@@ -166,7 +166,7 @@ public class LampSettingsTests
     public void RunScript_WritesTheSettingsManifestFromTheDeployedExe()
     {
         // LAMP step 7 (M.IDEA-T33): after publishing, run.ps1 runs the deployed exe once with --write-settings-manifest
-        // (Development, like serve.bat), so Vault.Desktop's Ideas tab matches the build just deployed.
+        // (Development, like serve.bat), so Vault.Desktop's MindAttic.Ideas tab matches the build just deployed.
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir != null && !File.Exists(Path.Combine(dir.FullName, "MindAttic.Ideas.slnx"))) dir = dir.Parent;
         Assert.That(dir, Is.Not.Null, "repo root");
