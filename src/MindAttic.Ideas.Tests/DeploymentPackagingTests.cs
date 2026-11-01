@@ -59,6 +59,27 @@ public class DeploymentPackagingTests
     }
 
     [Test]
+    public void VendoredPackagesMatchTheLocalFeedsSameVersion()
+    {
+        // M.IDEA-T34: MindAttic packages are repacked at the same version while a major is rolling out. A vendored copy
+        // left from an earlier pack restores instead of the current one (local-packages is listed first), so the
+        // deployed Release build silently runs stale library code. Only checkable where the dev feed exists.
+        const string feed = @"C:\LocalNuGet";
+        if (!Directory.Exists(feed)) Assert.Ignore("No local feed on this machine (CI).");
+        var vendorDir = Path.Combine(RepoRoot().FullName, "lib", "local-packages");
+
+        var stale = ReferencedMindAtticPackages()
+            .Select(r => $"{r.Id}.{r.Version}.nupkg")
+            .Distinct()
+            .Where(f => File.Exists(Path.Combine(vendorDir, f)) && File.Exists(Path.Combine(feed, f)))
+            .Where(f => !File.ReadAllBytes(Path.Combine(vendorDir, f)).AsSpan().SequenceEqual(File.ReadAllBytes(Path.Combine(feed, f))))
+            .ToList();
+
+        Assert.That(stale, Is.Empty, $"Vendored packages differ from {feed}; copy the current .nupkg into lib/local-packages/: "
+            + string.Join(", ", stale));
+    }
+
+    [Test]
     public void NugetConfigListsTheVendoredFeed()
     {
         var config = File.ReadAllText(Path.Combine(RepoRoot().FullName, "nuget.config"));
