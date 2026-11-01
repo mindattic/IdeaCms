@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 @attribute [Authorize(Policy = MaPolicies.Admin)]
 @inject NavigationManager Nav
+@inject IJSRuntime JS
 
 @* ============================================================================================
    The ONE admin screen: a TabControl whose tab pages are each a separate responsibility
@@ -35,7 +36,11 @@
         }
     </nav>
 
-    <h1 class="ma-admin-h">@Active.Title</h1>
+    <div class="ma-admin-h-row">
+        <h1 class="ma-admin-h">@Active.Title</h1>
+        <button type="button" class="ma-admin-tour-btn" title="Replay the tour for this section"
+                @onclick="() => StartTour(Active.Slug, force: true)">? Take the tour</button>
+    </div>
 
     <div role="tabpanel" id="@TabPanelId(Active.Slug)" aria-labelledby="@TabButtonId(Active.Slug)">
     @switch (Active.Slug)
@@ -115,4 +120,103 @@
         if (Tab is not null && !Tabs.Any(t => string.Equals(t.Slug, Tab, StringComparison.OrdinalIgnoreCase)))
             Nav.NavigateTo("/admin", replace: true);
     }
+
+    // ── First-visit onboarding tours (IDEA-T47) ──────────────────────────────────────────────
+    // One short driver.js tour per tab, auto-shown the first time a browser opens that tab and
+    // replayable any time via "Take the tour". Selectors are scoped under each tab's own
+    // #admin-panel-{slug} wrapper (added for the ARIA fix in IDEA-T46), so the same panel classes
+    // (.admin-new, .admin-list, .admin-table, ...) reused across tabs never collide.
+
+    private sealed record TourStep(string Element, string Title, string Description);
+
+    private string? _tourStartedFor;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_tourStartedFor == Active.Slug) return;
+        _tourStartedFor = Active.Slug;
+        if (!await JS.InvokeAsync<bool>("MaTour.hasSeen", Active.Slug))
+            await StartTour(Active.Slug, force: false);
+    }
+
+    private async Task StartTour(string slug, bool force)
+    {
+        var steps = GetSteps(slug);
+        if (steps.Count == 0) return;
+        if (!force && await JS.InvokeAsync<bool>("MaTour.hasSeen", slug)) return;
+
+        var payload = steps.Select(s => new
+        {
+            element = s.Element,
+            popover = new { title = s.Title, description = s.Description }
+        });
+        await JS.InvokeVoidAsync("MaTour.start", slug, System.Text.Json.JsonSerializer.Serialize(payload));
+    }
+
+    private static IReadOnlyList<TourStep> GetSteps(string slug) => slug switch
+    {
+        "pages" =>
+        [
+            new(TabButtonId("pages"), "Page Management", "Every page on your site lives here — you'll spend most of your time on this tab."),
+            new($"#{TabPanelId("pages")} .admin-new", "New page", "Start a page: give it a slug and pick Data (free-form HTML, no redeploy) or Code (compiled)."),
+            new($"#{TabPanelId("pages")} .admin-list", "Your pages", "Browse and nest every page here. Click one to open its editor."),
+            new($"#{TabPanelId("pages")} .admin-editor", "The editor", "Free-form HTML — no zones or templates to fight. Drop a <Component.X /> tag in anywhere to place a widget."),
+            new($"#{TabPanelId("pages")} .admin-component-palette", "Component Palette", "Every installed widget, ready to insert at your cursor with one click."),
+        ],
+        "content" =>
+        [
+            new(TabButtonId("content"), "Idea Library", "Every Theme, Plugin and Component you've installed, in one place."),
+            new($"#{TabPanelId("content")} .admin-table", "Installed building blocks", "See each citizen's version and origin, disable one without deleting it, or remove it entirely once nothing references it."),
+        ],
+        "upload" =>
+        [
+            new(TabButtonId("upload"), "Upload Idea", "Install a package by hand, without touching the Catalog feed."),
+            new($"#{TabPanelId("upload")} .admin-dropzone", "Install anything", "Drop in a .idea package, or a whole .idealist export — it's live the moment it installs, no restart."),
+            new($"#{TabPanelId("upload")} .admin-flags", "Allow override", "Check this only when you intentionally want a package to replace a key a compiled page already owns."),
+        ],
+        "media" =>
+        [
+            new(TabButtonId("media"), "Media", "Images, PDFs, video — anything you want to reference from a page."),
+            new($"#{TabPanelId("media")} .admin-dropzone", "Upload media", "Small files live in the database; larger ones are saved to disk automatically — you don't choose."),
+            new($"#{TabPanelId("media")} .admin-table", "Your library", "Copy the ready-made tag under each file straight into a page's body."),
+        ],
+        "packages" =>
+        [
+            new(TabButtonId("packages"), "Packages", "Every .idea blob actually installed, for download, verification or rollback."),
+            new($"#{TabPanelId("packages")} .admin-table", "Installed packages", "Download the exact bytes, check the SHA-256, and see what's superseded or disabled at a glance."),
+        ],
+        "catalog" =>
+        [
+            new(TabButtonId("catalog"), "Catalog", "Browse what's published on your NuGet feed instead of hunting down a .idea file by hand."),
+            new($"#{TabPanelId("catalog")} .admin-table", "One-click install", "Install straight from the feed — it resolves and installs through the exact same path the CLI uses."),
+        ],
+        "settings" =>
+        [
+            new(TabButtonId("settings"), "Settings", "Admin-wide concerns that aren't a specific page or package."),
+            new("#admin-settings-users", "Users", "Create, lock and manage administrator accounts from here."),
+            new("#admin-settings-appsettings", "App settings", "Package, media and sign-in security settings live in MindAttic Vault, not here — this links straight to them."),
+            new("#admin-settings-inbox", "Alerts inbox", "Raised automatically whenever a published page references something missing or disabled."),
+        ],
+        "assets" =>
+        [
+            new(TabButtonId("assets"), "Pkg Assets", "Verify a package's CSS and JS are actually reachable before you reference it in a page."),
+        ],
+        "roles" =>
+        [
+            new(TabButtonId("roles"), "Roles", "Custom roles for restricting pages to groups of users."),
+            new($"#{TabPanelId("roles")} .admin-new", "New role", "Give it a name and an optional description — pages can then be restricted to it."),
+            new($"#{TabPanelId("roles")} .admin-list", "Your roles", "Every custom role, alongside the built-in User and Admin roles."),
+        ],
+        "sites" =>
+        [
+            new(TabButtonId("sites"), "Sites", "One deployment, many domains — each site here owns its own host bindings."),
+            new($"#{TabPanelId("sites")} .admin-new", "New site", "A single-site install needs no bindings at all; add one only when you're hosting more than one domain."),
+            new($"#{TabPanelId("sites")} .admin-list", "Your sites", "The default site answers everything unclaimed by another site's bindings."),
+        ],
+        "attributions" =>
+        [
+            new(TabButtonId("attributions"), "Attributions", "Credit for the third-party work this CMS builds on — worth a glance, nothing to configure here."),
+        ],
+        _ => [],
+    };
 }

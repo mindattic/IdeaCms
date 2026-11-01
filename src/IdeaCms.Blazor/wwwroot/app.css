@@ -403,7 +403,10 @@ h1:focus {
 .ma-admin-tab { padding: .6rem 1.05rem; border: 0; border-bottom: 2px solid transparent; background: none; color: #9aa3af; cursor: pointer; font-size: .9rem; font-weight: 600; }
 .ma-admin-tab:hover { color: #e7eaf0; }
 .ma-admin-tab.on { color: #fff; border-bottom-color: #e2231a; }
-.ma-admin-h { font-size: 1.3rem; font-weight: 700; margin: 0 0 1rem; color: #fff; }
+.ma-admin-h { font-size: 1.3rem; font-weight: 700; margin: 0; color: #fff; }
+.ma-admin-h-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 0 0 1rem; flex-wrap: wrap; }
+.ma-admin-tour-btn { padding: .4rem .8rem; border: 1px solid rgba(226,35,26,.4); border-radius: 999px; background: none; color: #e2231a; cursor: pointer; font-size: .8rem; font-weight: 600; white-space: nowrap; }
+.ma-admin-tour-btn:hover { background: rgba(226,35,26,.08); border-color: #e2231a; }
 
 /* Settings + Attributions panels */
 .ma-settings { display: flex; flex-direction: column; gap: 1.25rem; max-width: 48rem; }
