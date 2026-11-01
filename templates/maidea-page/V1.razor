@@ -1,0 +1,21 @@
+@namespace IdeaCms.Page.HelloWorld
+@inherits PageBase
+@* Declare the citizens you compose by string id so the host hoists their css/js and reference-guards them.
+   Keep these in sync with your <CmsInclude> calls. Version 0 / omitted floats to latest. *@
+@attribute [Uses(ContentKind.Plugin, "tooltip", 1)]
+
+@* IdeaCms.Page.HelloWorld.V1 — namespace tail "HelloWorld" => key; class "V1" => version 1.
+   The theme is chosen by ThemeKey in data/page.json (the host wraps this body in it). Plugins/Components
+   are placed BY STRING ID via <CmsInclude> — nothing is bundled or compile-referenced. *@
+
+<section class="page">
+    <h1>HelloWorld</h1>
+    <p>Edit V1.razor. Compose other packages by string id — see the cheat sheet in docs/AUTHORING.md.</p>
+
+    <CmsInclude Ref="IdeaCms.Plugin.Tooltip.V1" />
+    <button data-tooltip="Resolved at runtime by string id.">Hover me</button>
+</section>
+
+<style>
+    .page { padding: 2rem; font-family: system-ui, sans-serif; }
+</style>
