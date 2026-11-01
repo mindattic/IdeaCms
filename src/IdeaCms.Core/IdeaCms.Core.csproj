@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AddRazorSupportForMvc>false</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj" />
+    <!-- The .idea manifest contract + read-only install rules (PackageInstallService reuses them). -->
+    <ProjectReference Include="..\IdeaCms.Packaging\IdeaCms.Packaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <!-- The unified, Vault-backed auth engine. CmsDbContext implements its IAuthDataContext seam.
+         Prod uses this clean package (dev auth bypass compiled out). In DEBUG only, the lib is ALSO
+         referenced as source below; MSBuild prefers the project output, so a dev build gets the lib's
+         Debug build (MA_DEV_AUTH → localhost dev-login bypass). Never present in a release build. -->
+    <PackageReference Include="MindAttic.Authentication" Version="7.0.0" />
+    <PackageReference Include="MindAttic.Log" Version="3.0.0" />
+    <PackageReference Include="MindAttic.Vault" Version="7.0.0" />
+    <ProjectReference Include="..\..\..\MindAttic.Authentication\src\MindAttic.Authentication\MindAttic.Authentication.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Authentication\src\MindAttic.Authentication\MindAttic.Authentication.csproj')" />
+    <PackageReference Include="MindAttic.Media" Version="2.0.0" />
+    <ProjectReference Include="..\..\..\MindAttic.Media\src\MindAttic.Media\MindAttic.Media.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Media\src\MindAttic.Media\MindAttic.Media.csproj')" />
+    <!-- Rendering-time dependencies the ADR mandates: HTML sanitizer + HTML tokenizer.
+         AngleSharp pinned to the exact version HtmlSanitizer requires (no version clash).
+         Both moved off the 0.17.1 line, which carries GHSA-pgww-w46g-26qg. -->
+    <PackageReference Include="HtmlSanitizer" Version="9.2.1039" />
+    <PackageReference Include="AngleSharp" Version="1.7.2" />
+    <!-- Pins the CSSOM/parser that HtmlSanitizer already pulls in transitively (used directly by
+         CssConflictMerger to expand shorthand properties and collapse same-selector conflicts). -->
+    <PackageReference Include="AngleSharp.Css" Version="1.0.2" />
+    <!-- Override the vulnerable transitive crypto.Xml 9.0.0 (pulled via SqlClient -> Azure.Identity).
+         10.0.8 itself later picked up five HIGH advisories; 10.0.11 matches the EF Core line. -->
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.11" />
+    <!-- NuGet client for NuGetIdeaListPackageResolver (feed query + exact-version download only — no
+         NuGet.Packaging.Signing: .idea packages carry their own content signature, verified independently
+         of NuGet's own signing feature; see PackageSigner). -->
+    <PackageReference Include="NuGet.Protocol" Version="7.9.0" />
+  </ItemGroup>
+
+</Project>

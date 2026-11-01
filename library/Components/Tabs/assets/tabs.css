@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Tabs — accessible tabs + the mindattic.com tab-board variant.
+﻿/* IdeaCms.Component.Tabs — accessible tabs + the mindattic.com tab-board variant.
    Scoped under .ma-tabs (MAIL-LAW-6); palette derives from currentColor + custom properties. */
 .ma-tabs {
   --ma-tabs-accent: #4a6cf7;

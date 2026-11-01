@@ -1,12 +1,12 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 using ParameterAttribute = Microsoft.AspNetCore.Components.ParameterAttribute;  // not the namespace: its ComponentBase would clash (M.IDEA-LAW-1)
 
-namespace MindAttic.Ideas.Component.Callout;
+namespace IdeaCms.Component.Callout;
 
 /// <summary>
-/// MindAttic.Ideas.Component.Callout.V1 — notice/admonition boxes as a CSS-only activator. Drop the
+/// IdeaCms.Component.Callout.V1 — notice/admonition boxes as a CSS-only activator. Drop the
 /// token once and ANY <c>&lt;div class="ma-callout"&gt;</c> gets the callout chrome; add a variant
 /// class for the accent + icon: <c>ma-callout-info</c> (default), <c>ma-callout-success</c>,
 /// <c>ma-callout-warn</c>, <c>ma-callout-error</c>. Pure CSS — icons are drawn glyphs, no images,

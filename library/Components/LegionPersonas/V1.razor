@@ -1,11 +1,11 @@
-@namespace MindAttic.Ideas.Component.LegionPersonas
+@namespace IdeaCms.Component.LegionPersonas
 @inherits ComponentBase
 @attribute [Idea(DisplayName = "Legion Personas", RenderMode = CmsRenderMode.InteractiveServer)]
 @attribute [Uses(ContentKind.Plugin, "sacredgeometry", 1)]
 @attribute [Uses(ContentKind.Component, "modalpopup", 1)]
 
 @* ============================================================================================
-   MindAttic.Ideas.Component.LegionPersonas.V1 — the MindAttic.Legion 1024-persona gallery as a single
+   IdeaCms.Component.LegionPersonas.V1 — the MindAttic.Legion 1024-persona gallery as a single
    compiled Page shipped as a .idea. Identity by convention: namespace tail "LegionPersonas" => key
    "legionpersonas", class "V1" => version 1. The persona library is the embedded personas.json
    (PersonaData); each card's live avatar is a SacredGeometry shape, animated by the SacredGeometry
@@ -15,7 +15,7 @@
 
 <div class="@_rootClass" style="@_rootStyle">
 @* Switch ON the SacredGeometry capability: loads the renderer + the canvas[data-sacred-shape] animator. *@
-<CmsInclude Ref="MindAttic.Ideas.Plugin.SacredGeometry.V1" />
+<CmsInclude Ref="IdeaCms.Plugin.SacredGeometry.V1" />
 
 <div class="gallery">
     @if (ShowFilters)
@@ -120,7 +120,7 @@
         </div>
     </section>
 
-    <CmsInclude Ref="MindAttic.Ideas.Component.ModalPopup.V1"
+    <CmsInclude Ref="IdeaCms.Component.ModalPopup.V1"
                 IsOpen="@(selected is not null)"
                 Config='{"showClose":true}'
                 OnClose="@EventCallback.Factory.Create(this, (Action)Close)">

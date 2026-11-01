@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/IdeaCms.Abstractions/IdeaCms.Abstractions.csproj" />
+    <Project Path="src/IdeaCms.Core/IdeaCms.Core.csproj" />
+    <Project Path="src/IdeaCms.Rendering/IdeaCms.Rendering.csproj" />
+    <Project Path="src/IdeaCms.Blazor/IdeaCms.Blazor.csproj" />
+    <Project Path="src/IdeaCms.Sdk/IdeaCms.Sdk.csproj" />
+    <Project Path="src/IdeaCms.Packaging/IdeaCms.Packaging.csproj" />
+    <Project Path="src/IdeaCms.Tests/IdeaCms.Tests.csproj" />
+  </Folder>
+</Solution>

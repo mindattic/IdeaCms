@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Gallery — lightbox for UNLINKED tiles inside .ma-gallery (anchor tiles
+﻿/* IdeaCms.Component.Gallery — lightbox for UNLINKED tiles inside .ma-gallery (anchor tiles
  * navigate normally — the books-grid case needs no JS at all). A tile's image is wherever the page
  * put it: an <img src="data:…"> or, per the page convention, a base64 background-image CSS class —
  * the lightbox reads the computed background. One overlay is created and reused; Esc closes,

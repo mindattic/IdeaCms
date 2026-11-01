@@ -1,12 +1,12 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.PinFooter;
+namespace IdeaCms.Plugin.PinFooter;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.PinFooter.V1 — the UiUx PINFOOTER bundle as an asset-only activator,
+/// IdeaCms.Plugin.PinFooter.V1 — the UiUx PINFOOTER bundle as an asset-only activator,
 /// extracted VERBATIM from mindattic.com/index.htm. Any element with class
 /// <c>pin-when-short</c> (canonically the site &lt;footer&gt;) pins to the bottom edge while the
 /// document is shorter than the viewport and flows normally once content scrolls — re-evaluated on

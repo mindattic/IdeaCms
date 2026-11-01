@@ -1,4 +1,4 @@
-// MindAttic.Ideas.Plugin.ThemeToggle — flips html[data-theme-mode] and remembers the choice.
+// IdeaCms.Plugin.ThemeToggle — flips html[data-theme-mode] and remembers the choice.
 // The server (App.razor) sets the initial data-theme-mode from the site's default; an early inline
 // script in <head> corrects it from localStorage before first paint if the visitor already chose one.
 // This file only needs to handle the click.

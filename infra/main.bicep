@@ -1,4 +1,4 @@
-// MindAttic.Ideas — Azure infrastructure. Two deployments of the same CMS on one App Service plan:
+// IdeaCms — Azure infrastructure. Two deployments of the same CMS on one App Service plan:
 //
 //   mindattic             the company site (MindAttic's own content, on Ideas)
 //   mindattic-ideas-demo  a public, vanilla demo of Ideas that the demo-reset workflow wipes hourly
@@ -48,7 +48,7 @@ param sqlDatabaseSku string = 'Basic'
 param turnstileSiteKey string = ''
 
 @description('Tag applied to every resource so the whole estate can be found and costed together.')
-param projectTag string = 'MindAttic.Ideas'
+param projectTag string = 'IdeaCms'
 
 @description('Placeholder for the demo admin password until the first reset replaces it. Never pass one in.')
 @secure()
@@ -363,7 +363,7 @@ func connectionString(fqdn string, db string) string =>
 // setting names (M.IDEA-§4.14) and now rejects hyphenated names outright. MindAttic.Authentication and
 // VaultPackageSigningTrust match them back to the dotted/hyphenated config keys.
 var siteSettings = concat(commonSettings, [
-  { name: 'ConnectionStrings__Ideas', value: connectionString(sqlServer.properties.fullyQualifiedDomainName, sqlDatabaseName) }
+  { name: 'ConnectionStrings__IdeaCms', value: connectionString(sqlServer.properties.fullyQualifiedDomainName, sqlDatabaseName) }
   { name: 'DataProtection__BlobUri', value: '${storage.properties.primaryEndpoints.blob}${dataProtectionContainerName}/ideas-keys.xml' }
   { name: 'DataProtection__KeyVaultKeyId', value: dataProtectionKey.properties.keyUriWithVersion }
   { name: 'Media__Azure__ContainerName', value: mediaContainerName }
@@ -385,12 +385,12 @@ var siteSettings = concat(commonSettings, [
 ])
 
 var demoSettings = concat(commonSettings, [
-  { name: 'ConnectionStrings__Ideas', value: connectionString(sqlServer.properties.fullyQualifiedDomainName, demoDatabaseName) }
+  { name: 'ConnectionStrings__IdeaCms', value: connectionString(sqlServer.properties.fullyQualifiedDomainName, demoDatabaseName) }
   { name: 'DataProtection__BlobUri', value: '${storage.properties.primaryEndpoints.blob}${demoDataProtectionContainerName}/demo-keys.xml' }
   { name: 'DataProtection__KeyVaultKeyId', value: demoDataProtectionKey.properties.keyUriWithVersion }
   { name: 'Media__Azure__ContainerName', value: demoMediaContainerName }
   // A vanilla install provisioned from its idealist: every first-party package + one hello page.
-  { name: 'Ideas__Idealist', value: 'seed/demo.idealist' }
+  { name: 'IdeaCms__Idealist', value: 'seed/demo.idealist' }
   // The shared admin login rotates hourly from outside; a forced change would let the first visitor
   // lock everyone else out. Sessions die within seconds of a reset and can never outlive an hour.
   { name: 'MindAttic__Auth__Bootstrap__RequirePasswordChange', value: 'false' }

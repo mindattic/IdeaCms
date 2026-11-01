@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Gallery — responsive image grid + lightbox. Scoped (MAIL-LAW-6).
+﻿/* IdeaCms.Component.Gallery — responsive image grid + lightbox. Scoped (MAIL-LAW-6).
    Tiles are elements carrying a base64 background-image CSS class (the page convention);
    plain <img> children are styled too. */
 .ma-gallery {

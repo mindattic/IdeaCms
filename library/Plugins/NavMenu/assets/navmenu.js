@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Plugin.NavMenu — hamburger toggle for the mobile breakpoint.
+﻿/* IdeaCms.Plugin.NavMenu — hamburger toggle for the mobile breakpoint.
  * Event delegation on document so menus rendered at any time (Blazor enhanced nav,
  * late includes) work without per-element wiring. Safe to load more than once. */
 (function () {

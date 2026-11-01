@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Provisions the Azure estate for MindAttic.Ideas — the company site and the public demo — and
+    Provisions the Azure estate for IdeaCms — the company site and the public demo — and
     wires up everything Bicep cannot.
 
 .DESCRIPTION
@@ -265,10 +265,10 @@ Write-Step 'Resetting the demo (creates its database, password and login)'
 $dispatched = $false
 if (Get-Command gh -ErrorAction SilentlyContinue) {
     $previous = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
-    try { & gh workflow run demo-reset.yml --repo mindattic/MindAttic.Ideas --ref master 2>&1 | Out-Null; $dispatched = $LASTEXITCODE -eq 0 }
+    try { & gh workflow run demo-reset.yml --repo mindattic/IdeaCms --ref master 2>&1 | Out-Null; $dispatched = $LASTEXITCODE -eq 0 }
     finally { $ErrorActionPreference = $previous }
 }
-if ($dispatched) { Write-Host 'Dispatched demo-reset.yml — watch it with: gh run watch --repo mindattic/MindAttic.Ideas' }
+if ($dispatched) { Write-Host 'Dispatched demo-reset.yml — watch it with: gh run watch --repo mindattic/IdeaCms' }
 else { Write-Warning 'Could not dispatch demo-reset.yml (not pushed yet, or no gh). The next deploy runs it; or dispatch it from Actions.' }
 
 Write-Step 'Provisioned'

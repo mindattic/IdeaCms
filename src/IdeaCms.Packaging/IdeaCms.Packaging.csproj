@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The .idea package format: the manifest model, the reflection-only packer, and the read-only
+       host path (archive reader, validator, version resolver). Referenced by BOTH the ma-idea CLI
+       (IdeaCms.Sdk) and the host (IdeaCms.Core), so the manifest contract and the
+       install rules live in exactly one place. Pure logic — no EF, no Blazor, no DI; everything here
+       is NUnit-testable. References only Abstractions (for SharedContracts.DeferToDefaultPrefixes +
+       the content enums) so the wire contract and the loader's host-prefix audit never drift. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>IdeaCms.Packaging</RootNamespace>
+    <AssemblyName>IdeaCms.Packaging</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Reflection-only inspection of a built RCL during `pack` — the target assembly is never executed. -->
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="9.0.0" />
+  </ItemGroup>
+
+</Project>

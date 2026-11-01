@@ -36,7 +36,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$migrationsProject = Join-Path $repoRoot 'src/MindAttic.Ideas.Core'
+$migrationsProject = Join-Path $repoRoot 'src/IdeaCms.Core'
 $scriptPath = Join-Path ([IO.Path]::GetTempPath()) "ideas-migrate-$(Get-Date -Format yyyyMMddHHmmss).sql"
 
 function Write-Step($text) { Write-Host "`n=== $text ===" -ForegroundColor Cyan }

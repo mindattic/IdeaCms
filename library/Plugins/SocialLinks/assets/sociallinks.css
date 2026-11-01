@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Plugin.SocialLinks — icon link row. Scoped under .ma-social (MAIL-LAW-6).
+﻿/* IdeaCms.Plugin.SocialLinks — icon link row. Scoped under .ma-social (MAIL-LAW-6).
    Instance settings (M.IDEA-§4.5) arrive as --ma-social-* custom properties on the <ul>; every var()
    falls back to the designed value. */
 .ma-social {

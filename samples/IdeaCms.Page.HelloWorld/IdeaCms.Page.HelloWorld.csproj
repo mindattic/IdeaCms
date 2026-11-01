@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <!-- ============================================================================================
+       The DEFINITIVE reference for authoring a modular page as a .idea package.
+
+       It is a Razor Class Library that compiles against ONLY IdeaCms.Abstractions (the frozen
+       SDK) and references its Theme + Widgets/Controls BY STRING ID at runtime: nothing else is a
+       project/package reference, nothing else is bundled. It is intentionally NOT part of the host
+       solution (.slnx); a third party would build it exactly like this and ship the .idea.
+
+       Build then pack (see docs/AUTHORING.md for the full ma-idea pack command).
+       ============================================================================================ -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Whole-number versioning (MindAttic rule). The .idea CONTENT version comes from the class name
+         (V1), independent of this assembly version. -->
+    <Version>1.0.0</Version>
+
+    <!-- A distributable .idea citizen, never a NuGet package and never built by the host solution. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The ONLY reference: the frozen SDK. Private=false + ExcludeAssets=runtime keep Abstractions (and
+         the framework Components it carries) OUT of bin/ — the package validator FORBIDS host assemblies
+         in bin/, and the packer filters them anyway, so the packed bin/ holds exactly one DLL: this one. -->
+    <ProjectReference Include="..\..\src\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj"
+                      Private="false" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+</Project>

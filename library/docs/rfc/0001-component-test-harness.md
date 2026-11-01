@@ -1,6 +1,6 @@
 ---
 codex: 1
-project: MindAttic.Ideas.Library
+project: IdeaCms.Library
 code: MAIL
 layer: rfc
 status: planned

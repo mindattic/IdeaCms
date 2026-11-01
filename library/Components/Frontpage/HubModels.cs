@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MindAttic.Ideas.Component.Frontpage;
+namespace IdeaCms.Component.Frontpage;
 
 /// <summary>One navigable item in a section's tab rail (a project, book, link, …).</summary>
 public sealed class HubPage

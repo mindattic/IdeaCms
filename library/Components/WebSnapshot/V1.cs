@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
-using ComponentBase = MindAttic.Ideas.Abstractions.ComponentBase;
+using IdeaCms.Abstractions;
+using ComponentBase = IdeaCms.Abstractions.ComponentBase;
 
-namespace MindAttic.Ideas.Component.WebSnapshot;
+namespace IdeaCms.Component.WebSnapshot;
 
 /// <summary>
-/// MindAttic.Ideas.Component.WebSnapshot.V1 — the UiUx WEBSNAPSHOT bundle as an asset-only activator,
+/// IdeaCms.Component.WebSnapshot.V1 — the UiUx WEBSNAPSHOT bundle as an asset-only activator,
 /// extracted VERBATIM from mindattic.com/index.htm. Any <c>&lt;div class="web-snapshot"&gt;</c>
 /// container becomes a framed site-screenshot viewer: fetch mode (<c>data-src</c> pointing at a
 /// .b64 capture) or inline mode (set the inner <c>&lt;img src&gt;</c> yourself, e.g. a base64 data

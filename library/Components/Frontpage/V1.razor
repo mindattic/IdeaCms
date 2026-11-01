@@ -1,10 +1,10 @@
-@namespace MindAttic.Ideas.Component.Frontpage
+@namespace IdeaCms.Component.Frontpage
 @inherits ComponentBase
 @attribute [Idea(DisplayName = "MindAttic Frontpage", RenderMode = CmsRenderMode.InteractiveServer)]
 @attribute [Uses(ContentKind.Plugin, "tooltip", 1)]
 
 @* ============================================================================================
-   MindAttic.Ideas.Component.Frontpage.V1 — the MindAttic corporate front page, ported from the
+   IdeaCms.Component.Frontpage.V1 — the MindAttic corporate front page, ported from the
    standalone page app into a single .idea widget. Renders the whole-site accordion (Portfolio /
    Software / Ecosystem / Hardware / Writing / Visual Arts) from self-contained bundled data — no
    database, no API. Identity by convention: namespace tail "Frontpage" => key "frontpage", class
@@ -19,7 +19,7 @@
 <style>@((MarkupString)HubContent.Css)</style>
 
 @* Switch ON the Tooltip capability so NavTabItem's data-tooltip taglines render on hover. *@
-<CmsInclude Ref="MindAttic.Ideas.Plugin.Tooltip.V1" />
+<CmsInclude Ref="IdeaCms.Plugin.Tooltip.V1" />
 
 <SiteNav Sections="_sections" AssetBase="@AssetBase" Options="_options" />
 

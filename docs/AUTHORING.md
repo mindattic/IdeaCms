@@ -1,4 +1,4 @@
-# Authoring for MindAttic.Ideas
+# Authoring for IdeaCms
 
 Two things make up a site, and they are **different kinds of thing**:
 
@@ -11,7 +11,7 @@ Two things make up a site, and they are **different kinds of thing**:
 
 > **The one rule:** a package never references another package's assembly. Everything composes by **stable
 > string id** resolved through the host catalog at runtime. The only shared compile-time dependency is the
-> frozen **`MindAttic.Ideas.Abstractions`** SDK.
+> frozen **`IdeaCms.Abstractions`** SDK.
 
 ---
 
@@ -73,7 +73,7 @@ A component is a tiny RCL. Common props + the Abstractions reference come from t
 | Part | From | Example |
 |---|---|---|
 | Kind | which base you inherit (`ThemeBase` / `PluginBase` / `ComponentBase`) | `PluginBase` → Plugin |
-| Key | the namespace tail after `MindAttic.Ideas.<Kind>.` (lowercased) | `…Plugin.Tooltip` → `tooltip` |
+| Key | the namespace tail after `IdeaCms.<Kind>.` (lowercased) | `…Plugin.Tooltip` → `tooltip` |
 | Version | the `V{n}` class name | `V1` → version 1 |
 
 Ship `V2` **alongside** `V1`; never mutate a shipped version.
@@ -105,7 +105,7 @@ A Plugin or Component composes others two ways — pick per piece:
 
 - **Compile-in (private):** a sub-component inside the citizen's own assembly (e.g. `PersonaCard` inside
   `LegionPersonas`). Not separately deployed. Use when the piece is only ever used here.
-- **Reference-by-id (separately deployed):** `<CmsInclude Ref="MindAttic.Ideas.Plugin.SacredGeometry.V1" />`
+- **Reference-by-id (separately deployed):** `<CmsInclude Ref="IdeaCms.Plugin.SacredGeometry.V1" />`
   in markup **plus** `@attribute [Uses(ContentKind.Plugin, "sacredgeometry", 1)]`. The child ships as its own
   `.idea` and rides along via `uses[]`. Use when the piece is reused or versioned independently.
 
@@ -180,17 +180,17 @@ false`) and swallowed on any JS/interop failure. A page is never invalid because
 
 ### Build, pack, verify
 
-From `library/` (the `ma-idea` CLI is `src/MindAttic.Ideas.Sdk`):
+From `library/` (the `ma-idea` CLI is `src/IdeaCms.Sdk`):
 
 ```pwsh
 dotnet build -c Release Plugins/Tooltip
-dotnet run --project ../src/MindAttic.Ideas.Sdk -- pack `
-  --assembly Plugins/Tooltip/bin/Release/net10.0/MindAttic.Ideas.Plugin.Tooltip.dll `
+dotnet run --project ../src/IdeaCms.Sdk -- pack `
+  --assembly Plugins/Tooltip/bin/Release/net10.0/IdeaCms.Plugin.Tooltip.dll `
   --out ./dist --wwwroot Plugins/Tooltip/assets `
-  --refs ../src/MindAttic.Ideas.Abstractions/bin/Debug/net10.0
+  --refs ../src/IdeaCms.Abstractions/bin/Debug/net10.0
 
-dotnet run --project ../src/MindAttic.Ideas.Sdk -- inspect ./dist/MindAttic.Ideas.Plugin.Tooltip.V1.idea
-dotnet run --project ../src/MindAttic.Ideas.Sdk -- verify ./dist   # whole-library compose-graph
+dotnet run --project ../src/IdeaCms.Sdk -- inspect ./dist/IdeaCms.Plugin.Tooltip.V1.idea
+dotnet run --project ../src/IdeaCms.Sdk -- verify ./dist   # whole-library compose-graph
 ```
 
 `tools/pack-all.ps1` builds and repacks every citizen in one pass (`-Sign` content-signs each package

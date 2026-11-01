@@ -1,0 +1,160 @@
+@attribute [Authorize(Policy = MaPolicies.Admin)]
+@using System.IO.Compression
+@using IdeaCms.Packaging
+@using IdeaCms.Core.Data
+@using IdeaCms.Core.Portability
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.EntityFrameworkCore
+@inject IPackageInstallService Installer
+@inject IDbContextFactory<CmsDbContext> DbFactory
+@inject IMediaStore Media
+@inject IWebHostEnvironment Env
+@inject IConfiguration Configuration
+@inject NavigationManager Nav
+
+@* Upload Idea panel — hosted by AdminShell's "Upload Idea" tab (no own route). Also accepts an
+   .idealist (detected by its idealist.json manifest entry, not the file extension) — routed through
+   IdeaListImporter, the same engine --import-idealist/boot use, so a Packages[] entry only available
+   on NuGet is resolved/installed the same way a single .idea upload resolves nothing extra. *@
+
+<div class="admin-upload">
+    @if (!string.IsNullOrWhiteSpace(_missingKey))
+    {
+        @* RFC 0001 upload-to-fix: a missing-content placeholder linked here carrying the broken
+           reference, so the admin knows exactly which .idea this upload should provide. *@
+        <div class="admin-status" style="border:1px dashed #c0392b;border-radius:6px;padding:.5rem .75rem;">
+            A page is waiting on <code>@_missingKey</code> — upload the <code>.idea</code> that provides it.
+        </div>
+    }
+    <p class="admin-sub">
+        Drop in Page / Theme / Plugin / Component <code>.idea</code> packages (legacy Control packages still install) — each is validated and added to
+        the general collection of usable pieces. A package that re-declares a key already owned by a compiled
+        citizen needs <strong>Allow override</strong>. See the installed collection under the
+        <a href="/admin/content">Idea Library</a> tab. An <code>.idealist</code> is also accepted — its
+        pages/media/settings import and its <code>Packages[]</code> resolve (filesystem, then the
+        NuGet feed) and install the same way <code>--import-idealist</code> does. Browse what's on the
+        feed under the <a href="/admin/catalog">Catalog</a> tab instead of uploading by hand.
+    </p>
+
+    <label class="admin-flags">
+        <input type="checkbox" @bind="allowOverride" /> Allow override (let a package shadow a compiled key)
+    </label>
+
+    <label class="admin-dropzone">
+        <InputFile OnChange="OnFiles" multiple accept=".idea,.idealist" />
+        <span class="admin-dropzone-label">Drop <code>.idea</code> or <code>.idealist</code> files here</span>
+        <span class="admin-dropzone-hint">or <strong>click to browse</strong> · multiple files accepted</span>
+    </label>
+
+    @if (busy)
+    {
+        <div class="admin-status">Installing…</div>
+    }
+
+    @if (results.Count > 0)
+    {
+        <ul class="admin-results">
+            @foreach (var r in results)
+            {
+                <li class="@(r.Ok ? "ok" : "err")"><span class="admin-result-name">@r.Name</span> — @r.Message</li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    private bool allowOverride;
+    private bool busy;
+    private string? _missingKey;
+    private readonly List<Result> results = new();
+
+    protected override void OnInitialized()
+    {
+        // ?missing=<reference> — set by the clickable upload-to-fix placeholder (MissingContent).
+        var query = new Uri(Nav.Uri).Query;
+        if (QueryHelpers.ParseQuery(query).TryGetValue("missing", out var v))
+            _missingKey = v.ToString();
+    }
+
+    private sealed record Result(string Name, bool Ok, string Message);
+
+    // 64 MB ceiling per package — comfortably covers a Page/Theme bundling images + a JS engine.
+    private const long MaxBytes = 64L * 1024 * 1024;
+
+    private async Task OnFiles(InputFileChangeEventArgs e)
+    {
+        busy = true;
+        results.Clear();
+        try
+        {
+            foreach (var file in e.GetMultipleFiles(maximumFileCount: 100))
+            {
+                try
+                {
+                    using var buffer = new MemoryStream();
+                    await using (var rs = file.OpenReadStream(MaxBytes))
+                        await rs.CopyToAsync(buffer);
+                    buffer.Position = 0;
+
+                    IdeaList? idealist = null;
+                    try
+                    {
+                        using var zip = new ZipArchive(buffer, ZipArchiveMode.Read, leaveOpen: true);
+                        (idealist, _) = await IdeaListImporter.ReadManifestAsync(zip);
+                    }
+                    catch (InvalidDataException) { /* not a zip at all — fall through to the plain .idea path, which will report it */ }
+                    buffer.Position = 0;
+
+                    if (idealist is not null)
+                    {
+                        using var zip = new ZipArchive(buffer, ZipArchiveMode.Read, leaveOpen: true);
+                        var resolver = IdeaListResolverFactory.Build([], Env.ContentRootPath, Configuration);
+                        await using var db = await DbFactory.CreateDbContextAsync();
+                        var importer = new IdeaListImporter(db, Media, Installer, resolver);
+
+                        try
+                        {
+                            var importResult = await importer.ImportAsync(zip, idealist, new IdeaListImportOptions(), (_, _) => { });
+                            var ok = importResult.Ok;
+                            var detail = $"{importResult.PackagesInstalled} package(s), "
+                                       + $"{importResult.PagesCreated} page(s) created, {importResult.PagesUpdated} updated, "
+                                       + $"{importResult.MediaUploaded} media uploaded"
+                                       + (importResult.MediaFailed > 0 ? $", {importResult.MediaFailed} media FAILED" : "")
+                                       + (importResult.Error is { Length: > 0 } err ? $" — {err}" : "");
+                            results.Add(new Result(file.Name, ok, detail));
+                        }
+                        catch (IdeaListImportException ex)
+                        {
+                            results.Add(new Result(file.Name, false, $"{ex.Message} ({string.Join("; ", ex.Reasons)})"));
+                        }
+                    }
+                    else
+                    {
+                        var plan = await Installer.InstallAsync(buffer, allowOverride);
+                        var ok = plan.Action is InstallAction.Install
+                                     or InstallAction.NoOpAlreadyInstalled
+                                     or InstallAction.RequiresOverrideConfirmation;
+                        var detail = plan.Reason is { Length: > 0 } reason ? $"{plan.Action} ({reason})" : plan.Action.ToString();
+                        results.Add(new Result(file.Name, ok, detail));
+                    }
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    results.Add(new Result(file.Name, false, ex.Message));
+                    StateHasChanged();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            results.Add(new Result("(upload)", false, ex.Message));
+            StateHasChanged();
+        }
+        finally
+        {
+            busy = false;
+            StateHasChanged();
+        }
+    }
+}

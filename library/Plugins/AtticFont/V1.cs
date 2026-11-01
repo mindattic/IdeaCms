@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.AtticFont;
+namespace IdeaCms.Plugin.AtticFont;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.AtticFont.V1 — the Attic display typeface as a self-contained Plugin.
+/// IdeaCms.Plugin.AtticFont.V1 — the Attic display typeface as a self-contained Plugin.
 /// Emits one stylesheet (base64-embedded @font-face, no external font files) bundled in this package's
 /// wwwroot/ and served under <c>/_ideas/Plugin/atticfont/1/</c>. Registers the family and exposes the
 /// <c>--font-attic</c> token; a Theme/page applies it (e.g. <c>font-family: var(--font-attic)</c>).

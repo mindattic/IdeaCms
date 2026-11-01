@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.CodeBlock — dresses every pre>code: adds .ma-code, a copy button, and a
+﻿/* IdeaCms.Component.CodeBlock — dresses every pre>code: adds .ma-code, a copy button, and a
  * data-lang badge. MutationObserver wires blocks rendered at any time. Safe to load more than once.
  * Instance settings (data-ma-settings="component.codeblock") tune labels and toggles; each falls back
  * to the as-designed behavior when absent. */

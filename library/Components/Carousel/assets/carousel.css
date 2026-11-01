@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Carousel — slider chrome. Scoped under .ma-carousel (MAIL-LAW-6).
+﻿/* IdeaCms.Component.Carousel — slider chrome. Scoped under .ma-carousel (MAIL-LAW-6).
    Values read optional custom properties (instance settings, M.IDEA-§4.5) with the as-designed fallback. */
 .ma-carousel {
   --ma-carousel-height: 20rem;

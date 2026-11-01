@@ -1,0 +1,61 @@
+<Solution>
+  <Folder Name="/Themes/">
+    <Project Path="Themes/Cyberspace/IdeaCms.Theme.Cyberspace.csproj" />
+    <Project Path="Themes/Hardware/IdeaCms.Theme.Hardware.csproj" />
+    <Project Path="Themes/Ideas/IdeaCms.Theme.Ideas.csproj" />
+    <Project Path="Themes/Spring/IdeaCms.Theme.Spring.csproj" />
+    <Project Path="Themes/Summer/IdeaCms.Theme.Summer.csproj" />
+    <Project Path="Themes/Autumn/IdeaCms.Theme.Autumn.csproj" />
+    <Project Path="Themes/Winter/IdeaCms.Theme.Winter.csproj" />
+  </Folder>
+  <Folder Name="/Plugins/">
+    <Project Path="Plugins/Tooltip/IdeaCms.Plugin.Tooltip.csproj" />
+    <Project Path="Plugins/OutfitFont/IdeaCms.Plugin.OutfitFont.csproj" />
+    <Project Path="Plugins/AtticFont/IdeaCms.Plugin.AtticFont.csproj" />
+    <Project Path="Plugins/SacredGeometry/IdeaCms.Plugin.SacredGeometry.csproj" />
+    <Project Path="Plugins/Cyberspace/IdeaCms.Plugin.Cyberspace.csproj" />
+    <Project Path="Plugins/NavMenu/IdeaCms.Plugin.NavMenu.csproj" />
+    <Project Path="Plugins/PoweredBy/IdeaCms.Plugin.PoweredBy.csproj" />
+    <Project Path="Plugins/Breadcrumbs/IdeaCms.Plugin.Breadcrumbs.csproj" />
+    <Project Path="Plugins/Footer/IdeaCms.Plugin.Footer.csproj" />
+    <Project Path="Plugins/PinFooter/IdeaCms.Plugin.PinFooter.csproj" />
+    <Project Path="Plugins/BackToTop/IdeaCms.Plugin.BackToTop.csproj" />
+    <Project Path="Plugins/BackHomeM/IdeaCms.Plugin.BackHomeM.csproj" />
+    <Project Path="Plugins/SocialLinks/IdeaCms.Plugin.SocialLinks.csproj" />
+    <Project Path="Plugins/Header/IdeaCms.Plugin.Header.csproj" />
+    <Project Path="Plugins/ThemeToggle/IdeaCms.Plugin.ThemeToggle.csproj" />
+  </Folder>
+  <Folder Name="/Components/">
+    <Project Path="Components/Textbox/IdeaCms.Component.Textbox.csproj" />
+    <Project Path="Components/Card/IdeaCms.Component.Card.csproj" />
+    <Project Path="Components/ProjectGrid/IdeaCms.Component.ProjectGrid.csproj" />
+    <Project Path="Components/AppLaunch/IdeaCms.Component.AppLaunch.csproj" />
+    <Project Path="Components/ProjectBrochure/IdeaCms.Component.ProjectBrochure.csproj" />
+    <Project Path="Components/Accordion/IdeaCms.Component.Accordion.csproj" />
+    <Project Path="Components/Tabs/IdeaCms.Component.Tabs.csproj" />
+    <Project Path="Components/TabBoard/IdeaCms.Component.TabBoard.csproj" />
+    <Project Path="Components/Gallery/IdeaCms.Component.Gallery.csproj" />
+    <Project Path="Components/Carousel/IdeaCms.Component.Carousel.csproj" />
+    <Project Path="Components/Callout/IdeaCms.Component.Callout.csproj" />
+    <Project Path="Components/CodeBlock/IdeaCms.Component.CodeBlock.csproj" />
+    <Project Path="Components/VideoEmbed/IdeaCms.Component.VideoEmbed.csproj" />
+    <Project Path="Components/ContactForm/IdeaCms.Component.ContactForm.csproj" />
+    <Project Path="Components/ModalPopup/IdeaCms.Component.ModalPopup.csproj" />
+    <Project Path="Components/Hero/IdeaCms.Component.Hero.csproj" />
+    <Project Path="Components/HardwareHero/IdeaCms.Component.HardwareHero.csproj" />
+    <Project Path="Components/TableOfContents/IdeaCms.Component.TableOfContents.csproj" />
+    <Project Path="Components/LegionPersonas/IdeaCms.Component.LegionPersonas.csproj" />
+    <Project Path="Components/IdeaCmsBrochure/IdeaCms.Component.IdeaCmsBrochure.csproj" />
+    <Project Path="Components/IdeaCmsFrontpage/IdeaCms.Component.IdeaCmsFrontpage.csproj" />
+    <Project Path="Components/FromMd/IdeaCms.Component.FromMd.csproj" />
+    <Project Path="Components/FromHtml/IdeaCms.Component.FromHtml.csproj" />
+    <Project Path="Components/MediaImage/IdeaCms.Component.MediaImage.csproj" />
+    <Project Path="Components/MediaLink/IdeaCms.Component.MediaLink.csproj" />
+    <Project Path="Components/HelloWorld/IdeaCms.Component.HelloWorld.csproj" />
+    <Project Path="Components/WebSnapshot/IdeaCms.Component.WebSnapshot.csproj" />
+    <Project Path="Components/Claudia/IdeaCms.Component.Claudia.csproj" />
+    <Project Path="Components/ChiMesh/IdeaCms.Component.ChiMesh.csproj" />
+    <Project Path="Components/MindAtticFrontpage/IdeaCms.Component.MindAtticFrontpage.csproj" />
+    <Project Path="Components/Frontpage/IdeaCms.Component.Frontpage.csproj" />
+  </Folder>
+</Solution>

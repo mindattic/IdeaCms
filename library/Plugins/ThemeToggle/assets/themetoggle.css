@@ -1,4 +1,4 @@
-/* MindAttic.Ideas.Plugin.ThemeToggle — a site-wide light/dark switch button. Theme-agnostic: colors
+/* IdeaCms.Plugin.ThemeToggle — a site-wide light/dark switch button. Theme-agnostic: colors
    derive from currentColor/inherit so it reads correctly against whatever theme/mode is active. */
 .ma-tt-btn {
     display: inline-flex;

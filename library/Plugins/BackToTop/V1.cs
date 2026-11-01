@@ -1,12 +1,12 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.BackToTop;
+namespace IdeaCms.Plugin.BackToTop;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.BackToTop.V1 — the scroll-to-top capability as an asset-only activator.
+/// IdeaCms.Plugin.BackToTop.V1 — the scroll-to-top capability as an asset-only activator.
 /// Drop the token once and a floating button appears in the bottom-right corner after the visitor
 /// scrolls one screen down; clicking it smooth-scrolls back to the top. Zero author markup — the
 /// script creates the button itself (the arrow is a CSS glyph; no images, no requests).

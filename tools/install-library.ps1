@@ -3,7 +3,7 @@
 # Plugin/Component split cleanly.
 #
 # What this does:
-#   1. Wipes src/MindAttic.Ideas.Web/library/ and copies all 43 dist/*.idea files in.
+#   1. Wipes src/IdeaCms.Web/library/ and copies all 43 dist/*.idea files in.
 #   2. Removes InstalledPackage rows with Category = 'Widget' (they no longer parse against the
 #      updated ContentKind enum — Widget was renamed to Plugin at ordinal 1).
 #   3. Removes ContentDefinition Package-origin rows with Category = 'Widget' (same reason).
@@ -21,19 +21,19 @@
 [CmdletBinding()]
 param(
     [switch]$Rebuild,
-    [string]$Conn = 'Server=(localdb)\MSSQLLocalDB;Database=MindAtticIdeas;Trusted_Connection=True;TrustServerCertificate=True'
+    [string]$Conn = 'Server=(localdb)\MSSQLLocalDB;Database=IdeaCms;Trusted_Connection=True;TrustServerCertificate=True'
 )
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
 $root    = Split-Path $PSScriptRoot -Parent
 $distDir = Join-Path $root 'library\dist'
-$webLib  = Join-Path $root 'src\MindAttic.Ideas.Web\library'
+$webLib  = Join-Path $root 'src\IdeaCms.Web\library'
 
 # ── 1. Optionally rebuild the dist/ packages ────────────────────────────────────────────────────
 if ($Rebuild) {
     Write-Host '[install-library] Building library...' -ForegroundColor Cyan
-    $slnx = Join-Path $root 'library\MindAttic.Ideas.Library.slnx'
+    $slnx = Join-Path $root 'library\IdeaCms.Library.slnx'
     dotnet build $slnx -c Release --nologo
     if ($LASTEXITCODE -ne 0) { throw 'Library build failed.' }
 

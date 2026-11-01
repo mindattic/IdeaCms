@@ -5,8 +5,8 @@
 into the real site ([BIBLE §4.9](../docs/BIBLE.md#M.IDEA-§4.9)).
 
 ```pwsh
-dotnet run --project src/MindAttic.Ideas.Blazor -- --seed core                        # schema + the 53 library .ideas
-dotnet run --project src/MindAttic.Ideas.Blazor -- --import-idealist seed/mindattic-site.idealist
+dotnet run --project src/IdeaCms.Blazor -- --seed core                        # schema + the 53 library .ideas
+dotnet run --project src/IdeaCms.Blazor -- --import-idealist seed/mindattic-site.idealist
 ```
 
 Re-runnable: pages reconcile on uid then slug (so the baseline seed's own pages are **adopted**, not
@@ -25,7 +25,7 @@ It is also what a second, vanilla deployment of Ideas would restore from to get 
 ## Refreshing it
 
 ```pwsh
-dotnet run --project src/MindAttic.Ideas.Blazor -- --export-idealist seed/mindattic-site.idealist
+dotnet run --project src/IdeaCms.Blazor -- --export-idealist seed/mindattic-site.idealist
 ```
 
 Verified by restoring into an empty database before committing — 48 pages created, 5 adopted, 34

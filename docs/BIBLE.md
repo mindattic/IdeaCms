@@ -1,21 +1,21 @@
 ---
 codex: 1
-project: MindAttic.Ideas
+project: IdeaCms
 code: M.IDEA
 layer: bible
 status: living
 updated: 2026-10-03
 ---
 
-# MindAttic.Ideas — Project Bible
+# IdeaCms — Project Bible
 
-> Single source of truth for what MindAttic.Ideas IS, is NOT, and the rules that keep it coherent.
+> Single source of truth for what IdeaCms IS, is NOT, and the rules that keep it coherent.
 > README.md says how to build/run; this says how to think about the system. Pending decisions that
 > cannot be folded in yet would sit in [`AMENDMENTS.md`](AMENDMENTS.md) (normally empty).
 
 ## 1. The one sentence {#M.IDEA-§1}
 
-MindAttic.Ideas is a **single-deployment Blazor CMS** — one App Service, one app pool, one
+IdeaCms is a **single-deployment Blazor CMS** — one App Service, one app pool, one
 database — that hosts *many* pages and goes live the moment you upload a `.idea` zip, with **no
 redeploy and no app-pool restart**.
 
@@ -85,7 +85,7 @@ convention, and it is live. The four kinds derive from one shared root `IdeaBase
                           │
                           ▼
    ┌──────────────────────────────────────────────────────────────────────────┐
-   │  MindAttic.Ideas.Blazor   (Blazor Web App, global InteractiveServer)        │
+   │  IdeaCms.Blazor   (Blazor Web App, global InteractiveServer)        │
    │   PageHost  /{*slug} ─► ISiteResolver(host) ─► (SiteId,Slug) ─► Theme ─► render
    │   CmsHead (@layer global, theme, page, component)                           │
    │   /_ideas/{Kind}/{key}/{ver}/…  /_media/{uid}  /_health  /_demo/reveal      │
@@ -94,18 +94,18 @@ convention, and it is live. The four kinds derive from one shared root `IdeaBase
    └───────────┬──────────────────────────────────────┬──────────────────────────┘
                │ uses                                  │ uses
    ┌───────────▼────────────────┐         ┌────────────▼──────────────────────────┐
-   │ MindAttic.Ideas.Core        │         │ MindAttic.Ideas.Packaging              │
+   │ IdeaCms.Core        │         │ IdeaCms.Packaging              │
    │  CmsDbContext (EF, SQL,     │         │  manifest kernel + reader + validator  │
    │   temporal Pages, auth      │         │  + CitizenValidator + packer + signer  │
    │   schema)                   │         │  + version resolver (pure, IO-free)    │
    │  catalog · install · ALC    │         └────────────┬──────────────────────────┘
    │  IncludeExpander · gate     │                      │
    │  instance settings · sites  │         ┌────────────▼──────────────────────────┐
-   │  .idealist import/export    │         │ MindAttic.Ideas.Sdk  (ma-idea CLI)     │
+   │  .idealist import/export    │         │ IdeaCms.Sdk  (ma-idea CLI)     │
    └───────────┬────────────────┘         │  pack/inspect/list/install/verify/     │
                │ references                │  sign/nupkg                            │
    ┌───────────▼────────────────────────────────────────────────────────────────┐
-   │ MindAttic.Ideas.Abstractions   (frozen v1 SDK, MAJOR pinned at 1)            │
+   │ IdeaCms.Abstractions   (frozen v1 SDK, MAJOR pinned at 1)            │
    │  IdeaBase + PageBase/PluginBase/ThemeBase/ComponentBase, [Idea] [Uses]       │
    │  [Setting], IRenderContext, IPageTree, IComponentMetadataStore, IDemoAccess, │
    │  ICmsContentSource/ITypeResolver/IRawContentGate seams                       │
@@ -116,26 +116,26 @@ convention, and it is live. The four kinds derive from one shared root `IdeaBase
 ```
 
 ### 4.1 Projects {#M.IDEA-§4.1}
-- **`src/MindAttic.Ideas.Abstractions`** — the frozen v1 SDK: `IdeaBase` + the four kind bases
+- **`src/IdeaCms.Abstractions`** — the frozen v1 SDK: `IdeaBase` + the four kind bases
   (`PageBase`/`PluginBase`/`ThemeBase`/`ComponentBase`), `[Idea]` (incl. `Slot`), `[Uses]`,
   `[Setting]`, `IRenderContext`, `IPageTree`, `IComponentMetadataStore`, `IDemoAccess`, `CmsInclude`,
   discovery/catalog seams. References ONLY `Microsoft.AspNetCore.Components` + `System.Text.Json`.
-- **`src/MindAttic.Ideas.Core`** — EF entities, `CmsDbContext` (SQL Server, temporal `Pages`, the
+- **`src/IdeaCms.Core`** — EF entities, `CmsDbContext` (SQL Server, temporal `Pages`, the
   authentication package's isolated `auth` schema), convention discovery, persisted catalog, package
   install, raw-content gate, `FreeFormPage`/include expander, instance settings, site resolution,
   `.idealist` import/export, the collectible-ALC type resolver, seed.
-- **`src/MindAttic.Ideas.Packaging`** — the pure `.idea` wire contract: manifest kernel, reflection-only
+- **`src/IdeaCms.Packaging`** — the pure `.idea` wire contract: manifest kernel, reflection-only
   packer, zip-slip-guarded reader, manifest validator (incl. host-assembly `bin/` audit and retired
   categories), `CitizenValidator`, `PackageSigner`, SHA-256, version resolver.
-- **`src/MindAttic.Ideas.Rendering`** — `PageHost` (the catch-all) and `CmsHead` (the cascade).
-- **`src/MindAttic.Ideas.Sdk`** — the `ma-idea` CLI (pack / inspect / list / install / upgrade / verify /
+- **`src/IdeaCms.Rendering`** — `PageHost` (the catch-all) and `CmsHead` (the cascade).
+- **`src/IdeaCms.Sdk`** — the `ma-idea` CLI (pack / inspect / list / install / upgrade / verify /
   sign / nupkg).
-- **`src/MindAttic.Ideas.Blazor`** — the Blazor Web App host: `/admin`, `/_ideas`, `/_media`,
+- **`src/IdeaCms.Blazor`** — the Blazor Web App host: `/admin`, `/_ideas`, `/_media`,
   `/_health`, `/_demo/reveal`, the CLI verbs, `BootProvisioning`, Vault/Legion/Authentication/Media
   wiring.
-- **`src/MindAttic.Ideas.Tests`** — the NUnit suite.
-- **`library/`** — the first-party citizen library (`library/MindAttic.Ideas.Library.slnx`); builds
-  independently of the CMS and references only `src/MindAttic.Ideas.Abstractions`
+- **`src/IdeaCms.Tests`** — the NUnit suite.
+- **`library/`** — the first-party citizen library (`library/IdeaCms.Library.slnx`); builds
+  independently of the CMS and references only `src/IdeaCms.Abstractions`
   (`Private=false`, `ExcludeAssets=runtime`). Its own canon is `library/docs/BIBLE.md` (code MAIL).
 - **`infra/`** — Bicep for the Azure estate; **`.github/workflows/`** — `azure-deploy.yml` and
   `demo-reset.yml` ([§4.14](#M.IDEA-§4.14)); **`seed/`** — the company site's `.idealist` and the demo's
@@ -145,7 +145,7 @@ convention, and it is live. The four kinds derive from one shared root `IdeaBase
 - **`IdeaBase`** — shared root of all content kinds.
 - **`ContentKind`** — `Page=0 · Plugin=1 · Theme=2 · Component=4`. Ordinal 3 is reserved and never
   reused ([M.IDEA-LAW-2](#M.IDEA-LAW-2)).
-- **`Page`** (`src/MindAttic.Ideas.Core/Entities/Page.cs`) — one durable EF row, `PageKind {Data,Code}`;
+- **`Page`** (`src/IdeaCms.Core/Entities/Page.cs`) — one durable EF row, `PageKind {Data,Code}`;
   Data columns `BodyHtml`/`PageCss`/`PageJs`/`BodyTrust`; shared `SiteId`/`ParentId`/`Slug`/`ThemeKey`/
   `ThemeVersion`; `SeoMetaJson` (`{title,description}`); `ActivePluginsJson` (array of
   `"Plugin.key[@n]"`; null = inherit the site's `plugins.default`, `[]` = none); `WorkflowDefinitionId`/
@@ -205,7 +205,7 @@ convention, and it is live. The four kinds derive from one shared root `IdeaBase
   the structural minimum.
 - **`CssConflictMerger` / `CssShorthandLinter`** (`Core/Services`) — [§4.7](#M.IDEA-§4.7).
 - **Authentication** — `AddMindAtticAuthentication<CmsDbContext>`, `UseMindAtticAuthentication()`,
-  `MapMindAtticAuthEndpoints()`; `IdeasClaimsAugmentor` adds the Admin role's `Cms.AuthorRawMarkup`
+  `MapMindAtticAuthEndpoints()`; `IdeaCmsClaimsAugmentor` adds the Admin role's `Cms.AuthorRawMarkup`
   claim. The first admin is created from the Vault bootstrap token; Admin MFA is currently not required
   (`MindAttic:Auth:Mfa:RequireForAdmin=false`).
 
@@ -313,7 +313,7 @@ In a Data page body, a citizen is placed with a PascalCase HTML tag:
   `requires[]` must all be present and enabled before any byte is persisted (`REQUIRES_UNMET`).
 - **Collisions.** An upload whose `(Kind,Key)` collides with a compiled citizen is refused unless an
   admin confirms the override.
-- **Distribution.** Each citizen is also an independent NuGet package, id `MindAttic.Ideas.{Category}.{Key}`,
+- **Distribution.** Each citizen is also an independent NuGet package, id `IdeaCms.{Category}.{Key}`,
   version `{n}.0.0`, carrying the signed `.idea` unchanged at `content/{key}.idea`. Publishing is
   `library/tools/pack-all.ps1 -Sign` → `ma-idea nupkg` → `library/tools/publish-nuget.ps1`.
 
@@ -323,7 +323,7 @@ In a Data page body, a citizen is placed with a PascalCase HTML tag:
   pages (body, trust, theme pin, plugin selection, instance-settings slots, SEO, role access, slug
   aliases), per-component metadata, media, and a **Packages** list.
 - `Packages[]` is purely referential — `Kind.key@version`, version mandatory, never bytes. Entries resolve
-  from `library/`, then `Ideas:PackagesDirs`/`--packages-dir` (matched by manifest, not filename), then a
+  from `library/`, then `IdeaCms:PackagesDirs`/`--packages-dir` (matched by manifest, not filename), then a
   NuGet feed (`CompositeIdeaListPackageResolver`; downloads cached in `library/.nuget-cache/`).
 - **Apply order:** install Packages in listed order (each idempotent), then validate every page's
   `Uses[]` against the catalog, then write media/site/settings/pages/metadata. An unmet `Uses[]` throws
@@ -336,7 +336,7 @@ In a Data page body, a citizen is placed with a PascalCase HTML tag:
 - **Trust:** the bundle's `Author` trust is honoured but announced; `--untrusted` downgrades it.
   `--prune` (soft-delete pages absent from the list) is opt-in.
 - CLI: `--export-idealist`, `--import-idealist`, `--compose-idealist`.
-- **Boot.** `Ideas:Idealist` (env `IDEAS_IDEALIST`) absent = *vanilla*: install everything in `library/`,
+- **Boot.** `IdeaCms:Idealist` (env `IDEACMS_IDEALIST`) absent = *vanilla*: install everything in `library/`,
   best-effort. Present = *custom*: apply that idealist and abort startup on any failure
   (`BootProvisioning.ApplyAsync`).
 
@@ -423,22 +423,22 @@ In a Data page body, a citizen is placed with a PascalCase HTML tag:
   retried with backoff, a permanent one exits with code 1, never an unhandled abort (exit 134). Until the
   sequence finishes every request but `/_health` gets `503 starting`.
 - **`/_health`** is a liveness probe that never touches the database and answers as soon as the server
-  listens; `X-Ideas-Ready` and `X-Ideas-Version` (build + commit) report boot state.
+  listens; `X-IdeaCms-Ready` and `X-IdeaCms-Version` (build + commit) report boot state.
 - **The demo** is reset hourly by `.github/workflows/demo-reset.yml`: rotate the admin password, stop the
-  demo and pin the new password, replace the demo database with a copy of `MindAtticIdeasDemoTemplate`,
+  demo and pin the new password, replace the demo database with a copy of `IdeaCmsDemoTemplate`,
   empty its media, start it (its one boot on the empty database seeds `admin` from the new password),
   sign in for real, then publish the login. The demo identity reaches only its own vault and containers; the company
   identity can read one demo secret (`credentials`). Demo admins cannot run code: unsigned packages are
   refused and markup is sanitized.
 - Product hooks used by the demo, all inert unless configured:
-  `MindAttic:Auth:Bootstrap:RequirePasswordChange=false`; `Ideas:Packages:StorageRoot`; `IDemoAccess`
+  `MindAttic:Auth:Bootstrap:RequirePasswordChange=false`; `IdeaCms:Packages:StorageRoot`; `IDemoAccess`
   (demo URL and status, never credentials); `POST /_demo/reveal` returns the login only for a
   server-verified Turnstile token bound to the `demo-reveal` action, 5/min per IP, `no-store`, 503 when
   Turnstile keys are absent.
 
 ## 5. The Laws {#M.IDEA-§5}
 
-> **Inherited.** MindAttic.Ideas inherits every org-wide law in
+> **Inherited.** IdeaCms inherits every org-wide law in
 > [`MindAttic.HouseRules.md`](../../MindAttic.HouseRules.md) by reference. Do not restate them here. Of
 > particular weight: whole-number versioning ([HOUSE-LAW-1](../../MindAttic.HouseRules.md#HOUSE-LAW-1)),
 > soft-disable ([HOUSE-LAW-2](../../MindAttic.HouseRules.md#HOUSE-LAW-2)), Vault credentials
@@ -491,7 +491,7 @@ These are the **project-specific** laws:
 
 ## 6. Verified state {#M.IDEA-§6}
 
-**Build/test evidence (2026-10-03):** `dotnet test src/MindAttic.Ideas.Tests` → **Passed: 586, Failed: 0,
+**Build/test evidence (2026-10-03):** `dotnet test src/IdeaCms.Tests` → **Passed: 586, Failed: 0,
 Skipped: 0**. The SQL Server temporal proof (`PageHistorySqlServerTests`) is `[Explicit]` and runs
 against LocalDB on demand.
 
@@ -527,7 +527,7 @@ the [`USER_STORIES.md`](USER_STORIES.md) priority backlog; the library's frontie
 Definition of done (a feature is `✅` only when *verified*, never merely asserted — see
 [HOUSE-LAW-8](../../MindAttic.HouseRules.md#HOUSE-LAW-8)):
 
-1. Clean `dotnet build` (0 warnings) on `MindAttic.Ideas.slnx`.
+1. Clean `dotnet build` (0 warnings) on `IdeaCms.slnx`.
 2. Green NUnit tests; a `✅` story names the test that proves it.
 3. For anything user-facing, an e2e or lifecycle assertion, or an observed live run.
 4. No new fact duplicated: a fact lives in exactly one layer and is cited by `{#id}` elsewhere. Code

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
-using ComponentBase = MindAttic.Ideas.Abstractions.ComponentBase;
+using IdeaCms.Abstractions;
+using ComponentBase = IdeaCms.Abstractions.ComponentBase;
 
-namespace MindAttic.Ideas.Component.TabBoard;
+namespace IdeaCms.Component.TabBoard;
 
 /// <summary>
-/// MindAttic.Ideas.Component.TabBoard.V1 — the mindattic.com project-board engine as an asset-only
+/// IdeaCms.Component.TabBoard.V1 — the mindattic.com project-board engine as an asset-only
 /// activator, extracted VERBATIM from mindattic.com/index.htm (the `.tabButton`/`.tabPage` styles
 /// and the board script). Drop the token once and authored board markup is wired — tiles in a
 /// wrapping grid, single-active full-row panels, procedural tile art for placeholders, per-section

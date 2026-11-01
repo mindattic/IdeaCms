@@ -1,12 +1,12 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Components.Rendering;
 using ParameterAttribute = Microsoft.AspNetCore.Components.ParameterAttribute;  // not the namespace: its ComponentBase would clash (M.IDEA-LAW-1)
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Component.Accordion;
+namespace IdeaCms.Component.Accordion;
 
 /// <summary>
-/// MindAttic.Ideas.Component.Accordion.V1 — the collapsible-sections capability as an asset-only
+/// IdeaCms.Component.Accordion.V1 — the collapsible-sections capability as an asset-only
 /// activator. Drop the token once and ANY <c>&lt;div class="ma-accordion"&gt;</c> of native
 /// <c>&lt;details&gt;/&lt;summary&gt;</c> children gets the accordion chrome (no JS required for
 /// open/close — the platform does it). Add <c>data-exclusive</c> on the container and the script

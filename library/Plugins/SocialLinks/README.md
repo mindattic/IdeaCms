@@ -11,7 +11,7 @@ A row of social and profile icon links rendered with inline SVG — no icon file
 
 **HTML tag syntax (Razor/Blazor):**
 ```razor
-<MindAttic.Ideas.Plugin.SocialLinks.V1 GitHub="https://github.com/yourname" Email="hi@example.com" />
+<IdeaCms.Plugin.SocialLinks.V1 GitHub="https://github.com/yourname" Email="hi@example.com" />
 ```
 
 ## Parameters

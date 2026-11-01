@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.CodeBlock — code chrome + copy button. Scoped via .ma-code (MAIL-LAW-6);
+﻿/* IdeaCms.Component.CodeBlock — code chrome + copy button. Scoped via .ma-code (MAIL-LAW-6);
    codeblock.js adds .ma-code to every pre>code so authors write plain Markdown-style markup.
    Values read optional custom properties (instance settings, M.IDEA-§4.5) with the as-designed fallback. */
 .ma-code {

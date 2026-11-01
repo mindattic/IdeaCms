@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Plugin.Footer — pin-when-short (the mindattic.com footer behavior).
+﻿/* IdeaCms.Plugin.Footer — pin-when-short (the mindattic.com footer behavior).
  * While the document is shorter than the viewport the footer fixes to the bottom edge; as soon
  * as content grows past one screen it flows normally (the class comes off, so it can never
  * overlap content). Re-evaluated on resize and on DOM growth. Safe to load more than once.

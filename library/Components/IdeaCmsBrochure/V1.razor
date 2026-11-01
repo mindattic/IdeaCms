@@ -1,0 +1,532 @@
+@namespace IdeaCms.Component.IdeaCmsBrochure
+@inherits ComponentBase
+
+<link rel="stylesheet" href="/_ideas/Component/ideasbrochure/1/brochure.css" />
+
+<div class="@_rootClass" style="@_rootStyle">
+
+  <!-- ── Hero ── -->
+  @if (ShowHero)
+  {
+  <section class="ibr-hero">
+    <p class="ibr-hero-eyebrow">@(Eyebrow ?? "A Content Management System for the post-framework era")</p>
+    <h1 class="ibr-hero-title">
+      <span class="ibr-hero-wordmark">MindAttic</span><span class="ibr-hero-dot">.</span><span class="ibr-hero-ideas">Ideas</span>
+    </h1>
+    <p class="ibr-hero-tagline">
+      Upload a <code class="ibr-code-inline">.idea</code> package. It goes live.
+      No restart. No pipeline. No ceremony.
+    </p>
+    @if (ShowBadges)
+    {
+    <div class="ibr-hero-badges">
+      <span class="ibr-badge">Hot-load</span>
+      <span class="ibr-badge">Zero-redeploy</span>
+      <span class="ibr-badge">Scoped CSS &amp; JS</span>
+      <span class="ibr-badge">Free-form pages</span>
+      <span class="ibr-badge">.NET 10 / Blazor</span>
+    </div>
+    }
+  </section>
+  }
+
+  <!-- ── Three primitives ── -->
+  @if (ShowPrimitives)
+  {
+  <section class="ibr-section">
+    <h2 class="ibr-section-title">Three honest primitives</h2>
+    <p class="ibr-section-lead">
+      A CMS has exactly one job: connect content to presentation without getting in the way.
+      That takes three things and nothing else.
+    </p>
+    <div class="ibr-pillars">
+      <article class="ibr-pillar">
+        <div class="ibr-pillar-label">Page</div>
+        <h3 class="ibr-pillar-title">Free-form HTML in a database row</h3>
+        <p>
+          One table. One row per page. No zones. No panes. No layout XML. A page is a slug,
+          a title, and a body that can embed widget tokens anywhere in the markup. The browser
+          <code class="ibr-code-inline">&lt;title&gt;</code> is its own standalone field.
+          That's it.
+        </p>
+      </article>
+      <article class="ibr-pillar">
+        <div class="ibr-pillar-label">Plugin / Component</div>
+        <h3 class="ibr-pillar-title">A self-contained <code class="ibr-code-inline">.idea</code> zip</h3>
+        <p>
+          A single archive: a compiled Blazor component, a CSS file scoped to a widget-specific
+          class prefix, and JavaScript in an IIFE. Installed live with no redeploy.
+          Versioned with a whole number — V1, V2, never 2.6.0.
+        </p>
+      </article>
+      <article class="ibr-pillar">
+        <div class="ibr-pillar-label">Theme</div>
+        <h3 class="ibr-pillar-title">A visual wrapper — nothing more</h3>
+        <p>
+          Themes control typography, color, and the chrome around a page's body. They never
+          touch the admin UI. They never own routes. A broken theme cannot lock you out of
+          your site.
+        </p>
+      </article>
+    </div>
+  </section>
+  }
+
+  <!-- ── Token grammar ── -->
+  @if (ShowTokens)
+  {
+  <section class="ibr-section">
+    <h2 class="ibr-section-title">The token grammar</h2>
+    <p class="ibr-section-lead">
+      Compose a page by writing free-form HTML and dropping tokens wherever a widget should appear.
+      No visual builder required. No drag-and-drop. No layout system.
+    </p>
+    <div class="ibr-two-col">
+      <div>
+        <p class="ibr-caption">A page body (authored in the admin editor):</p>
+        <pre class="ibr-code-block"><span class="ibr-ck-tag">&lt;h2&gt;</span>Software Projects<span class="ibr-ck-tag">&lt;/h2&gt;</span>
+<span class="ibr-ck-token">&lt;Component.TabBoard /&gt;</span>
+
+<span class="ibr-ck-tag">&lt;h2&gt;</span>Selected Work<span class="ibr-ck-tag">&lt;/h2&gt;</span>
+<span class="ibr-ck-token">&lt;Component.Gallery /&gt;</span>
+
+<span class="ibr-ck-comment">&lt;!-- Pin a specific version: --&gt;</span>
+<span class="ibr-ck-token">&lt;Plugin.Tooltip.V2 /&gt;</span>
+
+<span class="ibr-ck-comment">&lt;!-- Pass attributes to a widget: --&gt;</span>
+<span class="ibr-ck-token">&lt;Component.Hero title="Hello" /&gt;</span></pre>
+      </div>
+      <div class="ibr-token-rules">
+        <p class="ibr-caption">Resolution rules:</p>
+        <ul class="ibr-rule-list">
+          <li><strong>Floating</strong> — no version suffix → latest installed version</li>
+          <li><strong>Pinned</strong> — <code class="ibr-code-inline">.V2</code> suffix → that exact version, always</li>
+          <li><strong>Missing</strong> → a placeholder renders instead of a crash; the admin inbox gets an alert</li>
+          <li><strong>Disabled</strong> → same graceful degradation; the page still serves</li>
+          <li><strong>Attributes</strong> → passed directly to the Blazor component's <code class="ibr-code-inline">[Parameter]</code> properties</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  }
+
+  <!-- ── .idea package anatomy ── -->
+  @if (ShowAnatomy)
+  {
+  <section class="ibr-section">
+    <h2 class="ibr-section-title">Anatomy of a <code class="ibr-code-inline">.idea</code> package</h2>
+    <p class="ibr-section-lead">
+      Every widget is one file. Drop it in Admin → Upload and it is live within the same request
+      cycle — no IIS restart, no config change, no app pool recycle.
+    </p>
+    <div class="ibr-two-col">
+      <pre class="ibr-code-block"><span class="ibr-ck-dir">IdeaCms.Component.TabBoard.V1.idea  (zip)</span>
+├── <span class="ibr-ck-key">idea.json</span>
+│   <span class="ibr-ck-tag">{</span>
+│     <span class="ibr-ck-key">"key"</span>: <span class="ibr-ck-val">"tabboard"</span>,
+│     <span class="ibr-ck-key">"version"</span>: <span class="ibr-ck-val">1</span>,
+│     <span class="ibr-ck-key">"displayName"</span>: <span class="ibr-ck-val">"Tab Board"</span>,
+│     <span class="ibr-ck-key">"category"</span>: <span class="ibr-ck-val">"Component"</span>
+│   <span class="ibr-ck-tag">}</span>
+├── <span class="ibr-ck-dir">bin/</span>
+│   └── IdeaCms.Component.TabBoard.dll
+└── <span class="ibr-ck-dir">wwwroot/</span>
+    ├── tabboard.css  <span class="ibr-ck-comment">← .ma-tabs-*  (never leaks)</span>
+    └── tabboard.js   <span class="ibr-ck-comment">← (function(){ … })()  (no globals)</span></pre>
+      <div>
+        <h3 class="ibr-sub-title">What happens at install time</h3>
+        <ol class="ibr-numbered">
+          <li>The zip is validated against the manifest schema.</li>
+          <li>The DLL is loaded into a <strong>Collectible Assembly Load Context</strong> — isolated from the host and garbage-collected when replaced.</li>
+          <li>Static assets are mounted at <code class="ibr-code-inline">/_ideas/Component/tabboard/1/</code>.</li>
+          <li>The widget is registered in the in-memory content catalog.</li>
+          <li>Any page containing <code class="ibr-code-inline">&lt;Component.TabBoard /&gt;</code> resolves it on the next render — without touching the page record.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+  }
+
+  <!-- ── DNN section ── -->
+  @if (ShowDnn)
+  {
+  <section class="ibr-section ibr-section--dnn">
+    <h2 class="ibr-section-title">They saw the future. The technology wasn't ready.</h2>
+    <div class="ibr-two-col ibr-dnn-cols">
+      <div>
+        <p>
+          DotNetNuke launched in 2003 and had a genuinely revolutionary idea: a CMS where every
+          capability arrived as an installable zip package. Upload a module, it's live. No developer
+          required. No deployment pipeline. No server access needed. They saw exactly what the
+          web should be — and they were right.
+        </p>
+        <p>
+          But the technology of the era made clean execution impossible. WebForms required every
+          module to participate in an elaborate page-event lifecycle. CSS had no isolation mechanism.
+          JavaScript had no module system. And most fatally, the <em>Skin</em> system wrapped the
+          entire page <em>including the admin chrome</em>. A broken skin meant you couldn't access
+          your own admin panel to fix it. You were locked out of your own site.
+        </p>
+        <blockquote class="ibr-quote">
+          The concept was correct. The execution was a prisoner of 2003.
+        </blockquote>
+        <p>
+          IdeaCms revisits that vision with two decades of better tools. The installable
+          package idea is intact. Everything else is solved:
+        </p>
+        <ul class="ibr-dnn-list">
+          <li>Blazor's component model gives widgets genuinely isolated render trees</li>
+          <li>A per-widget CSS class prefix means <code class="ibr-code-inline">.ma-tabs-*</code> cannot affect <code class="ibr-code-inline">.ma-footer-*</code></li>
+          <li>JavaScript in an IIFE means no global variable conflicts between widgets</li>
+          <li>The admin UI lives on its own route prefix, styled by a fixed system stylesheet — never a theme</li>
+          <li>Collectible Assembly Load Contexts mean a widget DLL is isolated and garbage-collected when replaced</li>
+          <li>Pages are free-form HTML — no zone/pane/slot XML, because HTML and CSS already solve layout</li>
+        </ul>
+      </div>
+      <div class="ibr-dnn-card">
+        <h3 class="ibr-dnn-card-title">What DNN got right</h3>
+        <ul class="ibr-check-list ibr-check-list--yes">
+          <li>Capabilities as installable zip packages</li>
+          <li>Hot-install without server restarts</li>
+          <li>Content independent of presentation</li>
+          <li>Portal-based multi-tenancy vision</li>
+          <li>A module marketplace concept</li>
+          <li>Versioned modules</li>
+        </ul>
+        <h3 class="ibr-dnn-card-title ibr-mt">What held it back</h3>
+        <ul class="ibr-check-list ibr-check-list--no">
+          <li>Themes wrapped the admin UI (fatal)</li>
+          <li>No CSS isolation between modules</li>
+          <li>No JS isolation — globals everywhere</li>
+          <li>Zone/pane layout system instead of free HTML</li>
+          <li>WebForms postback lifecycle complexity</li>
+          <li>Module API tightly coupled to DNN internals</li>
+          <li>Technical debt outpaced the vision</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  }
+
+  <!-- ── Comparison table ── -->
+  @if (ShowComparison)
+  {
+  <section class="ibr-section">
+    <h2 class="ibr-section-title">How it stacks up</h2>
+    <div class="ibr-table-wrap">
+      <table class="ibr-table">
+        <thead>
+          <tr>
+            <th class="ibr-th-feature">Feature</th>
+            <th>DNN</th>
+            <th>WordPress</th>
+            <th>Orchard&nbsp;Core</th>
+            <th>Umbraco</th>
+            <th class="ibr-th-ideas">IdeaCms</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hot-install packages (no redeploy)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-yes">✓</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Free-form HTML pages (no zones or panes)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-maybe">~</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-maybe">~</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>CSS isolated per widget (no global leakage)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>JS isolated per widget (IIFE, no globals)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Theme never wraps admin UI</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-maybe">~</span></td>
+            <td><span class="ibr-yes">✓</span></td>
+            <td><span class="ibr-yes">✓</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Token grammar for inline widget composition</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-maybe">~</span> shortcodes</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Per-page temporal history (every prior state recoverable)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-maybe">~</span> revisions</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-yes">✓</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Modern .NET (Blazor server, .NET 10)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-yes">✓</span></td>
+            <td><span class="ibr-maybe">~</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Bridge tables over JSON blobs for structured data</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Whole-number versioning (V1, V2 — never 1.5.11)</td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td><span class="ibr-no">✗</span></td>
+            <td class="ibr-td-ideas"><span class="ibr-yes">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="ibr-table-note">
+      <span class="ibr-yes">✓</span> = Yes &nbsp;·&nbsp;
+      <span class="ibr-no">✗</span> = No &nbsp;·&nbsp;
+      <span class="ibr-maybe">~</span> = Partial or with caveats
+    </p>
+  </section>
+  }
+
+  <!-- ── Under the hood ── -->
+  @if (ShowTech)
+  {
+  <section class="ibr-section">
+    <h2 class="ibr-section-title">Under the hood</h2>
+    <div class="ibr-tech-grid">
+      <div class="ibr-tech-card">
+        <h3>SQL Server temporal tables</h3>
+        <p>Every page row is system-versioned. Any prior state — including which widget versions it
+        referenced — is recoverable. Wiki-like history with no separate history table.</p>
+      </div>
+      <div class="ibr-tech-card">
+        <h3>Entity Framework Core</h3>
+        <p>No raw SQL in application code. Bridge tables everywhere — one row per fact, no JSON
+        blobs for structured data. Migrations are additive and never destructive.</p>
+      </div>
+      <div class="ibr-tech-card">
+        <h3>Collectible Assembly Load Contexts</h3>
+        <p>Each widget DLL loads in its own ALC, isolated from the host. Replacing a widget
+        unloads the old DLL and loads the new one. The host process never restarts.</p>
+      </div>
+      <div class="ibr-tech-card">
+        <h3>Single Blazor circuit per page</h3>
+        <p>One interactive circuit. Every widget on a page shares it. No per-widget SignalR
+        connection, no per-widget app pool. Interactive where needed, static where not.</p>
+      </div>
+      <div class="ibr-tech-card">
+        <h3>Content trust model</h3>
+        <p>Inline JavaScript only executes when the author holds the
+        <code class="ibr-code-inline">Cms.AuthorRawMarkup</code> claim. Untrusted HTML is
+        sanitized at render time. Trust is stamped at write time, not read time.</p>
+      </div>
+      <div class="ibr-tech-card">
+        <h3>Admin inbox</h3>
+        <p>Every missing, disabled, or misconfigured widget surfaces a deduplicated alert in
+        the admin inbox — the page degrades gracefully and the problem is never silent.</p>
+      </div>
+    </div>
+  </section>
+  }
+
+  <!-- ── Get started ── -->
+  @if (ShowSteps)
+  {
+  <section class="ibr-section ibr-section--cta">
+    <h2 class="ibr-section-title">Get started in four steps</h2>
+    <div class="ibr-steps-grid">
+      <div class="ibr-step">
+        <div class="ibr-step-n">1</div>
+        <div>
+          <strong>Create a page</strong>
+          <p>Admin → Pages → New Page. Set a slug and a title.</p>
+        </div>
+      </div>
+      <div class="ibr-step">
+        <div class="ibr-step-n">2</div>
+        <div>
+          <strong>Add a widget token</strong>
+          <p>Type <code class="ibr-code-inline">&lt;Component.TabBoard /&gt;</code> into the body editor.</p>
+        </div>
+      </div>
+      <div class="ibr-step">
+        <div class="ibr-step-n">3</div>
+        <div>
+          <strong>Upload the widget</strong>
+          <p>Admin → Upload → drop <code class="ibr-code-inline">IdeaCms.Component.TabBoard.V1.idea</code>.</p>
+        </div>
+      </div>
+      <div class="ibr-step">
+        <div class="ibr-step-n">4</div>
+        <div>
+          <strong>Navigate to the page</strong>
+          <p>The widget resolves on the next request. No restart. No cache clear. No config change.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (ShowDemo && _demo is not null)
+  {
+  <section class="ibr-section ibr-demo" data-ma-demo data-site-key="@_demo.TurnstileSiteKey" data-reveal-path="@_revealPath">
+    <h2 class="ibr-section-title">Try the live demo</h2>
+    <p class="ibr-demo-lede">
+      A real Ideas install, not a video. Sign in as the admin, upload an <code class="ibr-code-inline">.idea</code>,
+      build a page, switch themes. It wipes itself and gets a brand-new password every hour, so break anything you like.
+    </p>
+    <p><a class="ibr-demo-link" href="@_demo.Url" target="_blank" rel="noopener noreferrer">@_demo.Url</a></p>
+    @if (!_demo.Ready)
+    {
+      <p class="ibr-demo-msg">The demo is resetting right now. Back in a few minutes.</p>
+    }
+    else if (_demo.TurnstileSiteKey is null)
+    {
+      <p class="ibr-demo-msg">Demo sign-in opens soon.</p>
+    }
+    else
+    {
+      <button type="button" class="ibr-demo-btn" data-ma-demo-reveal>Show demo login</button>
+      <div class="ibr-demo-check" data-ma-demo-check hidden></div>
+      <dl class="ibr-demo-login" data-ma-demo-login hidden>
+        <dt>Username</dt>
+        <dd><code data-ma-demo-user></code> <button type="button" class="ibr-demo-copy" data-ma-demo-copy="user">Copy</button></dd>
+        <dt>Password</dt>
+        <dd><code data-ma-demo-pass></code> <button type="button" class="ibr-demo-copy" data-ma-demo-copy="pass">Copy</button></dd>
+      </dl>
+      <p class="ibr-demo-msg" data-ma-demo-msg aria-live="polite"></p>
+      <script src="/_ideas/Component/ideasbrochure/1/demo-access.js" defer></script>
+    }
+  </section>
+  }
+
+  @if (ShowFooter)
+  {
+  <footer class="ibr-footer">
+    <p>IdeaCms &nbsp;·&nbsp; Built on .NET 10 &nbsp;·&nbsp; &copy; <span class="ibr-year">2026</span> @(CopyrightName ?? "Ryan DeBraal")</p>
+  </footer>
+  }
+
+</div>
+
+<script>
+(function () {
+    var y = document.querySelector('.ibr-year');
+    if (y) y.textContent = String(new Date().getFullYear());
+})();
+</script>
+
+@code {
+    // ── Content ─────────────────────────────────────────────────────────────────────────────────
+    [Parameter, Setting("Hero eyebrow", Group = "Content", Order = 1, Copyable = false)]
+    public string? Eyebrow { get; set; } = "A Content Management System for the post-framework era";
+
+    [Parameter, Setting("Copyright name", Group = "Content", Order = 2, Copyable = false)]
+    public string? CopyrightName { get; set; } = "Ryan DeBraal";
+
+    // ── Sections ────────────────────────────────────────────────────────────────────────────────
+    [Parameter, Setting("Hero", Group = "Sections", Order = 1)] public bool ShowHero { get; set; } = true;
+    [Parameter, Setting("Hero badges", Group = "Sections", Order = 2)] public bool ShowBadges { get; set; } = true;
+    [Parameter, Setting("Three primitives", Group = "Sections", Order = 3)] public bool ShowPrimitives { get; set; } = true;
+    [Parameter, Setting("Token grammar", Group = "Sections", Order = 4)] public bool ShowTokens { get; set; } = true;
+    [Parameter, Setting("Package anatomy", Group = "Sections", Order = 5)] public bool ShowAnatomy { get; set; } = true;
+    [Parameter, Setting("DNN history", Group = "Sections", Order = 6)] public bool ShowDnn { get; set; } = true;
+    [Parameter, Setting("Comparison table", Group = "Sections", Order = 7)] public bool ShowComparison { get; set; } = true;
+    [Parameter, Setting("Under the hood", Group = "Sections", Order = 8)] public bool ShowTech { get; set; } = true;
+    [Parameter, Setting("Get started steps", Group = "Sections", Order = 9)] public bool ShowSteps { get; set; } = true;
+    [Parameter, Setting("Live demo", Group = "Sections", Order = 10, Description = "Shown only when the host advertises a demo")] public bool ShowDemo { get; set; } = true;
+    [Parameter, Setting("Footer", Group = "Sections", Order = 11)] public bool ShowFooter { get; set; } = true;
+
+    // The demo is a host feature (IDemoAccess). Absent, or answering null, the section simply isn't
+    // rendered. Credentials never come through here: only the browser's post-Turnstile call gets them.
+    private DemoInfo? _demo;
+    private string? _revealPath;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!ShowDemo || Context is null || !Context.TryGetFeature<IDemoAccess>(out var demo) || demo is null) return;
+        try
+        {
+            _demo = await demo.GetInfoAsync();
+            _revealPath = demo.RevealPath;
+        }
+        catch { _demo = null; }
+    }
+
+    // ── Behavior ────────────────────────────────────────────────────────────────────────────────
+    [Parameter, Setting("Hover effects", Group = "Behavior", Order = 1, Description = "Card border transitions on hover")]
+    public bool HoverEffects { get; set; } = true;
+
+    // ── Layout ──────────────────────────────────────────────────────────────────────────────────
+    [Parameter, Setting("Max width", Group = "Layout", Order = 1, Description = "Default 72rem")] public string? MaxWidth { get; set; }
+    [Parameter, Setting("Padding", Group = "Layout", Order = 2, Description = "Default 2rem 1.5rem 4rem")] public string? Padding { get; set; }
+    [Parameter, Setting("Margin", Group = "Layout", Order = 3, Description = "Default 0 auto")] public string? Margin { get; set; }
+    [Parameter, Setting("Section gap", Group = "Layout", Order = 4, Description = "Default 5rem")] public string? SectionGap { get; set; }
+    [Parameter, Setting("Card gap", Group = "Layout", Order = 5, Description = "Pillar / card grid gap")] public string? CardGap { get; set; }
+    [Parameter, Setting("Card min width", Group = "Layout", Order = 6, Description = "Pillar grid column min, default 18rem")] public string? CardMinWidth { get; set; }
+    [Parameter, Setting("Hero padding", Group = "Layout", Order = 7, Description = "Default 4rem 1rem 1rem")] public string? HeroPadding { get; set; }
+
+    // ── Colors / appearance ─────────────────────────────────────────────────────────────────────
+    [Parameter, Setting("Accent color", Group = "Colors", Order = 1, Description = "Default #5aa0ff")] public string? Accent { get; set; }
+    [Parameter, Setting("Secondary accent", Group = "Colors", Order = 2, Description = "Wordmark gradient end, default #a78bfa")] public string? Accent2 { get; set; }
+    [Parameter, Setting("Text color", Group = "Colors", Order = 3)] public string? TextColor { get; set; }
+    [Parameter, Setting("Background", Group = "Colors", Order = 4)] public string? Background { get; set; }
+    [Parameter, Setting("Card corner radius", Group = "Appearance", Order = 1, Description = "Default 12px")] public string? CardRadius { get; set; }
+    [Parameter, Setting("Hero title size", Group = "Appearance", Order = 2, Description = "Default clamp(3rem, 8vw, 5.5rem)")] public string? TitleSize { get; set; }
+    [Parameter, Setting("Line height", Group = "Appearance", Order = 3, Description = "Default 1.7")] public string? LineHeight { get; set; }
+
+    // ── Advanced ────────────────────────────────────────────────────────────────────────────────
+    [Parameter, Setting("Extra CSS classes", Group = "Advanced")] public string? CssClass { get; set; }
+    [Parameter, Setting("Extra inline style", Group = "Advanced")] public string? CssStyle { get; set; }
+
+    private string _rootClass => string.Join(" ", new[] { "ibr", HoverEffects ? null : "ibr--no-anim", CssClass }
+        .Where(c => !string.IsNullOrWhiteSpace(c)));
+
+    private static string? Decl(string name, string? value) => string.IsNullOrWhiteSpace(value) ? null : $"{name}:{value}";
+
+    private string? _rootStyle
+    {
+        get
+        {
+            var s = string.Join(";", new[]
+            {
+                Decl("max-width", MaxWidth), Decl("padding", Padding), Decl("margin", Margin), Decl("gap", SectionGap),
+                Decl("--ibr-card-gap", CardGap), Decl("--ibr-card-min", CardMinWidth), Decl("--ibr-hero-padding", HeroPadding),
+                Decl("--ibr-accent", Accent), Decl("--ibr-accent-2", Accent2), Decl("color", TextColor),
+                Decl("background", Background), Decl("--ibr-card-radius", CardRadius), Decl("--ibr-title-size", TitleSize),
+                Decl("line-height", LineHeight),
+                string.IsNullOrWhiteSpace(CssStyle) ? null : CssStyle,
+            }.Where(p => p is not null));
+            return s.Length > 0 ? s : null;
+        }
+    }
+}

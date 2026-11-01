@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.ModalPopup — Activator for .ma-modal overlays.
+﻿/* IdeaCms.Component.ModalPopup — Activator for .ma-modal overlays.
  * Handles X-button clicks, backdrop clicks, and Escape key via event delegation.
  * Fires CustomEvent('ma-modal-close', {bubbles:true}) on the .ma-modal element before hiding.
  * Blazor-managed modals: close state is owned by Blazor (@onclick); the JS fires the event

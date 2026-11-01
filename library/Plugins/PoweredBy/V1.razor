@@ -1,8 +1,8 @@
-@namespace MindAttic.Ideas.Plugin.PoweredBy
+@namespace IdeaCms.Plugin.PoweredBy
 @inherits PluginBase
 @attribute [Idea(DisplayName = "Powered By", Slot = PluginSlot.AfterBody)]
 
-@*  MindAttic.Ideas.Plugin.PoweredBy.V1 — the site footer, and the CMS's own byline.
+@*  IdeaCms.Plugin.PoweredBy.V1 — the site footer, and the CMS's own byline.
 
     Emits a real <footer class="ma-footer pin-when-short">, so the Footer plugin's chrome styles it and
     Plugin.PinFooter pins it to the bottom edge while the page is shorter than the viewport — both by
@@ -53,8 +53,8 @@
     [Parameter, Setting("Badge link", Group = "Content", Order = 3, Copyable = false, Description = "designed: /ideas (overrides poweredby.href)")]
     public string? Href { get; set; }
 
-    /// <summary>Badge wording. Overrides the "poweredby.label" site setting. Default "MindAttic.Ideas".</summary>
-    [Parameter, Setting("Badge label", Group = "Content", Order = 4, Copyable = false, Description = "designed: MindAttic.Ideas (overrides poweredby.label)")]
+    /// <summary>Badge wording. Overrides the "poweredby.label" site setting. Default "IdeaCms".</summary>
+    [Parameter, Setting("Badge label", Group = "Content", Order = 4, Copyable = false, Description = "designed: IdeaCms (overrides poweredby.label)")]
     public string? Label { get; set; }
 
     [Parameter, Setting("Badge prefix", Group = "Content", Order = 5, Copyable = false, Description = "Words before the badge link (designed: \"Powered by\")")]
@@ -101,7 +101,7 @@
 
     private string? _text;
     private string _href = "/ideas";
-    private string _label = "MindAttic.Ideas";
+    private string _label = "IdeaCms";
     private IReadOnlyList<(string Text, string Href)> _links = Array.Empty<(string, string)>();
 
     protected override void OnParametersSet()
@@ -109,7 +109,7 @@
         var site = Context?.Site;
         _text = FirstNonEmpty(Text, site?.GetSetting("footer.text"));
         _href = SafeUrl(FirstNonEmpty(Href, site?.GetSetting("poweredby.href")) ?? "/ideas");
-        _label = FirstNonEmpty(Label, site?.GetSetting("poweredby.label")) ?? "MindAttic.Ideas";
+        _label = FirstNonEmpty(Label, site?.GetSetting("poweredby.label")) ?? "IdeaCms";
         _links = ParseLinks(FirstNonEmpty(Links, site?.GetSetting("footer.links")));
     }
 

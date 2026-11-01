@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.OutfitFont;
+namespace IdeaCms.Plugin.OutfitFont;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.OutfitFont.V1 — the Outfit typeface as a self-contained Plugin (the .idea
+/// IdeaCms.Plugin.OutfitFont.V1 — the Outfit typeface as a self-contained Plugin (the .idea
 /// target of the UiUx OutfitFont source). A code-only capability activator: it emits ONE stylesheet
 /// (base64-embedded @font-face, so no external font files) bundled in this package's wwwroot/ and
 /// served under <c>/_ideas/Plugin/outfitfont/1/</c>. Dropping it on a page makes the Outfit family

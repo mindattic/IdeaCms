@@ -1,12 +1,12 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 using ParameterAttribute = Microsoft.AspNetCore.Components.ParameterAttribute;  // not the namespace: its ComponentBase would clash (M.IDEA-LAW-1)
 
-namespace MindAttic.Ideas.Component.Carousel;
+namespace IdeaCms.Component.Carousel;
 
 /// <summary>
-/// MindAttic.Ideas.Component.Carousel.V1 — the slideshow capability as an asset-only activator. Drop the
+/// IdeaCms.Component.Carousel.V1 — the slideshow capability as an asset-only activator. Drop the
 /// token once and ANY <c>&lt;div class="ma-carousel"&gt;</c> of <c>.ma-slide</c> children becomes a
 /// slider with arrows, dots, and keyboard support. A slide is free-form markup; an image slide is a
 /// slide carrying a base64 background-image CSS class (the page convention):

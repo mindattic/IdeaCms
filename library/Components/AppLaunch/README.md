@@ -89,9 +89,9 @@ as the package `wwwroot`:
 ```pwsh
 # a Vite app needs a relative base, or its absolute /assets/… paths escape the mount
 npx vite build --base=./ --outDir dist
-dotnet run --project src/MindAttic.Ideas.Sdk -- pack `
-  --assembly bin/Release/net10.0/MindAttic.Ideas.Component.ExperimentRts.dll `
-  --out library/dist --refs src/MindAttic.Ideas.Abstractions/bin/Debug/net10.0 `
+dotnet run --project src/IdeaCms.Sdk -- pack `
+  --assembly bin/Release/net10.0/IdeaCms.Component.ExperimentRts.dll `
+  --out library/dist --refs src/IdeaCms.Abstractions/bin/Debug/net10.0 `
   --wwwroot dist
 ```
 

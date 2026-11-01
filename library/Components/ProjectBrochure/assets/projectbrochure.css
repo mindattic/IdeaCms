@@ -1,4 +1,4 @@
-/* MindAttic.Ideas.Component.ProjectBrochure
+/* IdeaCms.Component.ProjectBrochure
  *
  * Inherits colour from the theme rather than setting its own palette — the same brochure has to read
  * on Cyberspace, Dark and Light. Everything tunable is a custom property so a page can retheme one

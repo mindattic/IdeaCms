@@ -1,0 +1,118 @@
+@attribute [Authorize(Policy = MaPolicies.Admin)]
+@inject IPackageCatalogService Catalog
+@inject IPackageInstallService Installer
+@inject IWebHostEnvironment Env
+@inject IConfiguration Configuration
+
+@* Catalog panel — browses what's published on the NuGet feed (live GitHub REST enumeration) as an
+   alternative to hunting down and uploading a .idea file by hand. Install re-uses the exact same
+   resolver/installer pair the CLI/boot .idealist path already relies on — no new download logic. *@
+
+@if (result is null)
+{
+    <p>Loading…</p>
+}
+else if (!result.FeedConfigured)
+{
+    <p class="admin-empty">No NuGet feed configured (<code>IdeaCms:NuGetFeedUrl</code>) — nothing to browse here. Use the <a href="/admin/upload">Upload</a> tab to install a <code>.idea</code> directly.</p>
+}
+else if (result.Error is { Length: > 0 } error)
+{
+    <div class="admin-status" style="border:1px dashed #c0392b;border-radius:6px;padding:.5rem .75rem;">
+        Could not reach the feed: @error
+    </div>
+}
+else if (result.Entries.Count == 0)
+{
+    <p class="admin-empty">The feed has nothing published yet.</p>
+}
+else
+{
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Kind</th>
+                <th>Key</th>
+                <th>Ver</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in result.Entries)
+            {
+                var busyKey = BusyKeyFor(e);
+                <tr class="@(e.Installed ? "row-dim" : "")">
+                    <td>@e.Kind</td>
+                    <td>@e.Key</td>
+                    <td>V@e.Version</td>
+                    <td>
+                        @if (e.Installed)
+                        {
+                            <span class="admin-badge">installed</span>
+                        }
+                        else if (busy == busyKey)
+                        {
+                            <span class="admin-status">Installing…</span>
+                        }
+                        else
+                        {
+                            <button type="button" class="admin-link" @onclick="() => InstallAsync(e)">Install</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (message is { Length: > 0 })
+{
+    <div class="admin-status">@message</div>
+}
+
+@code {
+    private CatalogListResult? result;
+    private string? busy;
+    private string? message;
+
+    protected override async Task OnInitializedAsync() => await RefreshAsync();
+
+    private async Task RefreshAsync() => result = await Catalog.ListAvailableAsync();
+
+    private static string BusyKeyFor(CatalogEntry e) => $"{e.Kind}.{e.Key}@{e.Version}";
+
+    private async Task InstallAsync(CatalogEntry e)
+    {
+        busy = BusyKeyFor(e);
+        message = null;
+        StateHasChanged();
+        try
+        {
+            var resolver = IdeaListResolverFactory.Build([], Env.ContentRootPath, Configuration);
+            var stream = await resolver.ResolveAsync(e.Kind, e.Key, e.Version);
+            if (stream is null)
+            {
+                message = $"{e.PackageId} V{e.Version}: not found on the feed (it may have just been unpublished).";
+            }
+            else
+            {
+                await using (stream)
+                {
+                    var plan = await Installer.InstallAsync(stream, allowOverride: false);
+                    message = $"{e.PackageId} V{e.Version}: {plan.Action}"
+                              + (plan.Reason is { Length: > 0 } r ? $" ({r})" : "");
+                }
+                await RefreshAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"{e.PackageId} V{e.Version}: {ex.Message}";
+        }
+        finally
+        {
+            busy = null;
+            StateHasChanged();
+        }
+    }
+}

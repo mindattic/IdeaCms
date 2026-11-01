@@ -13,7 +13,7 @@ A full-width hero banner with a headline, optional subtitle, optional call-to-ac
 **HTML tag syntax** (inside a Razor page or component):
 
 ```html
-<MindAttic.Ideas.Component.Hero.V1
+<IdeaCms.Component.Hero.V1
     Title="Welcome"
     Subtitle="Build something great"
     ImageClass="img-sky"
@@ -63,7 +63,7 @@ A full-width hero banner with a headline, optional subtitle, optional call-to-ac
 - **CTA button**: neither `ctatext` nor `ctahref` alone renders anything. Both must be non-empty for the `<a>` element to appear.
 - **Alignment**: any value other than `left` or `right` (including an empty or missing `align=`) falls back to `center`.
 - **Single quotes in URLs**: if `image=` contains a `data:` URI with single quotes, they are percent-encoded (`%27`) automatically to keep the CSS `url('…')` value valid.
-- **Stylesheet**: the component loads `/_ideas/Component/hero/1/hero.css` via a `<link>` tag. This path is served by the MindAttic.Ideas runtime from the `.idea` package.
+- **Stylesheet**: the component loads `/_ideas/Component/hero/1/hero.css` via a `<link>` tag. This path is served by the IdeaCms runtime from the `.idea` package.
 
 ## Settings (M.IDEA-§4.5)
 

@@ -22,7 +22,7 @@
 [CmdletBinding()]
 param(
   [string]$IndexHtm = 'D:\Projects\MindAttic\mindattic.com\index.htm',
-  [string]$Conn = 'Server=(localdb)\MSSQLLocalDB;Database=MindAtticIdeas;Trusted_Connection=True'
+  [string]$Conn = 'Server=(localdb)\MSSQLLocalDB;Database=IdeaCms;Trusted_Connection=True'
 )
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'

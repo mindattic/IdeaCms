@@ -38,7 +38,7 @@ try {
   if ([string]::IsNullOrWhiteSpace($digest)) { Write-Output '{}'; exit 0 }
 
   $preamble = @"
-[MindAttic.Ideas Codex] The following digest of docs/BIBLE.md is the AUTHORITATIVE source of truth
+[IdeaCms Codex] The following digest of docs/BIBLE.md is the AUTHORITATIVE source of truth
 for this project (what it IS, is NOT, its Laws, and current status). Treat it as binding context.
 Full detail lives in docs/BIBLE.md; stories and their verifying tests are in
 docs/USER_STORIES.md. Org-wide laws are inherited from

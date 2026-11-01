@@ -1,0 +1,366 @@
+﻿/* ============================================================================
+   IdeaCms.Component.IdeaCmsBrochure.V1
+   All rules scoped to .ibr or .ibr-* — never leaks outside this widget.
+   ============================================================================ */
+
+.ibr {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    line-height: 1.7;
+}
+
+/* ── Hero ── */
+.ibr-hero {
+    text-align: center;
+    padding: var(--ibr-hero-padding, 4rem 1rem 1rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+}
+.ibr-hero-eyebrow {
+    font-size: .82rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .5;
+}
+.ibr-hero-title {
+    font-size: var(--ibr-title-size, clamp(3rem, 8vw, 5.5rem));
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin: 0;
+}
+.ibr-hero-wordmark {
+    background: linear-gradient(135deg, #e7eaf0 0%, var(--ibr-accent, #5aa0ff) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.ibr-hero-dot { color: var(--ibr-accent, #5aa0ff); }
+.ibr-hero-ideas {
+    background: linear-gradient(135deg, var(--ibr-accent, #5aa0ff) 0%, var(--ibr-accent-2, #a78bfa) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.ibr-hero-tagline {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    opacity: .8;
+    max-width: 38rem;
+    margin: 0;
+}
+.ibr-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+    margin-top: .5rem;
+}
+.ibr-badge {
+    display: inline-block;
+    padding: .25rem .8rem;
+    border: 1px solid rgba(90,160,255,.35);
+    border-radius: 999px;
+    font-size: .78rem;
+    color: var(--ibr-accent, #5aa0ff);
+    background: rgba(90,160,255,.07);
+}
+
+/* ── Section scaffold ── */
+.ibr-section { display: flex; flex-direction: column; gap: 1.75rem; }
+.ibr-section-title {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    margin: 0;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid rgba(90,160,255,.2);
+}
+.ibr-section-lead {
+    font-size: 1.05rem;
+    opacity: .8;
+    max-width: 52rem;
+    margin: 0;
+}
+
+/* ── Three-pillar grid ── */
+.ibr-pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--ibr-card-min, 18rem), 1fr));
+    gap: var(--ibr-card-gap, 1.5rem);
+}
+.ibr-pillar {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(90,160,255,.15);
+    border-radius: var(--ibr-card-radius, 12px);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    transition: border-color .18s;
+}
+.ibr-pillar:hover { border-color: rgba(90,160,255,.4); }
+.ibr-pillar-label {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ibr-accent, #5aa0ff);
+    background: rgba(90,160,255,.1);
+    padding: .18rem .6rem;
+    border-radius: 4px;
+}
+.ibr-pillar-title { font-size: 1.1rem; font-weight: 600; margin: 0; }
+.ibr-pillar p { margin: 0; opacity: .8; font-size: .95rem; }
+
+/* ── Two-column ── */
+.ibr-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+.ibr-dnn-cols { grid-template-columns: 3fr 2fr; }
+@media (max-width: 720px) {
+    .ibr-two-col,
+    .ibr-dnn-cols { grid-template-columns: 1fr; }
+}
+
+/* ── Code blocks ── */
+.ibr-code-block {
+    background: rgba(0,0,0,.5);
+    border: 1px solid rgba(90,160,255,.18);
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+    font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    font-size: .84rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+    color: #c9d1d9;
+}
+.ibr-code-inline {
+    font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    font-size: .88em;
+    background: rgba(90,160,255,.1);
+    color: #5aa0ff;
+    padding: .1em .4em;
+    border-radius: 4px;
+}
+.ibr-ck-tag     { color: #7dd3fc; }
+.ibr-ck-token   { color: #c084fc; font-weight: 600; }
+.ibr-ck-comment { color: #4b6070; font-style: italic; }
+.ibr-ck-key     { color: #86efac; }
+.ibr-ck-val     { color: #fca5a5; }
+.ibr-ck-dir     { color: #94a3b8; }
+
+.ibr-caption {
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    opacity: .45;
+    margin: 0 0 .6rem;
+}
+
+/* ── Token rule list ── */
+.ibr-token-rules { padding-top: 1.6rem; }
+.ibr-rule-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+}
+.ibr-rule-list li { padding-left: 1.2rem; position: relative; font-size: .95rem; }
+.ibr-rule-list li::before { content: '→'; position: absolute; left: 0; color: #5aa0ff; }
+
+/* ── Numbered list ── */
+.ibr-numbered {
+    padding-left: 1.5rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    font-size: .95rem;
+}
+.ibr-sub-title { font-size: 1.05rem; font-weight: 600; margin: 0 0 .75rem; }
+
+/* ── DNN section ── */
+.ibr-section--dnn {
+    background: rgba(167,139,250,.04);
+    border: 1px solid rgba(167,139,250,.15);
+    border-radius: 16px;
+    padding: 2.5rem;
+}
+.ibr-section--dnn p { margin: 0 0 .9rem; }
+.ibr-quote {
+    border-left: 3px solid #a78bfa;
+    padding-left: 1.25rem;
+    margin: 1.25rem 0;
+    font-style: italic;
+    font-size: 1.15rem;
+    opacity: .88;
+}
+.ibr-dnn-card {
+    background: rgba(0,0,0,.3);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 1.75rem;
+}
+.ibr-dnn-card-title {
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin: 0 0 .75rem;
+    opacity: .6;
+}
+.ibr-mt { margin-top: 1.5rem !important; }
+.ibr-check-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+}
+.ibr-check-list li { padding-left: 1.4rem; position: relative; font-size: .9rem; }
+.ibr-check-list--yes li::before { content: '✓'; position: absolute; left: 0; color: #4ade80; font-weight: 700; }
+.ibr-check-list--no  li::before { content: '✗'; position: absolute; left: 0; color: #f87171; font-weight: 700; }
+.ibr-dnn-list { padding-left: 1.4rem; margin: .5rem 0 0; display: flex; flex-direction: column; gap: .45rem; font-size: .95rem; }
+
+/* ── Comparison table ── */
+.ibr-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(90,160,255,.15);
+}
+.ibr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+}
+.ibr-table th,
+.ibr-table td {
+    padding: .75rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,.055);
+}
+.ibr-table th {
+    background: rgba(255,255,255,.04);
+    font-weight: 700;
+    font-size: .75rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    opacity: .65;
+}
+.ibr-table td:first-child,
+.ibr-table th:first-child { text-align: left; padding-left: 1.25rem; }
+.ibr-table tbody tr:last-child td { border-bottom: none; }
+.ibr-table tbody tr:hover { background: rgba(255,255,255,.02); }
+.ibr-th-ideas { color: #5aa0ff !important; opacity: 1 !important; }
+.ibr-td-ideas {
+    background: rgba(90,160,255,.05);
+    border-left: 1px solid rgba(90,160,255,.2) !important;
+}
+.ibr-yes   { color: #4ade80; font-weight: 700; }
+.ibr-no    { color: #f87171; font-weight: 700; }
+.ibr-maybe { color: #fbbf24; font-weight: 700; }
+.ibr-table-note { font-size: .78rem; opacity: .45; margin: 0; }
+
+/* ── Tech grid ── */
+.ibr-tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--ibr-card-gap, 1.25rem);
+}
+.ibr-tech-card {
+    background: rgba(255,255,255,.025);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    transition: border-color .18s;
+}
+.ibr-tech-card:hover { border-color: rgba(90,160,255,.3); }
+.ibr-tech-card h3 { font-size: .95rem; font-weight: 700; margin: 0; color: var(--ibr-accent, #5aa0ff); }
+.ibr-tech-card p  { margin: 0; font-size: .88rem; opacity: .75; }
+
+/* ── Get-started steps ── */
+.ibr-section--cta {
+    background: rgba(90,160,255,.04);
+    border: 1px solid rgba(90,160,255,.15);
+    border-radius: 16px;
+    padding: 2.5rem;
+}
+.ibr-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+}
+.ibr-step { display: flex; gap: 1rem; align-items: flex-start; }
+.ibr-step-n {
+    flex-shrink: 0;
+    width: 2.2rem; height: 2.2rem;
+    border-radius: 50%;
+    background: rgba(90,160,255,.15);
+    border: 1px solid rgba(90,160,255,.4);
+    color: var(--ibr-accent, #5aa0ff);
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+}
+.ibr-step strong { display: block; margin-bottom: .2rem; }
+.ibr-step p { margin: 0; font-size: .88rem; opacity: .7; }
+
+/* ── Footer ── */
+.ibr-footer {
+    text-align: center;
+    font-size: .82rem;
+    opacity: .35;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+
+/* ── Live demo ── */
+.ibr-demo {
+    border: 1px solid rgba(90,160,255,.25);
+    border-radius: var(--ibr-card-radius, 12px);
+    padding: 2rem;
+    background: rgba(90,160,255,.05);
+}
+.ibr-demo-lede { max-width: 46rem; }
+.ibr-demo-link { color: var(--ibr-accent, #5aa0ff); font-weight: 600; word-break: break-all; }
+.ibr-demo-btn {
+    background: var(--ibr-accent, #5aa0ff); color: #0b0f19; border: 0; border-radius: 8px;
+    padding: .65rem 1.3rem; font: inherit; font-weight: 700; cursor: pointer;
+}
+.ibr-demo-btn:disabled { opacity: .6; cursor: default; }
+.ibr-demo-check { margin-top: 1rem; }
+.ibr-demo-login {
+    display: grid; grid-template-columns: max-content 1fr; gap: .5rem 1rem; align-items: center;
+    margin: 1rem 0 0;
+}
+.ibr-demo-login dt { opacity: .7; }
+.ibr-demo-login dd { margin: 0; }
+.ibr-demo-login code { font-size: 1.05rem; padding: .15rem .45rem; border-radius: 5px; background: rgba(255,255,255,.08); user-select: all; }
+.ibr-demo-copy {
+    margin-left: .5rem; background: none; color: inherit; border: 1px solid rgba(255,255,255,.25);
+    border-radius: 6px; padding: .15rem .6rem; font: inherit; font-size: .85rem; cursor: pointer;
+}
+.ibr-demo-msg { margin-top: .75rem; opacity: .8; }
+
+/* Instance setting (M.IDEA-§4.5): hover effects off. */
+.ibr--no-anim .ibr-pillar,
+.ibr--no-anim .ibr-tech-card { transition: none; }
+.ibr--no-anim .ibr-pillar:hover { border-color: rgba(90,160,255,.15); }
+.ibr--no-anim .ibr-tech-card:hover { border-color: rgba(255,255,255,.07); }

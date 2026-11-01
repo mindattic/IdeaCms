@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.Cyberspace;
+namespace IdeaCms.Plugin.Cyberspace;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.Cyberspace.V1 — the animated console-background effects engine as a
+/// IdeaCms.Plugin.Cyberspace.V1 — the animated console-background effects engine as a
 /// self-contained Plugin. Bundles its own CSS (the effect-layer styles), the engine JS, the circuitboard
 /// textures, and a bootstrap shim that points the engine at those bundled textures — all under
 /// <c>/_ideas/Plugin/cyberspace/1/</c>. The Theme renders the effect-layer divs (.cyberspace-sl-fine /

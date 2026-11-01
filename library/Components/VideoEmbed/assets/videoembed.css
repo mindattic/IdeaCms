@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.VideoEmbed — responsive player frame. Scoped under .ma-video (MAIL-LAW-6). */
+﻿/* IdeaCms.Component.VideoEmbed — responsive player frame. Scoped under .ma-video (MAIL-LAW-6). */
 .ma-video {
   --ma-video-ratio: 16 / 9;
   position: relative;

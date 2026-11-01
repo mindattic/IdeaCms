@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Card — content card + .ma-cards row helper. Scoped (MAIL-LAW-6).
+﻿/* IdeaCms.Component.Card — content card + .ma-cards row helper. Scoped (MAIL-LAW-6).
    Values read optional --ma-card-* custom properties (instance settings, M.IDEA-§4.5) with the
    as-designed fallback. */
 .ma-cards {

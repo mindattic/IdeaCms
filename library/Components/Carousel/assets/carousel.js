@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Carousel — wires any .ma-carousel of .ma-slide children: arrows, dots,
+﻿/* IdeaCms.Component.Carousel — wires any .ma-carousel of .ma-slide children: arrows, dots,
  * Left/Right keys, optional data-autoplay="ms" (pauses on hover/focus). A MutationObserver wires
  * carousels rendered at any time. Safe to load more than once. No external requests.
  * Page-wide defaults come from the instance settings (data-ma-settings="component.carousel");

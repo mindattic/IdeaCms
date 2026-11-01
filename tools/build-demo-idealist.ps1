@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   The demo (mindattic-ideas-demo) is a vanilla Ideas install that boots from this file
-  (Ideas:Idealist = seed/demo.idealist). It is generated, not committed, so its Packages[] is always
+  (IdeaCms:Idealist = seed/demo.idealist). It is generated, not committed, so its Packages[] is always
   exactly the set of packages in the build that ships — adding a package to library/ needs no edit here.
   The page itself lives in seed/demo/frontpage.html.
 
@@ -22,7 +22,7 @@ param(
 $ErrorActionPreference = 'Stop'
 # $PSScriptRoot is empty inside param() defaults on Windows PowerShell 5.1, so resolve them here.
 $repoRoot = Split-Path -Parent $PSScriptRoot
-if (-not $LibraryDir) { $LibraryDir = Join-Path $repoRoot 'src\MindAttic.Ideas.Blazor\library' }
+if (-not $LibraryDir) { $LibraryDir = Join-Path $repoRoot 'src\IdeaCms.Blazor\library' }
 if (-not $PagePath)   { $PagePath   = Join-Path $repoRoot 'seed\demo\frontpage.html' }
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -53,7 +53,7 @@ $list = [ordered]@{
         [ordered]@{ scope = 'Site'; key = 'nav.brand';       value = 'Ideas demo' }
         [ordered]@{ scope = 'Site'; key = 'nav.brandhref';   value = '/' }
         [ordered]@{ scope = 'Site'; key = 'nav.links';       value = 'Home=/;Sign in=/admin;About Ideas=https://mindattic.azurewebsites.net/ideas' }
-        [ordered]@{ scope = 'Site'; key = 'footer.text';     value = 'A public demo of MindAttic.Ideas. Wiped and re-provisioned every hour.' }
+        [ordered]@{ scope = 'Site'; key = 'footer.text';     value = 'A public demo of IdeaCms. Wiped and re-provisioned every hour.' }
         [ordered]@{ scope = 'Site'; key = 'plugins.default'; value = $plugins }
     )
     pages         = @(

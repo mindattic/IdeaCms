@@ -45,7 +45,7 @@ REPO_OVERRIDE = {
     'projects/mindattic-com': 'mindattic.com',
     'projects/mindatticcares-com': 'mindatticcares.com',
     'projects/ryandebraal-com': 'ryandebraal.com',
-    'projects/mindattic-ideas-library': 'MindAttic.Ideas.Library',
+    'projects/mindattic-ideas-library': 'IdeaCms.Library',
 }
 
 def repo_name(slug, title):

@@ -39,4 +39,4 @@ publish/
 
 # The LOCAL media store: uploaded screenshots, diagrams and page assets the dev host writes at
 # runtime. Content belongs in the database and travels as a .idealist (M.IDEA-§4.9), never in git.
-src/MindAttic.Ideas.Blazor/media/
+src/IdeaCms.Blazor/media/

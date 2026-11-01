@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.TabBoard — the mindattic.com tab-board engine, verbatim from index.htm.
+﻿/* IdeaCms.Component.TabBoard — the mindattic.com tab-board engine, verbatim from index.htm.
  *
  * Drop the token once and:
  *   - authored .board-section / .board-grid / .tabButton[data-target] / .tabPage markup is wired:

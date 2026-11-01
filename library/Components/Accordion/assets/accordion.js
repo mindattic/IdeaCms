@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Accordion — exclusive-open behavior for .ma-accordion[data-exclusive]
+﻿/* IdeaCms.Component.Accordion — exclusive-open behavior for .ma-accordion[data-exclusive]
  * (open/close itself is native <details>; this only closes the siblings). Event delegation, so
  * accordions rendered at any time work. Safe to load more than once.
  * Instance setting exclusiveByDefault (data-ma-settings="component.accordion") makes every

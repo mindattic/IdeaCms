@@ -14,7 +14,7 @@ node shoot.mjs --only hyperspace
 Output lands in `out/` (gitignored) with an `index.json` describing the run. To ingest:
 
 ```pwsh
-dotnet run --project src/MindAttic.Ideas.Blazor -- --upload-media <abs paths…> --folder screenshots
+dotnet run --project src/IdeaCms.Blazor -- --upload-media <abs paths…> --folder screenshots
 ```
 
 ## Why a manifest instead of detection
@@ -69,17 +69,17 @@ It needs two inputs beside it:
 
 ```pwsh
 # 1. the pages + their seeded READMEs
-sqlcmd -S "(localdb)\MSSQLLocalDB" -d MindAtticIdeas -y 0 -o pages.json -Q `
+sqlcmd -S "(localdb)\MSSQLLocalDB" -d IdeaCms -y 0 -o pages.json -Q `
   "SET NOCOUNT ON; SELECT p.Slug, p.Title, ISNULL(m.MetadataJson,'') AS Meta FROM Pages p
    LEFT JOIN ComponentMetadata m ON m.PageUid = p.Uid AND m.ComponentKey = 'frommd'
    WHERE p.Slug LIKE 'projects/%' AND p.IsDeleted = 0 ORDER BY p.Slug FOR JSON PATH;"
 # sqlcmd chunks FOR JSON at 2033 chars — strip the physical newlines to reassemble it.
 
 # 2. the placeholder's media uid, one line
-dotnet run --project src/MindAttic.Ideas.Blazor -- --upload-media tools/shoot/assets/no-screenshot.svg --folder screenshots
+dotnet run --project src/IdeaCms.Blazor -- --upload-media tools/shoot/assets/no-screenshot.svg --folder screenshots
 
 python brochures.py                      # -> brochures-all.sql
-sqlcmd -S "(localdb)\MSSQLLocalDB" -d MindAtticIdeas -f 65001 -i brochures-all.sql
+sqlcmd -S "(localdb)\MSSQLLocalDB" -d IdeaCms -f 65001 -i brochures-all.sql
 ```
 
 **`-f 65001` is not optional.** sqlcmd reads a UTF-8 script as ANSI otherwise, and every em-dash in

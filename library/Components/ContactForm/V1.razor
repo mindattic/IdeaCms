@@ -1,8 +1,8 @@
-@namespace MindAttic.Ideas.Component.ContactForm
+@namespace IdeaCms.Component.ContactForm
 @inherits ComponentBase
 @attribute [Idea(DisplayName = "Contact Form")]
 
-@* MindAttic.Ideas.Component.ContactForm.V1 — a name/email/message contact form that POSTs to a
+@* IdeaCms.Component.ContactForm.V1 — a name/email/message contact form that POSTs to a
    configurable endpoint (action=, falling back to the "contact.action" site setting so each SITE
    wires its own backend — Formspree-style relay or a future host endpoint). Includes a honeypot
    field bots fill and servers should reject. With no action configured it renders a visible

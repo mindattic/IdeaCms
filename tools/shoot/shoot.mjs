@@ -35,7 +35,7 @@ import { terminalHtml } from './lib/terminal.mjs';
 import { renderMermaid, sourceFor } from './lib/diagram.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(HERE, '..', '..');        // MindAttic.Ideas
+const REPO_ROOT = path.resolve(HERE, '..', '..');        // IdeaCms
 const PROJECTS_ROOT = path.resolve(REPO_ROOT, '..');      // D:\Projects\MindAttic
 const OUT = path.join(HERE, 'out');
 const TMP = path.join(HERE, '.tmp');

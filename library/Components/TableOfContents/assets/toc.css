@@ -1,5 +1,5 @@
 /* ============================================================================
-   MindAttic.Ideas.Component.TableOfContents.V1 — minimal, theme-agnostic styling for
+   IdeaCms.Component.TableOfContents.V1 — minimal, theme-agnostic styling for
    the auto-generated subpage list. Uses `inherit`/neutral grays so it sits cleanly
    on any host theme (light or dark). Scoped under .ma-toc so it never leaks.
    Served from this .idea's wwwroot at /_ideas/Component/tableofcontents/1/.

@@ -1,15 +1,15 @@
 ---
 codex: 1
-project: MindAttic.Ideas.Library
+project: IdeaCms.Library
 code: MAIL
 layer: bible
 status: living
 updated: 2026-10-03
 ---
 
-# MindAttic.Ideas.Library — Project Bible
+# IdeaCms.Library — Project Bible
 
-> Single source of truth for what the first-party library (`library/` in the MindAttic.Ideas repo) IS,
+> Single source of truth for what the first-party library (`library/` in the IdeaCms repo) IS,
 > is NOT, and the rules that keep it coherent. The [README](../README.md) says how to build and pack;
 > this says how to think about it. Tabular facts live once in
 > [`docs/data/components.json`](data/components.json) (L5) and are cited here by `id`. The CMS's own
@@ -17,8 +17,8 @@ updated: 2026-10-03
 
 ## 1. The one sentence {#MAIL-§1}
 
-MindAttic.Ideas.Library is the **first-party catalog of `.idea` citizens** — Themes, Plugins, and
-Components — that ship *with* the MindAttic.Ideas CMS, each an independently versioned, independently
+IdeaCms.Library is the **first-party catalog of `.idea` citizens** — Themes, Plugins, and
+Components — that ship *with* the IdeaCms CMS, each an independently versioned, independently
 packable RCL whose **asset bundle is the single source of truth** for every consumer.
 
 ## 2. The product promise {#MAIL-§2}
@@ -43,7 +43,7 @@ packable RCL whose **asset bundle is the single source of truth** for every cons
 
 - **NOT the CMS host.** The CMS (`../src`) never references anything here; it installs packed `.idea`
   files as optional content. The only thing these projects compile against is the frozen
-  `MindAttic.Ideas.Abstractions` SDK in `../src`.
+  `IdeaCms.Abstractions` SDK in `../src`.
 - **NOT a `dotnet pack` library.** Every project is `IsPackable=false`; the unit of distribution is the
   `.idea` (a guarded, content-signed zip, [HOUSE-LAW-5](../../../MindAttic.HouseRules.md)). For feed
   transport, `ma-idea nupkg` wraps a signed `.idea` unchanged inside a NuGet package.
@@ -55,18 +55,18 @@ packable RCL whose **asset bundle is the single source of truth** for every cons
 - **NOT cross-host static web assets.** Chrome lives in a plain `assets/` folder (NOT `wwwroot/`) so the
   Razor SDK never registers it as a static web asset. `assets/` becomes the package `wwwroot/` only at
   pack time.
-- **NOT a separate repo.** The library is the `library/` half of the MindAttic.Ideas repo, with its own
-  solution; the GitHub repo `mindattic/MindAttic.Ideas.Library` is archived.
+- **NOT a separate repo.** The library is the `library/` half of the IdeaCms repo, with its own
+  solution; the GitHub repo `mindattic/IdeaCms.Library` is archived.
 
 ## 4. Architecture canon {#MAIL-§4}
 
 ```
-   ../src/MindAttic.Ideas.* (CMS host)  ── installs packed, signed .idea (optional content) ──┐
+   ../src/IdeaCms.* (CMS host)  ── installs packed, signed .idea (optional content) ──┐
         ▲ compiles against (frozen SDK only)                                                   │
         │                                                                                      │
-   ../src/MindAttic.Ideas.Abstractions ◄── ProjectReference (Private=false, ExcludeAssets=runtime)
+   ../src/IdeaCms.Abstractions ◄── ProjectReference (Private=false, ExcludeAssets=runtime)
         │
-   ┌────┴────────────────────────── library/ (MindAttic.Ideas.Library.slnx) ─────────────────┐
+   ┌────┴────────────────────────── library/ (IdeaCms.Library.slnx) ─────────────────┐
    │  Directory.Build.props  (net10.0, the ONE Abstractions ref, CopyLocalLockFileAssemblies)   │
    │                                                                                           │
    │   Themes/      ThemeBase     → ThemeCssUrls; chrome + ONE @Body hole; light+dark palette  │
@@ -80,7 +80,7 @@ packable RCL whose **asset bundle is the single source of truth** for every cons
 ```
 
 ### 4.1 Projects {#MAIL-§4.1}
-The solution ([`MindAttic.Ideas.Library.slnx`](../MindAttic.Ideas.Library.slnx)) holds **53 citizen
+The solution ([`IdeaCms.Library.slnx`](../IdeaCms.Library.slnx)) holds **53 citizen
 RCLs — 7 Themes, 15 Plugins, 31 Components** — in three solution folders. Two named groups recur in
 [`components.json`](data/components.json) notes:
 - the **baseline set** — general-purpose parts for ordinary websites (NavMenu, Breadcrumbs, Hero, Card,
@@ -114,7 +114,7 @@ Abstractions reference live once in [`Directory.Build.props`](../Directory.Build
 - **pack** — `tools/pack-all.ps1` builds every citizen and repacks any whose assembly is newer than its
   `.idea` (`-Force` for all); `-Sign` content-signs each with the Vault `PackageSigning` certificate;
   `-Install` copies them into the host's `library/`. A single citizen packs with
-  `dotnet run --project ../src/MindAttic.Ideas.Sdk -- pack …`. The packer runs `CitizenValidator` and
+  `dotnet run --project ../src/IdeaCms.Sdk -- pack …`. The packer runs `CitizenValidator` and
   refuses an unsafe citizen.
 - **publish** — `tools/publish-nuget.ps1` wraps each signed `.idea` with `ma-idea nupkg` and pushes it
   to the configured feed.
@@ -175,7 +175,7 @@ parameter is never renamed or retyped.
 | Aspect | Status | Evidence |
 |---|---|---|
 | Packed artifacts present | ✅ | [`dist/`](../dist) holds 53 `*.idea`, one per row in [`components.json`](data/components.json); the same 53 ship in the CMS host's `library/`. |
-| Every shipped package passes citizen validation | ✅ | `ShippedContentValidationTests.EveryShippedPackage_PassesCitizenValidation` in `../src/MindAttic.Ideas.Tests` (564 passing, 2026-10-03). |
+| Every shipped package passes citizen validation | ✅ | `ShippedContentValidationTests.EveryShippedPackage_PassesCitizenValidation` in `../src/IdeaCms.Tests` (564 passing, 2026-10-03). |
 | Install + render of a packed citizen | ✅ | `RenderPipelineTests` in the CMS suite; live renders serve `/_ideas/...` mounts. |
 | Library test project | ⬜ | None exists in `library/`; see [RFC 0001](rfc/0001-component-test-harness.md). |
 | Raw-HTML consumer demo | 🟡 | Only `Themes/Cyberspace/demo.html` exists. |
@@ -215,7 +215,7 @@ A citizen change is **done** only when:
 - **Key** — a citizen's namespace tail, lowercased; its stable string identity.
 - **Version** — the `V{n}` class number; whole-number only ([HOUSE-LAW-1](../../../MindAttic.HouseRules.md)).
 - **`[Uses]` / `<CmsInclude>`** — declare/render a dependency on another installed citizen by string id.
-- **Abstractions** — `MindAttic.Ideas.Abstractions`, the frozen SDK every citizen compiles against;
+- **Abstractions** — `IdeaCms.Abstractions`, the frozen SDK every citizen compiles against;
   supplies `ThemeBase` / `PluginBase` / `ComponentBase`, `[Idea]`, `[Uses]`, `[Setting]`, `CmsInclude`.
 - **Page record** — a CMS database row; NOT a `.idea` ([MAIL-LAW-8](#MAIL-LAW-8)).
 - **RCL** — Razor Class Library, the project type of every citizen (`Microsoft.NET.Sdk.Razor`).

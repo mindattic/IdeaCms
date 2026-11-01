@@ -5,7 +5,7 @@
 //   creates a page that references it by a {{tag}} → the page renders the widget (no missing placeholder).
 //
 // Prereqs: the CMS is running (see e2e/README.md) and CYPRESS_ADMIN_PASSWORD is set. The uploaded fixture
-// is the Tooltip plugin packed from MindAttic.Ideas.Library (copied to cypress/fixtures by the README step).
+// is the Tooltip plugin packed from IdeaCms.Library (copied to cypress/fixtures by the README step).
 describe("admin: upload a plugin and reference it from a page", () => {
   const slug = "e2e-plugin-demo";
   const tag = "{{ MindAttic.Ideas.Plugin.Tooltip }}";
@@ -15,7 +15,7 @@ describe("admin: upload a plugin and reference it from a page", () => {
   it("uploads the Tooltip .idea into the library", () => {
     cy.visit("/admin/upload");
     cy.get('input[type="file"]').selectFile(
-      "cypress/fixtures/MindAttic.Ideas.Plugin.Tooltip.V1.idea",
+      "cypress/fixtures/IdeaCms.Plugin.Tooltip.V1.idea",
       { force: true } // the native input is visually hidden inside the dropzone label
     );
     // Install result row reports success (Install or NoOpAlreadyInstalled).
@@ -53,7 +53,7 @@ describe("admin: upload a plugin and reference it from a page", () => {
     cy.contains("h1", "E2E").should("be.visible");
     cy.get("button[data-tooltip]").should("exist");
     // The {{tag}} must have resolved — neither the raw token text nor the missing-content box remains.
-    cy.contains("MindAttic.Ideas.Plugin.Tooltip").should("not.exist");
+    cy.contains("IdeaCms.Plugin.Tooltip").should("not.exist");
     cy.contains(/not found/i).should("not.exist");
   });
 });

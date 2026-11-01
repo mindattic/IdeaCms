@@ -1,0 +1,57 @@
+@attribute [Authorize(Policy = MaPolicies.Admin)]
+@inject IContentCatalog Catalog
+@using IdeaCms.Core.Rendering
+
+@* Assets panel — lists mounted CSS/script assets for every installed package citizen.
+   Helps authors verify that a citizen's assets are reachable before referencing it in a page. *@
+
+@{
+    var mounted = Catalog.All
+        .Where(d => d.AssetMount is not null)
+        .OrderBy(d => d.Kind).ThenBy(d => d.Key).ThenBy(d => d.Version)
+        .ToList();
+}
+
+@if (!mounted.Any())
+{
+    <p class="admin-empty">No installed package citizens with mounted assets.</p>
+}
+else
+{
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Kind</th>
+                <th>Key</th>
+                <th>Ver</th>
+                <th>Mount</th>
+                <th>CSS</th>
+                <th>Scripts</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in mounted)
+            {
+                var assets = PageAssets.PackageAssetsOf(d);
+                <tr>
+                    <td>@d.Kind</td>
+                    <td>@d.Key</td>
+                    <td>V@d.Version</td>
+                    <td><code>@d.AssetMount</code></td>
+                    <td>
+                        @foreach (var css in assets.Css)
+                        {
+                            <div><a href="@css" target="_blank">@System.IO.Path.GetFileName(css)</a></div>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var js in assets.Scripts)
+                        {
+                            <div><a href="@js" target="_blank">@System.IO.Path.GetFileName(js)</a></div>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

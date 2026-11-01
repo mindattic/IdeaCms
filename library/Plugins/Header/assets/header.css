@@ -1,4 +1,4 @@
-/* MindAttic.Ideas.Plugin.Header — scoped under .mah-* so no collision with app.css uc-* classes.
+/* IdeaCms.Plugin.Header — scoped under .mah-* so no collision with app.css uc-* classes.
    Self-contained: all layout + dropdown styles live here. Fixed top bar, CSS-only hover open. */
 
 /* ── Fixed header — flex container. Columns are .mah-col children. ─────── */

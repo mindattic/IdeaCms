@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   NuGet distribution (M.IDEA-§4.8): each `.idea` citizen ships as its own package
-  (id `MindAttic.Ideas.{Category}.{Key}`, version `{n}.0.0`), content-signed independently of NuGet's
+  (id `IdeaCms.{Category}.{Key}`, version `{n}.0.0`), content-signed independently of NuGet's
   own signing feature (see PackageSigner) so every install path — NuGet fetch, `library/` folder,
   `--install`, admin upload — verifies the same signature the same way.
 
@@ -35,7 +35,7 @@ $libraryRoot = Split-Path -Parent $PSScriptRoot
 $repoRoot    = Split-Path -Parent $libraryRoot
 $distDir     = Join-Path $libraryRoot 'dist'
 $nupkgDir    = Join-Path $libraryRoot 'nupkg'
-$sdkProject  = Join-Path $repoRoot 'src\MindAttic.Ideas.Sdk'
+$sdkProject  = Join-Path $repoRoot 'src\IdeaCms.Sdk'
 
 # ---- pull the signing pfx + password and the feed PAT out of MindAttic.Vault's on-disk JSON. Vault
 # buckets are just JSON files under %APPDATA%\MindAttic\<bucket>\ — no library call needed for a script. ----

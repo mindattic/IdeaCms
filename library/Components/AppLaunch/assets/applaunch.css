@@ -1,4 +1,4 @@
-/* MindAttic.Ideas.Component.AppLaunch
+/* IdeaCms.Component.AppLaunch
  *
  * Two surfaces: the launch TILE (themeable, inherits colour) and the OVERLAY (deliberately not
  * themeable — it is a viewport takeover, so its geometry carries !important to survive any theme

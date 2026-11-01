@@ -1,4 +1,4 @@
-# MindAttic.Ideas project templates
+# IdeaCms project templates
 
 Scaffold a new modular `.idea` citizen with `dotnet new`.
 
@@ -17,23 +17,23 @@ dotnet new install ./templates/maidea-page
 # Scaffold a new Page (run from samples/ so the relative Abstractions path resolves)
 cd samples
 dotnet new maidea-page -n MyPage --slug my-page --theme cyberspace
-# -> samples/MyPage/  with MindAttic.Ideas.Page.MyPage.csproj, namespace MindAttic.Ideas.Page.MyPage, class V1
+# -> samples/MyPage/  with IdeaCms.Page.MyPage.csproj, namespace IdeaCms.Page.MyPage, class V1
 ```
 
 ## Template parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `-n` / `--name` | _(required)_ | Short name — becomes `MindAttic.Ideas.Page.<Name>` |
+| `-n` / `--name` | _(required)_ | Short name — becomes `IdeaCms.Page.<Name>` |
 | `--slug` | `hello-world` | Route the page is served at after install |
 | `--theme` | `cyberspace` | Theme key this page wears (referenced by string, not bundled) |
 
 ## What gets generated
 
-The generated project mirrors [`samples/MindAttic.Ideas.Page.HelloWorld`](../samples/MindAttic.Ideas.Page.HelloWorld):
+The generated project mirrors [`samples/IdeaCms.Page.HelloWorld`](../samples/IdeaCms.Page.HelloWorld):
 a Razor Class Library that:
 
-- compiles against **only** `MindAttic.Ideas.Abstractions` (Private=false, ExcludeAssets=runtime so host assemblies stay out of `bin/`)
+- compiles against **only** `IdeaCms.Abstractions` (Private=false, ExcludeAssets=runtime so host assemblies stay out of `bin/`)
 - references its theme and citizens by **string id** at runtime (never by assembly reference)
 - includes a `data/page.json` seed file for the initial Page row
 

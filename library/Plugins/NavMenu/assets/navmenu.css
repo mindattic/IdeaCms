@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Plugin.NavMenu — site navigation bar. Scoped under .ma-header (MAIL-LAW-6).
+﻿/* IdeaCms.Plugin.NavMenu — site navigation bar. Scoped under .ma-header (MAIL-LAW-6).
    Theme-agnostic: colors derive from currentColor/inherit plus overridable custom properties. */
 .ma-header {
   --ma-header-gap: 1.25rem;

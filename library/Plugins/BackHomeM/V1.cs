@@ -1,12 +1,12 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.BackHomeM;
+namespace IdeaCms.Plugin.BackHomeM;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.BackHomeM.V1 — the "back to mindattic.com" corner glyph as a self-contained
+/// IdeaCms.Plugin.BackHomeM.V1 — the "back to mindattic.com" corner glyph as a self-contained
 /// Plugin. Emits one stylesheet (base64-embedded icon @font-face, no external files) bundled in this
 /// package's wwwroot/ and served under <c>/_ideas/Plugin/backhomem/1/</c>, styling the
 /// <c>.back-home-m</c> anchor a Theme/page places. Instance settings (M.IDEA-§4.5) are emitted as

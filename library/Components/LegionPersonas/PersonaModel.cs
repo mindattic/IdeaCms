@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 
-namespace MindAttic.Ideas.Component.LegionPersonas;
+namespace IdeaCms.Component.LegionPersonas;
 
 /// <summary>
 /// A flattened, display-ready persona — the projection the gallery needs, with no MindAttic.Legion

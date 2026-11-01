@@ -1,0 +1,14 @@
+@namespace IdeaCms.Blazor.Components.Layout
+
+@* Flex header chrome. ColumnCount is a hint; actual columns are the <HeaderContent> children placed
+   inside ChildContent. <UserProfileDropdown> is slotted into the last <HeaderContent> by the caller. *@
+<header class="ma-host-header">
+    @ChildContent
+</header>
+
+@code {
+    /// <summary>Intended number of columns — purely informational; layout comes from HeaderContent children.</summary>
+    [Parameter] public int ColumnCount { get; set; } = 3;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

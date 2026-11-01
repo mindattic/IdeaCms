@@ -1,4 +1,4 @@
-# Deploying MindAttic.Ideas to Azure
+# Deploying IdeaCms to Azure
 
 One build of the CMS runs as **two deployments** on one App Service plan ([BIBLE §4.14](BIBLE.md#M.IDEA-§4.14)):
 
@@ -43,8 +43,8 @@ storage and vaults are pennies).
 ### 0. The GitHub OIDC principal
 
 CI authenticates as the app registration **`gh-mindattic-ideas-deploy`** (Contributor on the resource
-group) with federated credentials `repo:mindattic/MindAttic.Ideas:ref:refs/heads/main` (the branch was `master` until 2026-10-16; its credential is kept) and
-`repo:mindattic/MindAttic.Ideas:environment:production`. Its ids are the repo secrets
+group) with federated credentials `repo:mindattic/IdeaCms:ref:refs/heads/main` (the branch was `master` until 2026-10-16; its credential is kept) and
+`repo:mindattic/IdeaCms:environment:production`. Its ids are the repo secrets
 `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`. No other secret is needed.
 
 ### 1. Provision
@@ -93,7 +93,7 @@ On push to `master` and on dispatch:
    single-run firewall rule. Skippable with `skip_migrate`.
 3. **deploy-company** — deploy the artifact to the company site, restart it onto it (a zip deploy
    overwrites DLLs under the running process on Linux), then wait (up to 20 minutes) until `/_health`
-   reports **this commit** ready (`X-Ideas-Version` contains the SHA, `X-Ideas-Ready: true`) and `/`
+   reports **this commit** ready (`X-IdeaCms-Version` contains the SHA, `X-IdeaCms-Ready: true`) and `/`
    answers 200. The build stamps the commit with `-p:SourceRevisionId`; a bare 200 could come from the
    container being replaced.
 4. **deploy-demo** — only after the company job finishes (whatever its result): the same artifact to the
@@ -107,8 +107,8 @@ Never deploys when migrate *ran and failed*: that is how you get a half-migrated
 The server listens **before** the boot sequence (discovery, seed, admin bootstrap, `.idea`/`.idealist`
 provisioning) runs, so a container answers within seconds of `dotnet` starting:
 
-- **`/_health`** — liveness, always 200, never touches the database. Headers: `X-Ideas-Ready`
-  (`false` until the boot sequence finishes) and `X-Ideas-Version` (the build, `+<commit>`).
+- **`/_health`** — liveness, always 200, never touches the database. Headers: `X-IdeaCms-Ready`
+  (`false` until the boot sequence finishes) and `X-IdeaCms-Version` (the build, `+<commit>`).
 - **Everything else** — `503 starting` with `Retry-After: 10` until the boot sequence finishes.
 - **A transient failure** in the boot sequence (a SQL, socket, timeout or Azure identity error) is retried:
   8 attempts, 5 s doubling to 60 s apart, about four minutes in all. Every step is idempotent.
@@ -150,7 +150,7 @@ that fails between the stop and the start leaves the demo stopped; the next run 
 GitHub's cron can start a few minutes late; the displayed login is always the live one. Expect a few
 minutes of demo downtime at the top of each hour.
 
-**How the company site shows it.** `IdeasBrochure` asks the host's `IDemoAccess` feature for the URL and
+**How the company site shows it.** `IdeaCmsBrochure` asks the host's `IDemoAccess` feature for the URL and
 status only. The login is fetched by the browser from `POST /_demo/reveal` with a Turnstile token, which
 the server verifies with Cloudflare (bound to the `demo-reveal` action), rate-limits per client IP
 (5/minute), and answers `Cache-Control: no-store`. The password is never in page HTML or logs.
@@ -180,7 +180,7 @@ Set as App Service application settings. `__` maps to `:` in the config chain.
 | Setting | Value | Notes |
 |---|---|---|
 | `ASPNETCORE_ENVIRONMENT` | `Production` | Turns off `MigrateAsync`, the dropbox auto-install, and the dev auth bypass. |
-| `ConnectionStrings__Ideas` | `Server=tcp:…;Authentication=Active Directory Default;…` | No password. |
+| `ConnectionStrings__IdeaCms` | `Server=tcp:…;Authentication=Active Directory Default;…` | No password. |
 | `DataProtection__BlobUri` | `https://….blob.core.windows.net/dp-keys/ideas-keys.xml` | **Required in production** — the app throws without it. |
 | `DataProtection__KeyVaultKeyId` | `https://….vault.azure.net/keys/dp-protect/<version>` | **Required in production.** |
 | `Media__Provider` | `azure` | `local` keeps assets on the App Service filesystem, which does not survive a redeploy. |
@@ -202,9 +202,9 @@ Set as App Service application settings. `__` maps to `:` in the config chain.
 - **A video, or anything large** — `--upload-media`, which streams from disk straight into blob
   storage instead of crossing a SignalR circuit:
   ```pwsh
-  dotnet run --project src/MindAttic.Ideas.Blazor -- --upload-media .\feature.mp4 --folder site
+  dotnet run --project src/IdeaCms.Blazor -- --upload-media .\feature.mp4 --folder site
   ```
-  Point it at production by exporting the same `Media__*` and `ConnectionStrings__Ideas` values
+  Point it at production by exporting the same `Media__*` and `ConnectionStrings__IdeaCms` values
   locally. `/_media/{uid}` then 302s to a short-lived SAS and Azure serves the Range requests
   ([BIBLE §4.11](BIBLE.md#M.IDEA-§4.11)).
 - **A whole authored site** — export it where you built it, import it where it should live
@@ -213,12 +213,12 @@ Set as App Service application settings. `__` maps to `:` in the config chain.
   `frommd`/`fromhtml` slots — plus, for a fresh deployment, which `.idea` packages it should install.
   ```pwsh
   # on the source (your dev box)
-  dotnet run --project src/MindAttic.Ideas.Blazor -- --export-idealist D:	emp\site.idealist
+  dotnet run --project src/IdeaCms.Blazor -- --export-idealist D:	emp\site.idealist
 
   # against production — dry run first; it prints exactly what it would create and update
-  $env:ConnectionStrings__Ideas = '<production connection string>'
-  dotnet run --project src/MindAttic.Ideas.Blazor -- --import-idealist D:	emp\site.idealist --dry-run
-  dotnet run --project src/MindAttic.Ideas.Blazor -- --import-idealist D:	emp\site.idealist
+  $env:ConnectionStrings__IdeaCms = '<production connection string>'
+  dotnet run --project src/IdeaCms.Blazor -- --import-idealist D:	emp\site.idealist --dry-run
+  dotnet run --project src/IdeaCms.Blazor -- --import-idealist D:	emp\site.idealist
   ```
   Safe to re-run: pages reconcile on uid then slug (so the baseline seed's pages are **adopted**, not
   duplicated) and media is matched by SHA-256 (so nothing re-uploads). The import reports how many

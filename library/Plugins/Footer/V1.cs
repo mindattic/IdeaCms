@@ -1,12 +1,12 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.Footer;
+namespace IdeaCms.Plugin.Footer;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.Footer.V1 — the site-footer capability as an asset-only activator. Drop the
+/// IdeaCms.Plugin.Footer.V1 — the site-footer capability as an asset-only activator. Drop the
 /// token once and ANY <c>&lt;footer class="ma-footer"&gt;…&lt;/footer&gt;</c> the author writes gets the
 /// footer chrome plus the mindattic.com <em>pin-when-short</em> behavior: when the page content is
 /// shorter than the viewport the footer pins to the bottom edge; when content is taller it flows

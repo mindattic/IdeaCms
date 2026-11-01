@@ -1,4 +1,4 @@
-/* MindAttic.Ideas.Component.AppLaunch — launch a hosted app borderless.
+/* IdeaCms.Component.AppLaunch — launch a hosted app borderless.
  *
  * Event delegation on document, so a tile rendered at any time (Blazor re-render, enhanced nav,
  * a late include) works with no per-element wiring. Safe to load more than once.

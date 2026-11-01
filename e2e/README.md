@@ -1,4 +1,4 @@
-# MindAttic.Ideas — Cypress E2E
+# IdeaCms — Cypress E2E
 
 End-to-end coverage of the core admin flow:
 
@@ -6,12 +6,12 @@ End-to-end coverage of the core admin flow:
 > that references it by a `{{tag}}` → the page **renders the content** (no missing-content placeholder).
 
 Spec: [`cypress/e2e/admin-widget-flow.cy.js`](cypress/e2e/admin-widget-flow.cy.js).  
-Fixture: `cypress/fixtures/MindAttic.Ideas.Plugin.Tooltip.V1.idea` (packed from the first-party library).
+Fixture: `cypress/fixtures/IdeaCms.Plugin.Tooltip.V1.idea` (packed from the first-party library).
 
 ## Prerequisites
 
 - Node.js (for Cypress)
-- A running instance of `MindAttic.Ideas.Web` (these tests do **not** start the app)
+- A running instance of `IdeaCms.Web` (these tests do **not** start the app)
 
 ## Run
 
@@ -19,8 +19,8 @@ Fixture: `cypress/fixtures/MindAttic.Ideas.Plugin.Tooltip.V1.idea` (packed from 
 # 1) Start the CMS on a dev port + separate DB (from the repo root)
 $env:ASPNETCORE_ENVIRONMENT = "Development"
 $env:ASPNETCORE_URLS        = "https://localhost:7207"
-$env:ConnectionStrings__Ideas = "Server=(localdb)\MSSQLLocalDB;Database=MindAtticIdeas_E2E;Trusted_Connection=True;TrustServerCertificate=True"
-dotnet run --project src/MindAttic.Ideas.Web
+$env:ConnectionStrings__IdeaCms = "Server=(localdb)\MSSQLLocalDB;Database=IdeaCms_E2E;Trusted_Connection=True;TrustServerCertificate=True"
+dotnet run --project src/IdeaCms.Web
 # On first run the bundled library/*.idea files seed into the catalog automatically.
 
 # 2) In a separate shell, from this e2e/ folder:

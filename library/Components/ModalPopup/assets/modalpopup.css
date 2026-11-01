@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.ModalPopup — Scoped to .ma-modal* selectors (MAIL-LAW-6).
+﻿/* IdeaCms.Component.ModalPopup — Scoped to .ma-modal* selectors (MAIL-LAW-6).
  * Provides the backdrop + dialog chrome. CSS custom properties let the host page override colours
  * without rewriting this sheet. Dark defaults match the Cyberspace theme palette. */
 

@@ -1,0 +1,40 @@
+@namespace IdeaCms.Blazor.Components.Layout
+
+@* One column slot inside <Header>. Each column controls its own flex sizing, alignment, and padding. *@
+<div class="ma-host-header-col @(Fill ? "ma-host-header-col--fill" : "")" style="@_style">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>Grows to fill remaining horizontal space (flex: 1). Typical for the center column.</summary>
+    [Parameter] public bool Fill { get; set; }
+
+    /// <summary>Horizontal alignment of content within the column (justify-content). E.g. "center", "flex-end".</summary>
+    [Parameter] public string? Justify { get; set; }
+
+    /// <summary>Vertical alignment of content within the column (align-items). E.g. "center", "flex-start".</summary>
+    [Parameter] public string? Align { get; set; }
+
+    /// <summary>CSS padding shorthand applied to this column. E.g. "0 1.5rem" or "4px 8px".</summary>
+    [Parameter] public string? Padding { get; set; }
+
+    /// <summary>Minimum width for this column. Prevents flex shrink below a threshold. E.g. "180px".</summary>
+    [Parameter] public string? MinWidth { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private string? _style
+    {
+        get
+        {
+            var s = string.Join(";", new[]
+            {
+                string.IsNullOrEmpty(Justify)  ? null : $"justify-content:{Justify}",
+                string.IsNullOrEmpty(Align)    ? null : $"align-items:{Align}",
+                string.IsNullOrEmpty(Padding)  ? null : $"padding:{Padding}",
+                string.IsNullOrEmpty(MinWidth) ? null : $"min-width:{MinWidth}",
+            }.Where(s => s is not null));
+            return s.Length > 0 ? s : null;
+        }
+    }
+}

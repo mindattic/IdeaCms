@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Accordion — chrome for native <details> groups. Scoped (MAIL-LAW-6).
+﻿/* IdeaCms.Component.Accordion — chrome for native <details> groups. Scoped (MAIL-LAW-6).
    Every value reads a custom property with the as-designed fallback, so instance settings (M.IDEA-§4.5)
    can retune it without touching the rules. */
 .ma-accordion {

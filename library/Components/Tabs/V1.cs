@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
-using ComponentBase = MindAttic.Ideas.Abstractions.ComponentBase;
+using IdeaCms.Abstractions;
+using ComponentBase = IdeaCms.Abstractions.ComponentBase;
 
-namespace MindAttic.Ideas.Component.Tabs;
+namespace IdeaCms.Component.Tabs;
 
 /// <summary>
-/// MindAttic.Ideas.Component.Tabs.V1 — the tabbed-content capability as an asset-only activator (the
+/// IdeaCms.Component.Tabs.V1 — the tabbed-content capability as an asset-only activator (the
 /// Tooltip model). Drop the token once and ANY <c>&lt;div class="ma-tabs"&gt;</c> whose child sections
 /// carry <c>data-title</c> becomes a wired, accessible tab control — the script builds the tablist
 /// from the titles, so the page author writes only content:

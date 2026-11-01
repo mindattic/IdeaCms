@@ -1,4 +1,4 @@
-/* MindAttic.Ideas.Plugin.PoweredBy — site footer + the CMS byline. Scoped (MAIL-LAW-6).
+/* IdeaCms.Plugin.PoweredBy — site footer + the CMS byline. Scoped (MAIL-LAW-6).
    Deliberately light on layout: when the Footer plugin is also active it owns the .ma-footer chrome
    and the pin-when-short behavior, and this file only styles the .ma-pb-* internals. */
 

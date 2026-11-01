@@ -1,8 +1,8 @@
-@namespace MindAttic.Ideas.Plugin.ThemeToggle
+@namespace IdeaCms.Plugin.ThemeToggle
 @inherits PluginBase
 @attribute [Idea(DisplayName = "Theme Toggle", Slot = PluginSlot.BeforeBody)]
 
-@*  MindAttic.Ideas.Plugin.ThemeToggle.V1 — a site-wide light/dark switch for whichever theme is active.
+@*  IdeaCms.Plugin.ThemeToggle.V1 — a site-wide light/dark switch for whichever theme is active.
     Both icons always render; theme.css-independent CSS here shows/hides them off the data-theme-mode
     attribute App.razor sets on <html> (server default) and themetoggle.js corrects/toggles (localStorage
     "mindattic.theme-mode"). No theme markup changes needed — see M.IDEA-§4.13 and each theme's

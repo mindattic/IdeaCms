@@ -1,0 +1,148 @@
+@using IdeaCms.Core.Rendering
+@using IdeaCms.Blazor.Services
+@inject IInstanceConfigService Instances
+@inject InstanceClipboard Clipboard
+@implements IDisposable
+
+@* Settings editor for ONE citizen instance on one page (M.IDEA-§4.5), generated from the citizen's
+   [Parameter]/[Setting] schema. Unset = the citizen's declared default; "Reset" returns a value to it. *@
+
+<div class="admin-editor-head">
+    <h2>@View.DisplayName <span class="admin-sub">on /@View.PageSlug</span></h2>
+    <button class="admin-save" @onclick="Save">Save</button>
+    <button class="admin-link" @onclick="Copy" title="Copy this instance's configuration">⧉ Copy Configuration</button>
+    <button class="admin-link" @onclick="Paste" disabled="@(!Clipboard.CanPasteOnto(View.Kind, View.Key))"
+            title="@(Clipboard.Current is { } c ? "Paste from " + c.SourceLabel : "Copy a configuration first")">📋 Paste Configuration</button>
+    <button class="admin-link" @onclick="() => OnClose.InvokeAsync()">Close</button>
+</div>
+
+@if (!string.IsNullOrEmpty(status))
+{
+    <div class="admin-status @(statusBad ? "err" : "ok")">@status</div>
+}
+
+@if (View.Schema.Count == 0)
+{
+    <p class="admin-empty">This @View.Kind.ToString().ToLowerInvariant() exposes no settings.</p>
+}
+else
+{
+    @foreach (var group in View.Schema.GroupBy(d => d.Group ?? "General"))
+    {
+        <details class="admin-page-props" open>
+            <summary>@group.Key</summary>
+            <div class="admin-settings-grid">
+                @foreach (var d in group)
+                {
+                    var setting = d;
+                    var isSet = values.TryGetValue(setting.Name, out var current) && current is not null;
+                    <div class="admin-setting @(isSet ? "set" : "")">
+                        <div class="admin-setting-head">
+                            <strong>@setting.DisplayName</strong>
+                            @if (!setting.Copyable) { <span class="admin-badge" title="Not copied by Copy Configuration">content</span> }
+                            @if (isSet) { <button class="admin-mini" title="Reset to default" @onclick="() => Reset(setting.Name)">↺ reset</button> }
+                        </div>
+                        @switch (setting.ValueKind)
+                        {
+                            case SettingValueKind.Bool:
+                                <label class="admin-access-check">
+                                    <input type="checkbox" checked="@IsTrue(Effective(setting))"
+                                           @onchange="e => SetBool(setting.Name, e)" />
+                                    @(IsTrue(Effective(setting)) ? "On" : "Off")
+                                </label>
+                                break;
+                            case SettingValueKind.Choice:
+                                <select value="@Effective(setting)" @onchange="e => Set(setting.Name, e.Value?.ToString())">
+                                    @foreach (var choice in setting.Choices)
+                                    {
+                                        <option value="@choice">@choice</option>
+                                    }
+                                </select>
+                                break;
+                            case SettingValueKind.Integer:
+                            case SettingValueKind.Number:
+                                <input type="number" step="@(setting.ValueKind == SettingValueKind.Integer ? "1" : "any")"
+                                       value="@current" placeholder="@setting.DefaultValue"
+                                       @onchange="e => Set(setting.Name, EmptyToNull(e.Value?.ToString()))" />
+                                break;
+                            default:
+                                if (setting.Multiline)
+                                {
+                                    <textarea rows="4" placeholder="@setting.DefaultValue"
+                                              @onchange="e => Set(setting.Name, EmptyToNull(e.Value?.ToString()))">@current</textarea>
+                                }
+                                else
+                                {
+                                    <input value="@current" placeholder="@setting.DefaultValue"
+                                           @onchange="e => Set(setting.Name, EmptyToNull(e.Value?.ToString()))" />
+                                }
+                                break;
+                        }
+                        <div class="admin-sub">
+                            @setting.Description
+                            @if (setting.DefaultValue is { Length: > 0 } dv) { <span> · default <code>@dv</code></span> }
+                        </div>
+                    </div>
+                }
+            </div>
+        </details>
+    }
+}
+
+@code {
+    [Parameter, EditorRequired] public InstanceSettingsView View { get; set; } = default!;
+    [Parameter] public EventCallback OnSaved { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private Dictionary<string, string?> values = new(StringComparer.OrdinalIgnoreCase);
+    private string status = "";
+    private bool statusBad;
+    private InstanceSettingsView? loadedFrom;
+
+    protected override void OnInitialized() => Clipboard.Changed += OnClipboardChanged;
+    public void Dispose() => Clipboard.Changed -= OnClipboardChanged;
+    private void OnClipboardChanged() => InvokeAsync(StateHasChanged);
+
+    protected override void OnParametersSet()
+    {
+        if (ReferenceEquals(loadedFrom, View)) return;
+        loadedFrom = View;
+        values = new Dictionary<string, string?>(View.Values, StringComparer.OrdinalIgnoreCase);
+        status = "";
+    }
+
+    private string? Effective(SettingDescriptor d) =>
+        values.TryGetValue(d.Name, out var v) && v is not null ? v : d.DefaultValue;
+
+    private static bool IsTrue(string? v) => string.Equals(v, "true", StringComparison.OrdinalIgnoreCase);
+    private static string? EmptyToNull(string? v) => string.IsNullOrWhiteSpace(v) ? null : v;
+    private void Set(string name, string? value) => values[name] = value;
+    private void SetBool(string name, ChangeEventArgs e) => values[name] = e.Value is true ? "true" : "false";
+    private void Reset(string name) => values[name] = null;
+
+    private async Task Save()
+    {
+        var principal = AuthState is null ? new ClaimsPrincipal() : (await AuthState).User;
+        var error = await Instances.SaveSettingsAsync(View.PageId, View.Path, values, principal);
+        statusBad = error is not null;
+        status = error ?? "Saved.";
+        if (error is null) await OnSaved.InvokeAsync();
+    }
+
+    private void Copy()
+    {
+        Clipboard.Copy(View with { Values = values });
+        statusBad = false;
+        status = "Configuration copied — open another " + View.Kind.ToString().ToLowerInvariant() + " instance and Paste.";
+    }
+
+    private void Paste()
+    {
+        if (!Clipboard.CanPasteOnto(View.Kind, View.Key)) return;
+        var source = Clipboard.Current!.SourceLabel;
+        values = Clipboard.PasteOnto(View with { Values = values });
+        statusBad = false;
+        status = $"Pasted from {source} — review, then Save.";
+    }
+}

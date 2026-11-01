@@ -1,12 +1,12 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.SacredGeometry;
+namespace IdeaCms.Plugin.SacredGeometry;
 
 /// <summary>
-/// MindAttic.Ideas.Plugin.SacredGeometry.V1 — the 1024-shape SacredGeometry catalog + renderer as a
+/// IdeaCms.Plugin.SacredGeometry.V1 — the 1024-shape SacredGeometry catalog + renderer as a
 /// self-contained Plugin (the .idea target of the canonical UiUx <c>Components/SacredGeometry</c>
 /// source). A code-only capability activator: it emits the renderer (<c>window.SacredGeometry</c>) plus
 /// a tiny auto-init driver, both bundled in this package's wwwroot/ and served under

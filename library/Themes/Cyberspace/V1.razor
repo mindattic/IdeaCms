@@ -1,23 +1,23 @@
-@namespace MindAttic.Ideas.Theme.Cyberspace
+@namespace IdeaCms.Theme.Cyberspace
 @inherits ThemeBase
 @attribute [Uses(ContentKind.Plugin, "outfitfont", 1)]
 @attribute [Uses(ContentKind.Plugin, "atticfont", 1)]
 @attribute [Uses(ContentKind.Plugin, "backhomem", 1)]
 @attribute [Uses(ContentKind.Plugin, "cyberspace", 1)]
 
-@* MindAttic.Ideas.Theme.Cyberspace.V1 — chrome (theme.css) + ONE @Body hole, and it COMPOSES its
+@* IdeaCms.Theme.Cyberspace.V1 — chrome (theme.css) + ONE @Body hole, and it COMPOSES its
    look/feel from separately-installed Plugin .ideas BY STRING ID (the "multi-target source" model):
    the two fonts, the back-home glyph, and the console-bg effects engine. Each Plugin emits its own
    css/js from its own .idea wwwroot, so this theme bundles only its own chrome. The effect-layer divs
    are rendered here; the Cyberspace plugin's engine paints into them.
    Instance settings (M.IDEA-§4.5): palette tokens live on :root in theme.css, so overrides are emitted as an
    html:root { … } block (wins over :root by specificity); effect layers are plain on/off toggles. *@
-<CmsInclude Ref="MindAttic.Ideas.Plugin.OutfitFont.V1" />
-<CmsInclude Ref="MindAttic.Ideas.Plugin.AtticFont.V1" />
-<CmsInclude Ref="MindAttic.Ideas.Plugin.BackHomeM.V1" />
+<CmsInclude Ref="IdeaCms.Plugin.OutfitFont.V1" />
+<CmsInclude Ref="IdeaCms.Plugin.AtticFont.V1" />
+<CmsInclude Ref="IdeaCms.Plugin.BackHomeM.V1" />
 @if (EffectsEngine)
 {
-    <CmsInclude Ref="MindAttic.Ideas.Plugin.Cyberspace.V1" />
+    <CmsInclude Ref="IdeaCms.Plugin.Cyberspace.V1" />
 }
 @if (_rootVars is { } vars)
 {

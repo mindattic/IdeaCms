@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Tabs — wires any .ma-tabs container into an accessible tab control.
+﻿/* IdeaCms.Component.Tabs — wires any .ma-tabs container into an accessible tab control.
  *
  * Author markup (content only; the tablist is GENERATED from data-title):
  *   <div class="ma-tabs">                      <!-- add ma-tabs-board for the tile-board look -->

@@ -27,8 +27,8 @@
   up rebuilt packages during development, start the host with IDEAS_DROPBOX pointed at dist/, which
   installs through the same path with allowOverride:true:
 
-      $env:IDEAS_DROPBOX = 'D:\Projects\MindAttic\MindAttic.Ideas\library\dist'
-      dotnet run --project src\MindAttic.Ideas.Blazor
+      $env:IDEAS_DROPBOX = 'D:\Projects\MindAttic\IdeaCms\library\dist'
+      dotnet run --project src\IdeaCms.Blazor
 
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File tools\pack-all.ps1
@@ -47,17 +47,17 @@ $ErrorActionPreference = 'Stop'
 $libraryRoot = Split-Path -Parent $PSScriptRoot
 $repoRoot    = Split-Path -Parent $libraryRoot
 $distDir     = Join-Path $libraryRoot 'dist'
-$sdkProject  = Join-Path $repoRoot 'src\MindAttic.Ideas.Sdk'
-$refsDir     = Join-Path $repoRoot 'src\MindAttic.Ideas.Abstractions\bin\Debug\net10.0'
-$hostLibrary = Join-Path $repoRoot 'src\MindAttic.Ideas.Blazor\library'
+$sdkProject  = Join-Path $repoRoot 'src\IdeaCms.Sdk'
+$refsDir     = Join-Path $repoRoot 'src\IdeaCms.Abstractions\bin\Debug\net10.0'
+$hostLibrary = Join-Path $repoRoot 'src\IdeaCms.Blazor\library'
 
 if (-not (Test-Path $refsDir)) {
-    throw "Abstractions reference output not found at '$refsDir'. Build the CMS solution first: dotnet build MindAttic.Ideas.slnx -c Debug"
+    throw "Abstractions reference output not found at '$refsDir'. Build the CMS solution first: dotnet build IdeaCms.slnx -c Debug"
 }
 if (-not (Test-Path $distDir)) { New-Item -ItemType Directory -Path $distDir | Out-Null }
 
 Write-Host 'Building the library (Release)...' -ForegroundColor Cyan
-$slnx = Join-Path $libraryRoot 'MindAttic.Ideas.Library.slnx'
+$slnx = Join-Path $libraryRoot 'IdeaCms.Library.slnx'
 & dotnet build -c Release $slnx --nologo -v quiet
 if ($LASTEXITCODE -ne 0) { throw "Library build failed (exit $LASTEXITCODE)." }
 

@@ -1,4 +1,4 @@
-name: Build and deploy MindAttic.Ideas to Azure App Service
+name: Build and deploy IdeaCms to Azure App Service
 
 # One build, two deployments of it (the same artifact on both):
 #   mindattic             the company site
@@ -32,9 +32,9 @@ permissions:
   id-token: write          # required by azure/login's OIDC flow
 
 env:
-  PUBLISH_PROJECT: src/MindAttic.Ideas.Blazor/MindAttic.Ideas.Blazor.csproj
-  TEST_PROJECT: src/MindAttic.Ideas.Tests/MindAttic.Ideas.Tests.csproj
-  MIGRATIONS_PROJECT: src/MindAttic.Ideas.Core
+  PUBLISH_PROJECT: src/IdeaCms.Blazor/IdeaCms.Blazor.csproj
+  TEST_PROJECT: src/IdeaCms.Tests/IdeaCms.Tests.csproj
+  MIGRATIONS_PROJECT: src/IdeaCms.Core
   AZURE_RESOURCE_GROUP: rg-mindattic-ideas
   DOTNET_VERSION: '10.x'
 
@@ -54,12 +54,12 @@ jobs:
       # to tolerate those two missing sources instead of hard-failing with NU1301, which is exactly
       # why the vendored copies have to be there.
       - name: Restore
-        run: dotnet restore MindAttic.Ideas.slnx --ignore-failed-sources
+        run: dotnet restore IdeaCms.slnx --ignore-failed-sources
 
-      # The commit is stamped into the informational version, which /_health reports as X-Ideas-Version:
+      # The commit is stamped into the informational version, which /_health reports as X-IdeaCms-Version:
       # that is how the smoke test tells the new container from the one it is replacing.
       - name: Build
-        run: dotnet build MindAttic.Ideas.slnx -c Release --no-restore -p:SourceRevisionId=${{ github.sha }}
+        run: dotnet build IdeaCms.slnx -c Release --no-restore -p:SourceRevisionId=${{ github.sha }}
 
       # The deploy is gated on the suite. PageHistorySqlServerTests is [Explicit] and needs the dev
       # LocalDB, so it does not run here.
@@ -69,7 +69,7 @@ jobs:
       - name: Publish
         run: dotnet publish ${{ env.PUBLISH_PROJECT }} -c Release -o publish --no-build
 
-      # The demo boots from this (Ideas:Idealist). Generated from the packages actually in the build,
+      # The demo boots from this (IdeaCms:Idealist). Generated from the packages actually in the build,
       # so it can never list one that is not shipped.
       - name: Build the demo's idealist
         shell: pwsh
@@ -198,8 +198,8 @@ jobs:
         run: az webapp restart --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name $env:APP
 
       # /_health answers as soon as the server listens, before initialisation; its headers say which
-      # build is running (X-Ideas-Version carries the commit) and whether it has finished initialising
-      # (X-Ideas-Ready). Wait for THIS commit to report ready -- the old container keeps answering until
+      # build is running (X-IdeaCms-Version carries the commit) and whether it has finished initialising
+      # (X-IdeaCms-Ready). Wait for THIS commit to report ready -- the old container keeps answering until
       # the new one is up, so a bare 200 proves nothing -- then require the home page.
       - name: Smoke-test health and the home page
         shell: pwsh
@@ -211,7 +211,7 @@ jobs:
           while (-not $ready -and (Get-Date) -lt $deadline) {
             try {
               $r = Invoke-WebRequest -Uri "$base/_health" -UseBasicParsing -TimeoutSec 30
-              $version = "$($r.Headers['X-Ideas-Version'])"; $isReady = "$($r.Headers['X-Ideas-Ready'])"
+              $version = "$($r.Headers['X-IdeaCms-Version'])"; $isReady = "$($r.Headers['X-IdeaCms-Ready'])"
               if ($version -like "*$sha*" -and $isReady -eq 'true') { $ready = $true; Write-Host "/_health: this build ($version) is ready." }
               else { Write-Host "/_health: $($r.StatusCode), version '$version', ready '$isReady'." }
             } catch { Write-Host "/_health: $($_.Exception.Message)" }

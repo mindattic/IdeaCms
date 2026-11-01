@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Component.Gallery;
+namespace IdeaCms.Component.Gallery;
 
 /// <summary>
-/// MindAttic.Ideas.Component.Gallery.V1 — the image-grid capability as an asset-only activator. Drop the
+/// IdeaCms.Component.Gallery.V1 — the image-grid capability as an asset-only activator. Drop the
 /// token once and ANY <c>&lt;div class="ma-gallery"&gt;</c> becomes a responsive grid of its tiles.
 /// Tiles follow the page-authoring convention that images live as inline base64 CSS classes:
 /// <code>
@@ -22,7 +22,7 @@ namespace MindAttic.Ideas.Component.Gallery;
 /// are emitted as a small &lt;style&gt; overriding the gallery custom properties only for values that
 /// are set; behavior ones reach gallery.js through a <c>data-ma-settings="component.gallery"</c> element.
 /// </summary>
-public sealed class V1 : MindAttic.Ideas.Abstractions.ComponentBase
+public sealed class V1 : IdeaCms.Abstractions.ComponentBase
 {
     private const string Mount = "/_ideas/Component/gallery/1";
 

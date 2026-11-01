@@ -1,10 +1,10 @@
-# MindAttic.Ideas.Library
+# IdeaCms.Library
 
-The **first-party library of `.idea` citizens** for [MindAttic.Ideas](../README.md) — the `library/` half of the
-MindAttic.Ideas repo, home of every Theme, Plugin, and Component that ships with the CMS.
+The **first-party library of `.idea` citizens** for [IdeaCms](../README.md) — the `library/` half of the
+IdeaCms repo, home of every Theme, Plugin, and Component that ships with the CMS.
 
 The CMS never references this library at compile time. It only installs the packed `.idea` files as
-optional content. Each project here compiles against the frozen `MindAttic.Ideas.Abstractions` SDK only.
+optional content. Each project here compiles against the frozen `IdeaCms.Abstractions` SDK only.
 
 ## The one rule: the asset bundle is the single source of truth
 
@@ -14,7 +14,7 @@ Each citizen **owns its assets** in its own `assets/` folder. That bundle serves
 |---|---|
 | **Raw `.html` pages** | links `assets/*.css` / `assets/*.js` directly (see `Themes/Cyberspace/demo.html`) |
 | **Standalone Blazor apps** | references the component RCL, or links the same `assets/` |
-| **The MindAttic.Ideas CMS** | uploads the packed `.idea` (assets bundled into `wwwroot/`) |
+| **The IdeaCms CMS** | uploads the packed `.idea` (assets bundled into `wwwroot/`) |
 
 Three packagings of one thing — not three projects.
 
@@ -28,7 +28,7 @@ library/
                ThemeToggle, Tooltip  (15)
   Components/  Accordion, AppLaunch, Callout, Card, Carousel, ChiMesh, Claudia,
                CodeBlock, ContactForm, FromHtml, FromMd, Frontpage, Gallery,
-               HardwareHero, HelloWorld, Hero, IdeasBrochure, IdeasFrontpage,
+               HardwareHero, HelloWorld, Hero, IdeaCmsBrochure, IdeaCmsFrontpage,
                LegionPersonas, MediaImage, MediaLink, MindAtticFrontpage, ModalPopup,
                ProjectBrochure, ProjectGrid, TabBoard, TableOfContents, Tabs, Textbox,
                VideoEmbed, WebSnapshot  (31)
@@ -52,7 +52,7 @@ dotnet build -c Release Plugins/Tooltip
 Build everything:
 
 ```pwsh
-dotnet build -c Release MindAttic.Ideas.Library.slnx
+dotnet build -c Release IdeaCms.Library.slnx
 ```
 
 Build, pack and sign everything (`-Install` also copies the packages into the CMS host's `library/`):
@@ -61,21 +61,21 @@ Build, pack and sign everything (`-Install` also copies the packages into the CM
 powershell -ExecutionPolicy Bypass -File tools\pack-all.ps1 -Sign -Install
 ```
 
-Pack one citizen to `dist/` (the `ma-idea` CLI is `../src/MindAttic.Ideas.Sdk`):
+Pack one citizen to `dist/` (the `ma-idea` CLI is `../src/IdeaCms.Sdk`):
 
 ```pwsh
-dotnet run --project ../src/MindAttic.Ideas.Sdk -- pack `
-  --assembly Plugins/Tooltip/bin/Release/net10.0/MindAttic.Ideas.Plugin.Tooltip.dll `
+dotnet run --project ../src/IdeaCms.Sdk -- pack `
+  --assembly Plugins/Tooltip/bin/Release/net10.0/IdeaCms.Plugin.Tooltip.dll `
   --out ./dist `
   --wwwroot Plugins/Tooltip/assets `
-  --refs ../src/MindAttic.Ideas.Abstractions/bin/Debug/net10.0
+  --refs ../src/IdeaCms.Abstractions/bin/Debug/net10.0
 ```
 
 Then inspect or verify:
 
 ```pwsh
-dotnet run --project ../src/MindAttic.Ideas.Sdk -- inspect ./dist/MindAttic.Ideas.Plugin.Tooltip.V1.idea
-dotnet run --project ../src/MindAttic.Ideas.Sdk -- verify ./dist
+dotnet run --project ../src/IdeaCms.Sdk -- inspect ./dist/IdeaCms.Plugin.Tooltip.V1.idea
+dotnet run --project ../src/IdeaCms.Sdk -- verify ./dist
 ```
 
 See [`docs/AUTHORING.md`](../docs/AUTHORING.md) for the full authoring guide (adding a new citizen, composing,

@@ -30,7 +30,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
     <!-- Path to the CMS Abstractions project in the sibling src/ tree (same repo). -->
-    <IdeasAbstractionsProject Condition="'$(IdeasAbstractionsProject)' == ''">$(MSBuildThisFileDirectory)..\src\MindAttic.Ideas.Abstractions\MindAttic.Ideas.Abstractions.csproj</IdeasAbstractionsProject>
+    <IdeasAbstractionsProject Condition="'$(IdeasAbstractionsProject)' == ''">$(MSBuildThisFileDirectory)..\src\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj</IdeasAbstractionsProject>
   </PropertyGroup>
 
   <ItemGroup>

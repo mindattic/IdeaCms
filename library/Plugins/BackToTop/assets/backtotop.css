@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Plugin.BackToTop — floating button. Scoped under .ma-backtotop (MAIL-LAW-6). */
+﻿/* IdeaCms.Plugin.BackToTop — floating button. Scoped under .ma-backtotop (MAIL-LAW-6). */
 .ma-backtotop {
   position: fixed;
   right: var(--ma-btt-right, 1.25rem);

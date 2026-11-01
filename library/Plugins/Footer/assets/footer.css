@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Plugin.Footer — footer chrome + pin-when-short. Scoped under .ma-footer (MAIL-LAW-6). */
+﻿/* IdeaCms.Plugin.Footer — footer chrome + pin-when-short. Scoped under .ma-footer (MAIL-LAW-6). */
 .ma-footer {
   padding: var(--ma-footer-padding, 1.25rem 1rem);
   margin-top: var(--ma-footer-margin-top, 2rem);

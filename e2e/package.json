@@ -2,7 +2,7 @@
   "name": "mindattic-ideas-e2e",
   "version": "1.0.0",
   "private": true,
-  "description": "Cypress end-to-end tests for the MindAttic.Ideas admin flow (login → add page → upload .idea → reference by tag → renders).",
+  "description": "Cypress end-to-end tests for the IdeaCms admin flow (login → add page → upload .idea → reference by tag → renders).",
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run"

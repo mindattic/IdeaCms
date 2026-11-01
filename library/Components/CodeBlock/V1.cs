@@ -1,12 +1,12 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Components.Rendering;
-using MindAttic.Ideas.Abstractions;
+using IdeaCms.Abstractions;
 using ParameterAttribute = Microsoft.AspNetCore.Components.ParameterAttribute;  // not the namespace: its ComponentBase would clash (M.IDEA-LAW-1)
 
-namespace MindAttic.Ideas.Component.CodeBlock;
+namespace IdeaCms.Component.CodeBlock;
 
 /// <summary>
-/// MindAttic.Ideas.Component.CodeBlock.V1 — presentable code blocks as an asset-only activator. Drop
+/// IdeaCms.Component.CodeBlock.V1 — presentable code blocks as an asset-only activator. Drop
 /// the token once and EVERY <c>&lt;pre&gt;&lt;code&gt;</c> on the page gets the code chrome, a
 /// one-click copy button, and an optional language badge from <c>data-lang</c>:
 /// <code>&lt;pre data-lang="csharp"&gt;&lt;code&gt;var x = 1;&lt;/code&gt;&lt;/pre&gt;</code>

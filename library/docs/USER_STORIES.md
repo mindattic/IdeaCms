@@ -1,23 +1,23 @@
 ---
 codex: 1
-project: MindAttic.Ideas.Library
+project: IdeaCms.Library
 code: MAIL
 layer: stories
 status: living
 updated: 2026-10-03
 ---
 
-# MindAttic.Ideas.Library — User Stories
+# IdeaCms.Library — User Stories
 
 > ✅ done (shipped & verified) · 🟡 partial · ⬜ planned. Every ✅ cites the proof. `library/` has no
-> test project of its own; proofs are a clean build, a CMS-suite test in `../src/MindAttic.Ideas.Tests`,
+> test project of its own; proofs are a clean build, a CMS-suite test in `../src/IdeaCms.Tests`,
 > or an observed demo (see [MAIL-§8](BIBLE.md#MAIL-§8) and [HOUSE-LAW-8](../../../MindAttic.HouseRules.md)).
 
 ## Epic A — Authoring a citizen
 
 - **MAIL-US-A1 ✅** As a citizen author, I can add a Theme/Plugin/Component as a tiny RCL and have its
   identity come from convention (namespace tail = key, `V{n}` = version), so no per-project key/version
-  config exists. *(verified by `dotnet build -c Release MindAttic.Ideas.Library.slnx`; rule at
+  config exists. *(verified by `dotnet build -c Release IdeaCms.Library.slnx`; rule at
   [MAIL-LAW-2](BIBLE.md#MAIL-LAW-2).)*
 - **MAIL-US-A2 ✅** As a citizen author, I get common build settings and the one Abstractions reference
   for free, so my `.csproj` stays tiny. *(verified by [`Directory.Build.props`](../Directory.Build.props)

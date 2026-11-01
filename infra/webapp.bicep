@@ -1,4 +1,4 @@
-// One MindAttic.Ideas web app: a Linux .NET 10 site with a system-assigned identity on the shared plan.
+// One IdeaCms web app: a Linux .NET 10 site with a system-assigned identity on the shared plan.
 // main.bicep calls this once per deployment it hosts (the company site and the public demo) and owns
 // every role assignment, so each identity's reach is visible in one place.
 

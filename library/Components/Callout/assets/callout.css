@@ -1,4 +1,4 @@
-﻿/* MindAttic.Ideas.Component.Callout — notice boxes. Scoped under .ma-callout (MAIL-LAW-6).
+﻿/* IdeaCms.Component.Callout — notice boxes. Scoped under .ma-callout (MAIL-LAW-6).
    Icons are text glyphs (no images, no requests); accents are custom properties per variant.
    Geometry reads optional custom properties (instance settings, M.IDEA-§4.5) with the as-designed fallback. */
 .ma-callout {

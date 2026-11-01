@@ -1,4 +1,4 @@
-# Dev login on localhost — MindAttic.Ideas Admin
+# Dev login on localhost — IdeaCms Admin
 
 A developer signs in to Admin on localhost exactly the way production seeds its first admin: through the
 MindAttic.Authentication **bootstrap token**, read from the uncommitted, machine-local Vault `Security`
@@ -22,7 +22,7 @@ no hardcoded admin password. `Program.cs` already lists `"Security"` among the V
    [Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
    ```
    The file lives under `%APPDATA%`, outside the repo, so it cannot be committed.
-2. **Run the app** (`dotnet run --project src/MindAttic.Ideas.Blazor`). On an empty database, startup
+2. **Run the app** (`dotnet run --project src/IdeaCms.Blazor`). On an empty database, startup
    migrates the auth schema, then the bootstrapper creates `admin` with a forced password change and
    `PasswordHash = Argon2id(bootstrap-token + pepper)`. Admin MFA is currently not required
    (`MindAttic:Auth:Mfa:RequireForAdmin = false`).
@@ -46,5 +46,5 @@ entirely. Neither is used.
 
 ## Reset for a clean first login
 
-Drop the dev database (`MindAtticIdeas` on LocalDB) so the next boot re-runs migrate → seed. Optionally
+Drop the dev database (`IdeaCms` on LocalDB) so the next boot re-runs migrate → seed. Optionally
 rotate the dev `bootstrap-token` in `providers.json` between runs.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MindAttic.Ideas</title>
+<title>IdeaCms</title>
 <meta name="description" content="A single-deployment Blazor CMS for .NET 10: upload a .idea package and a page, theme, plugin or component goes live at once, with no redeploy and no app restart.">
 <meta name="generator" content="MindAttic Codex build-readme.ps1">
 <meta name="generated" content="2026-10-13">
@@ -110,10 +110,10 @@ pre:hover .cpbtn{opacity:1}
     <div id="toc-inner"></div>
   </nav>
   <main id="content">
-<h1 id="mindatticideas">MindAttic.Ideas</h1>
+<h1 id="mindatticideas">IdeaCms</h1>
 <p>A single-deployment Blazor CMS for .NET 10: upload a .idea package and a page, theme, plugin or component goes live at once, with no redeploy and no app restart.</p>
-<p><a href="src"><img src="https://img.shields.io/badge/language-C%23-239120" alt="C#"></a> <a href="src/MindAttic.Ideas.Blazor/MindAttic.Ideas.Blazor.csproj"><img src="https://img.shields.io/badge/.NET-10-512BD4" alt=".NET 10"></a> <a href="src/MindAttic.Ideas.Blazor"><img src="https://img.shields.io/badge/Blazor-InteractiveServer-5C2D91" alt="Blazor Server"></a> <a href="docs/DEPLOYMENT.md"><img src="https://img.shields.io/badge/hosted%20on-Azure%20App%20Service-0078D4" alt="Azure App Service"></a> <a href="https://mindattic-ideas-demo.azurewebsites.net"><img src="https://img.shields.io/badge/status-live-2ea44f" alt="Status"></a></p>
-<p><img src="docs/images/ideas-brochure.png" alt="The MindAttic.Ideas brochure page, served by Ideas itself on the company site"></p>
+<p><a href="src"><img src="https://img.shields.io/badge/language-C%23-239120" alt="C#"></a> <a href="src/IdeaCms.Blazor/IdeaCms.Blazor.csproj"><img src="https://img.shields.io/badge/.NET-10-512BD4" alt=".NET 10"></a> <a href="src/IdeaCms.Blazor"><img src="https://img.shields.io/badge/Blazor-InteractiveServer-5C2D91" alt="Blazor Server"></a> <a href="docs/DEPLOYMENT.md"><img src="https://img.shields.io/badge/hosted%20on-Azure%20App%20Service-0078D4" alt="Azure App Service"></a> <a href="https://mindattic-ideas-demo.azurewebsites.net"><img src="https://img.shields.io/badge/status-live-2ea44f" alt="Status"></a></p>
+<p><img src="docs/images/ideas-brochure.png" alt="The IdeaCms brochure page, served by Ideas itself on the company site"></p>
 <p>Try it: the public demo at <a href="https://mindattic-ideas-demo.azurewebsites.net">mindattic-ideas-demo.azurewebsites.net</a> is a vanilla install with every first-party package, wiped and re-provisioned every hour. The current admin login is shown (behind a human check) on the <a href="https://mindattic.azurewebsites.net/ideas">Ideas page</a> of the company site, which itself runs on Ideas.</p>
 <h2 id="why">Why</h2>
 <ul>
@@ -152,13 +152,13 @@ pre:hover .cpbtn{opacity:1}
 </ul>
 <p><img src="docs/images/company-site.png" alt="mindattic.azurewebsites.net, the company site, built from Ideas pages and first-party components"></p>
 <h2 id="quick-start">Quick start</h2>
-<p>Prerequisites: the .NET 10 SDK, SQL Server LocalDB (the host falls back to <code>(localdb)\MSSQLLocalDB</code> database <code>MindAtticIdeas</code> when no <code>ConnectionStrings:Ideas</code> is configured), and the machine-local MindAttic.Vault files described in <a href="docs/DEV_LOGIN.md"><code>docs/DEV_LOGIN.md</code></a>.</p>
-<pre><code class="language-powershell">git clone https://github.com/mindattic/MindAttic.Ideas.git
-cd MindAttic.Ideas
+<p>Prerequisites: the .NET 10 SDK, SQL Server LocalDB (the host falls back to <code>(localdb)\MSSQLLocalDB</code> database <code>IdeaCms</code> when no <code>ConnectionStrings:IdeaCms</code> is configured), and the machine-local MindAttic.Vault files described in <a href="docs/DEV_LOGIN.md"><code>docs/DEV_LOGIN.md</code></a>.</p>
+<pre><code class="language-powershell">git clone https://github.com/mindattic/IdeaCms.git
+cd IdeaCms
 
-dotnet build MindAttic.Ideas.slnx -c Debug
-dotnet test src/MindAttic.Ideas.Tests/MindAttic.Ideas.Tests.csproj
-dotnet run --project src/MindAttic.Ideas.Blazor</code></pre>
+dotnet build IdeaCms.slnx -c Debug
+dotnet test src/IdeaCms.Tests/IdeaCms.Tests.csproj
+dotnet run --project src/IdeaCms.Blazor</code></pre>
 <p>The host listens on <code>https://localhost:7207</code> and <code>http://localhost:5229</code> (<code>Properties/launchSettings.json</code>). Sign in at <code>/login</code> as <code>admin</code> with the Vault bootstrap token; you are forced to change the password on first sign-in (<a href="docs/DEV_LOGIN.md"><code>docs/DEV_LOGIN.md</code></a>). Then open <code>/admin</code> to create pages and upload <code>.idea</code> files.</p>
 <p><code>run.ps1</code> publishes a Release copy to <code>C:\Apps\Ideas\</code> (served on <code>http://localhost:5280</code>) when source has changed, and is a fast no-op otherwise; <code>run.ps1 -Force</code> does a clean rebuild, and <code>run.ps1 -Launch</code> also starts it and opens the browser. The desktop shortcut points at <code>C:\Apps\Ideas\run.bat</code>, which opens a menu: 1) Deploy &amp; Run runs <code>run.ps1 -Force</code> then launches, 2) Run launches the deployed copy (<code>serve.bat</code>) without redeploying. <code>run.ps1 -LauncherOnly</code> only rewrites the launchers.</p>
 <h2 id="how-it-works">How it works</h2>
@@ -167,28 +167,28 @@ dotnet run --project src/MindAttic.Ideas.Blazor</code></pre>
                           |
                           v
    +--------------------------------------------------------------+
-   |  MindAttic.Ideas.Blazor   (Blazor Web App, global InteractiveServer)
+   |  IdeaCms.Blazor   (Blazor Web App, global InteractiveServer)
    |   PageHost  /{*slug}  --&gt;  resolve (SiteId, Slug) -&gt; Theme -&gt; render
    |   CmsHead (fixed CSS cascade)   /_ideas/{Kind}/{key}/{ver}/... assets
    |   /admin (Admin policy)         Vault + Legion + Authentication
    +-----------+----------------------------------+---------------+
                | uses                             | uses
    +-----------v------------+        +------------v----------------------+
-   | MindAttic.Ideas.Core   |        | MindAttic.Ideas.Packaging         |
+   | IdeaCms.Core   |        | IdeaCms.Packaging         |
    |  CmsDbContext (EF, SQL,|        |  manifest kernel, reader,         |
    |   temporal Pages)      |        |  validator, packer, SHA-256       |
    |  ContentCatalog        |        |  (pure, IO-free)                  |
    |  IncludeExpander       |        +------------+----------------------+
    |  RawContentGate        |                     |
    |  collectible ALC load  |        +------------v----------------------+
-   +-----------+------------+        | MindAttic.Ideas.Sdk (ma-idea CLI) |
+   +-----------+------------+        | IdeaCms.Sdk (ma-idea CLI) |
                | references          +-----------------------------------+
    +-----------v-----------------------------------------------------+
-   | MindAttic.Ideas.Abstractions   (frozen v1 SDK, MAJOR pinned at 1) |
+   | IdeaCms.Abstractions   (frozen v1 SDK, MAJOR pinned at 1) |
    |  IdeaBase + PageBase / PluginBase / ThemeBase / ComponentBase    |
    |  refs ONLY Microsoft.AspNetCore.Components + System.Text.Json    |
    +------------------------------------------------------------------+</code></pre>
-<p>Pages resolve by <code>(SiteId, Slug)</code> through one catch-all <code>PageHost</code>; there is no per-page routing, so a runtime-loaded type renders with zero router changes. The unit you install is a <code>.idea</code> zip; what it contains is one of four content kinds, all deriving from <code>IdeaBase</code> (<code>src/MindAttic.Ideas.Abstractions/Bases.cs</code>):</p>
+<p>Pages resolve by <code>(SiteId, Slug)</code> through one catch-all <code>PageHost</code>; there is no per-page routing, so a runtime-loaded type renders with zero router changes. The unit you install is a <code>.idea</code> zip; what it contains is one of four content kinds, all deriving from <code>IdeaBase</code> (<code>src/IdeaCms.Abstractions/Bases.cs</code>):</p>
 <table><thead><tr>
 <th>Kind</th>
 <th>Ordinal</th>
@@ -201,21 +201,21 @@ dotnet run --project src/MindAttic.Ideas.Blazor</code></pre>
 <td><code>0</code></td>
 <td>Free-form or compiled page content, resolved by <code>(SiteId, Slug)</code></td>
 <td><code>PageBase</code></td>
-<td><code>MindAttic.Ideas.Page.HelloWorld.V1</code></td>
+<td><code>IdeaCms.Page.HelloWorld.V1</code></td>
 </tr>
 <tr>
 <td>Plugin</td>
 <td><code>1</code></td>
 <td>A site-wide capability activator: loads CSS/JS across the whole page</td>
 <td><code>PluginBase</code></td>
-<td><code>MindAttic.Ideas.Plugin.Tooltip.V1</code></td>
+<td><code>IdeaCms.Plugin.Tooltip.V1</code></td>
 </tr>
 <tr>
 <td>Theme</td>
 <td><code>2</code></td>
 <td>Layout chrome with one <code>Body</code> hole and a CSS bundle</td>
 <td><code>ThemeBase</code></td>
-<td><code>MindAttic.Ideas.Theme.Cyberspace.V1</code></td>
+<td><code>IdeaCms.Theme.Cyberspace.V1</code></td>
 </tr>
 <tr>
 <td>(removed)</td>
@@ -229,7 +229,7 @@ dotnet run --project src/MindAttic.Ideas.Blazor</code></pre>
 <td><code>4</code></td>
 <td>An inline UI unit rendered at its exact tag position; can nest other Components</td>
 <td><code>ComponentBase</code></td>
-<td><code>MindAttic.Ideas.Component.Textbox.V1</code></td>
+<td><code>IdeaCms.Component.Textbox.V1</code></td>
 </tr>
 </tbody></table>
 <p>"Idea" names the shared base, the <code>.idea</code> package format and the <code>/_ideas/...</code> asset route; it is never a content kind. New kinds may be appended to the enum (new ordinals only, never renumbered).</p>
@@ -257,10 +257,10 @@ dotnet run --project src/MindAttic.Ideas.Blazor</code></pre>
 <p><code>{{ … }}</code> brace tokens are not part of the grammar; <code>SeedService</code> converts any found in stored content into tags at startup.</p>
 <p>Identity is inferred by convention: Kind from the base type, Key from the namespace tail, Version from the <code>V{n}</code> class name. An optional <code>[Idea(key:, version:, scope:)]</code> attribute overrides the convention when a name can't follow it.</p>
 <h2 id="composing-citizens-with-cmsinclude">Composing citizens with CmsInclude</h2>
-<p>A compiled Page, Theme or Component references another citizen by string id, with zero compile-time reference to that citizen's package. This is <code>CmsInclude</code>, defined once in <code>src/MindAttic.Ideas.Abstractions/CmsInclude.cs</code>:</p>
-<pre><code class="language-razor">&lt;CmsInclude Ref="MindAttic.Ideas.Plugin.Tooltip.V1" /&gt;
-&lt;CmsInclude Ref="MindAttic.Ideas.Component.Textbox.V1" placeholder="Name" /&gt;
-&lt;CmsInclude Ref="MindAttic.Ideas.Component.Accordion" /&gt;</code></pre>
+<p>A compiled Page, Theme or Component references another citizen by string id, with zero compile-time reference to that citizen's package. This is <code>CmsInclude</code>, defined once in <code>src/IdeaCms.Abstractions/CmsInclude.cs</code>:</p>
+<pre><code class="language-razor">&lt;CmsInclude Ref="IdeaCms.Plugin.Tooltip.V1" /&gt;
+&lt;CmsInclude Ref="IdeaCms.Component.Textbox.V1" placeholder="Name" /&gt;
+&lt;CmsInclude Ref="IdeaCms.Component.Accordion" /&gt;</code></pre>
 <p><code>CmsInclude</code> takes the cascaded <code>IRenderContext</code>, resolves the <code>IIncludeRenderer</code> host feature from it and delegates rendering. With no host feature present (for example at Blazor design time) it renders nothing rather than throwing. Unmatched attributes flow straight through to the resolved citizen. A <code>Ref</code> with no version floats to the latest.</p>
 <p>Declare what a compiled citizen depends on with the repeatable <code>[Uses(ContentKind, key, version)]</code> attribute (<code>version: 0</code> floats to latest):</p>
 <pre><code class="language-csharp">[Uses(ContentKind.Plugin, "tooltip", 1)]
@@ -279,7 +279,7 @@ public sealed class V1 : PageBase { }</code></pre>
 <li>SQL Server temporal (system-versioned) tables keep wiki-like history: every Page version records which Plugin, Component and Theme versions it carried, so you can inspect and roll back to any prior state.</li>
 </ul>
 <h2 id="abstractions-sdk">Abstractions SDK</h2>
-<p>Everything an author compiles against lives in one frozen project, <code>src/MindAttic.Ideas.Abstractions</code>. It references only <code>Microsoft.AspNetCore.Components</code> and <code>System.Text.Json</code>, and its public surface is append-only forever (MAJOR pinned at <code>1</code>, the <code>Sdk.Version</code> constant): members may be added, never removed, renamed or made abstract.</p>
+<p>Everything an author compiles against lives in one frozen project, <code>src/IdeaCms.Abstractions</code>. It references only <code>Microsoft.AspNetCore.Components</code> and <code>System.Text.Json</code>, and its public surface is append-only forever (MAJOR pinned at <code>1</code>, the <code>Sdk.Version</code> constant): members may be added, never removed, renamed or made abstract.</p>
 <table><thead><tr>
 <th>File</th>
 <th>What it defines</th>
@@ -338,7 +338,7 @@ public sealed class V1 : PageBase { }</code></pre>
 </tbody></table>
 <p>A citizen's instance settings are its public, writable, simple-typed <code>[Parameter]</code>s (bool, string, integer, floating, enum). For a Component they are its tag attributes; for a Theme, page-level Plugin or Code page they live in the page's versioned instance-settings slots. There is deliberately no "settings for every instance of X" layer; configuration is shared by Copy and Paste Configuration in the admin (<a href="docs/BIBLE.md#M.IDEA-§4.5">M.IDEA-§4.5</a>).</p>
 <h2 id="the-idea-package-format">The idea package format</h2>
-<p>A <code>.idea</code> is a plain zip. Its only required member is <code>idea.json</code>; the manifest kernel is defined in <code>src/MindAttic.Ideas.Packaging/IdeaManifest.cs</code> and its six required fields never change:</p>
+<p>A <code>.idea</code> is a plain zip. Its only required member is <code>idea.json</code>; the manifest kernel is defined in <code>src/IdeaCms.Packaging/IdeaManifest.cs</code> and its six required fields never change:</p>
 <pre><code class="language-json">{
   "manifestVersion": 1,
   "category": "Plugin",
@@ -359,25 +359,25 @@ public sealed class V1 : PageBase { }</code></pre>
  +- data/                     optional idempotent seed
  +- icon.png  README  LICENSE never parsed
  +- idea.sig.json             content signature (RSA-PSS/SHA-256)</code></pre>
-<p>Unknown fields and folders are ignored, for forward compatibility. Host-provided assemblies (<code>MindAttic.Ideas.Abstractions</code>, <code>Microsoft.*</code>, <code>System.*</code>) are forbidden in <code>bin/</code>, and <code>ManifestValidator</code> audits for this. <code>MindAttic.Ideas.Packaging</code> (pure, IO-free, NUnit-tested) is the whole wire contract: manifest kernel, reflection-only <code>Packer</code>, zip-slip-guarded <code>IdeaArchiveReader</code>, <code>ManifestValidator</code>, <code>Sha256Hasher</code>, <code>PackageVersionResolver</code> and <code>PackageSigner</code>. <code>Packer.Pack</code> also runs <code>CitizenValidator</code>: a citizen with colliding settings, reserved setting names, <code>eval(</code>-style JavaScript or <code>expression(</code>-style CSS produces no package.</p>
+<p>Unknown fields and folders are ignored, for forward compatibility. Host-provided assemblies (<code>IdeaCms.Abstractions</code>, <code>Microsoft.*</code>, <code>System.*</code>) are forbidden in <code>bin/</code>, and <code>ManifestValidator</code> audits for this. <code>IdeaCms.Packaging</code> (pure, IO-free, NUnit-tested) is the whole wire contract: manifest kernel, reflection-only <code>Packer</code>, zip-slip-guarded <code>IdeaArchiveReader</code>, <code>ManifestValidator</code>, <code>Sha256Hasher</code>, <code>PackageVersionResolver</code> and <code>PackageSigner</code>. <code>Packer.Pack</code> also runs <code>CitizenValidator</code>: a citizen with colliding settings, reserved setting names, <code>eval(</code>-style JavaScript or <code>expression(</code>-style CSS produces no package.</p>
 <h2 id="project-layout">Project layout</h2>
-<pre><code class="language-text">MindAttic.Ideas.slnx                  CMS engine solution
+<pre><code class="language-text">IdeaCms.slnx                  CMS engine solution
 src/
-  MindAttic.Ideas.Abstractions        the frozen SDK
-  MindAttic.Ideas.Core                EF entities, CmsDbContext (SQL Server, temporal Pages),
+  IdeaCms.Abstractions        the frozen SDK
+  IdeaCms.Core                EF entities, CmsDbContext (SQL Server, temporal Pages),
                                         discovery, catalog, raw-content gate, include expander,
                                         ALC loader, idealist import/export, seed
-  MindAttic.Ideas.Packaging           pure .idea wire contract
-  MindAttic.Ideas.Rendering           rendering support (CmsHead, PageHost)
-  MindAttic.Ideas.Sdk                 the ma-idea CLI
-  MindAttic.Ideas.Blazor              the Blazor Web App host and its CLI verbs
-  MindAttic.Ideas.Tests               NUnit suite
+  IdeaCms.Packaging           pure .idea wire contract
+  IdeaCms.Rendering           rendering support (CmsHead, PageHost)
+  IdeaCms.Sdk                 the ma-idea CLI
+  IdeaCms.Blazor              the Blazor Web App host and its CLI verbs
+  IdeaCms.Tests               NUnit suite
 library/                              first-party Themes, Plugins, Components
-  MindAttic.Ideas.Library.slnx        independent solution; references only Abstractions
+  IdeaCms.Library.slnx        independent solution; references only Abstractions
   Themes/  Plugins/  Components/      one small csproj per citizen
   dist/                               packed *.idea output
   tools/                              pack-all.ps1, publish-nuget.ps1, codex.ps1
-samples/MindAttic.Ideas.Page.HelloWorld   the reference modular Page
+samples/IdeaCms.Page.HelloWorld   the reference modular Page
 templates/maidea-page                 dotnet new template that scaffolds a Page
 seed/                                 demo and mindattic-site idealists
 infra/                                Bicep and provisioning scripts for Azure
@@ -385,7 +385,7 @@ e2e/                                  Cypress end-to-end suite
 docs/                                 Codex canon: BIBLE, AMENDMENTS, USER_STORIES, guides
 tools/                                build-readme, codex, deploy, install-library, shoot (screenshots)</code></pre>
 <h2 id="authoring-a-page-from-the-template">Authoring a Page from the template</h2>
-<p>The fastest way to build a new Page citizen is <code>dotnet new</code> from <code>templates/maidea-page</code>, which scaffolds what <a href="samples/MindAttic.Ideas.Page.HelloWorld">samples/MindAttic.Ideas.Page.HelloWorld</a> shows working end to end:</p>
+<p>The fastest way to build a new Page citizen is <code>dotnet new</code> from <code>templates/maidea-page</code>, which scaffolds what <a href="samples/IdeaCms.Page.HelloWorld">samples/IdeaCms.Page.HelloWorld</a> shows working end to end:</p>
 <pre><code class="language-powershell"># Install the template once, from the repo root
 dotnet new install ./templates/maidea-page
 
@@ -400,7 +400,7 @@ dotnet new maidea-page -n MyPage --slug my-page --theme cyberspace</code></pre>
 <tr>
 <td><code>-n</code> / <code>--name</code></td>
 <td>required</td>
-<td>Short name; becomes <code>MindAttic.Ideas.Page.&lt;Name&gt;</code></td>
+<td>Short name; becomes <code>IdeaCms.Page.&lt;Name&gt;</code></td>
 </tr>
 <tr>
 <td><code>--slug</code></td>
@@ -413,7 +413,7 @@ dotnet new maidea-page -n MyPage --slug my-page --theme cyberspace</code></pre>
 <td>Theme key the page wears (referenced by string, never bundled)</td>
 </tr>
 </tbody></table>
-<p>The generated project is a Razor Class Library that compiles against only <code>MindAttic.Ideas.Abstractions</code>:</p>
+<p>The generated project is a Razor Class Library that compiles against only <code>IdeaCms.Abstractions</code>:</p>
 <pre><code class="language-xml">&lt;Project Sdk="Microsoft.NET.Sdk.Razor"&gt;
   &lt;PropertyGroup&gt;
     &lt;TargetFramework&gt;net10.0&lt;/TargetFramework&gt;
@@ -421,37 +421,37 @@ dotnet new maidea-page -n MyPage --slug my-page --theme cyberspace</code></pre>
     &lt;IsPackable&gt;false&lt;/IsPackable&gt;
   &lt;/PropertyGroup&gt;
   &lt;ItemGroup&gt;
-    &lt;ProjectReference Include="..\..\src\MindAttic.Ideas.Abstractions\MindAttic.Ideas.Abstractions.csproj"
+    &lt;ProjectReference Include="..\..\src\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj"
                       Private="false" ExcludeAssets="runtime" /&gt;
   &lt;/ItemGroup&gt;
 &lt;/Project&gt;</code></pre>
 <p><code>Private="false"</code> and <code>ExcludeAssets="runtime"</code> keep Abstractions out of the packed <code>bin/</code>. The sample page itself, abridged:</p>
-<pre><code class="language-razor">@namespace MindAttic.Ideas.Page.HelloWorld
+<pre><code class="language-razor">@namespace IdeaCms.Page.HelloWorld
 @inherits PageBase
 @attribute [Uses(ContentKind.Plugin, "tooltip", 1)]
 @attribute [Uses(ContentKind.Component, "textbox", 1)]
 
 &lt;section class="hello"&gt;
     &lt;h1&gt;Hello, world.&lt;/h1&gt;
-    &lt;CmsInclude Ref="MindAttic.Ideas.Plugin.Tooltip.V1" /&gt;
+    &lt;CmsInclude Ref="IdeaCms.Plugin.Tooltip.V1" /&gt;
     &lt;p&gt;&lt;button type="button" data-tooltip="Resolved at runtime by string id."&gt;Hover me&lt;/button&gt;&lt;/p&gt;
-    &lt;p&gt;&lt;CmsInclude Ref="MindAttic.Ideas.Component.Textbox.V1" placeholder="Type here" /&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;CmsInclude Ref="IdeaCms.Component.Textbox.V1" placeholder="Type here" /&gt;&lt;/p&gt;
 &lt;/section&gt;</code></pre>
 <p>Identity comes from convention: namespace tail <code>HelloWorld</code> gives key <code>helloworld</code>, class <code>V1</code> gives version 1. <code>data/page.json</code> seeds the initial Page row (slug, title, theme key and version, published). Build, pack and inspect it (full detail in <a href="docs/AUTHORING.md">docs/AUTHORING.md</a>):</p>
 <pre><code class="language-powershell">dotnet build -c Release samples/MyPage
 
-dotnet run --project src/MindAttic.Ideas.Sdk -- pack `
-  --assembly samples/MyPage/bin/Release/net10.0/MindAttic.Ideas.Page.MyPage.dll `
+dotnet run --project src/IdeaCms.Sdk -- pack `
+  --assembly samples/MyPage/bin/Release/net10.0/IdeaCms.Page.MyPage.dll `
   --out ./dist `
-  --refs src/MindAttic.Ideas.Abstractions/bin/Debug/net10.0
+  --refs src/IdeaCms.Abstractions/bin/Debug/net10.0
 
-dotnet run --project src/MindAttic.Ideas.Sdk -- inspect ./dist/MindAttic.Ideas.Page.MyPage.V1.idea</code></pre>
+dotnet run --project src/IdeaCms.Sdk -- inspect ./dist/IdeaCms.Page.MyPage.V1.idea</code></pre>
 <p>Then drop the <code>.idea</code> on the admin upload page. The host validates it (the same gate as an install), registers the type, extracts its <code>wwwroot/</code>, and it is live at its slug.</p>
 <h2 id="a-plugin-from-the-first-party-library">A Plugin from the first-party library</h2>
 <p>A Plugin is smaller still when it is mostly asset activation. This is the core of the shipped <code>library/Plugins/Tooltip/V1.cs</code>, abridged (the real file adds typed instance settings for colours, sizing and behaviour):</p>
-<pre><code class="language-csharp">using MindAttic.Ideas.Abstractions;
+<pre><code class="language-csharp">using IdeaCms.Abstractions;
 
-namespace MindAttic.Ideas.Plugin.Tooltip;
+namespace IdeaCms.Plugin.Tooltip;
 
 public sealed class V1 : PluginBase
 {
@@ -462,7 +462,7 @@ public sealed class V1 : PluginBase
 }</code></pre>
 <p>Its assets live in a plain <code>assets/</code> folder next to the code (not <code>wwwroot/</code>, to avoid the Razor static-web-asset collision):</p>
 <pre><code class="language-text">library/Plugins/Tooltip/
- +- MindAttic.Ideas.Plugin.Tooltip.csproj   settings inherited from Directory.Build.props
+ +- IdeaCms.Plugin.Tooltip.csproj   settings inherited from Directory.Build.props
  +- AssemblyInfo.cs
  +- V1.cs
  +- assets/
@@ -470,7 +470,7 @@ public sealed class V1 : PluginBase
      +- tooltip.js</code></pre>
 <p>That one <code>assets/</code> bundle serves three consumers with no duplication: a raw <code>.html</code> page links the CSS and JS directly, a standalone Blazor app references the RCL or the same folder, and the CMS installs the packed <code>.idea</code> whose <code>wwwroot/</code> is that folder, served at <code>/_ideas/Plugin/tooltip/1/</code>.</p>
 <h2 id="first-party-library">First-party library</h2>
-<p><code>library/</code> (<code>library/MindAttic.Ideas.Library.slnx</code>) is the home of every official Theme, Plugin and Component. It is build-independent of the CMS: it references only Abstractions, and the CMS never compile-references it, it only installs the packed output. A vanilla deployment installs everything in <code>library/</code> at boot.</p>
+<p><code>library/</code> (<code>library/IdeaCms.Library.slnx</code>) is the home of every official Theme, Plugin and Component. It is build-independent of the CMS: it references only Abstractions, and the CMS never compile-references it, it only installs the packed output. A vanilla deployment installs everything in <code>library/</code> at boot.</p>
 <table><thead><tr>
 <th>Folder</th>
 <th>Citizens with a project on disk</th>
@@ -485,7 +485,7 @@ public sealed class V1 : PluginBase
 </tr>
 <tr>
 <td><code>Components/</code> (31)</td>
-<td>Accordion, AppLaunch, Callout, Card, Carousel, ChiMesh, Claudia, CodeBlock, ContactForm, FromHtml, FromMd, Frontpage, Gallery, HardwareHero, HelloWorld, Hero, IdeasBrochure, IdeasFrontpage, LegionPersonas, MediaImage, MediaLink, MindAtticFrontpage, ModalPopup, ProjectBrochure, ProjectGrid, TabBoard, TableOfContents, Tabs, Textbox, VideoEmbed, WebSnapshot</td>
+<td>Accordion, AppLaunch, Callout, Card, Carousel, ChiMesh, Claudia, CodeBlock, ContactForm, FromHtml, FromMd, Frontpage, Gallery, HardwareHero, HelloWorld, Hero, IdeaCmsBrochure, IdeaCmsFrontpage, LegionPersonas, MediaImage, MediaLink, MindAtticFrontpage, ModalPopup, ProjectBrochure, ProjectGrid, TabBoard, TableOfContents, Tabs, Textbox, VideoEmbed, WebSnapshot</td>
 </tr>
 </tbody></table>
 <p><code>library/dist/</code> holds the 53 packed <code>.idea</code> files. Every theme carries a light and a dark palette (<a href="docs/BIBLE.md#M.IDEA-§4.13">M.IDEA-§4.13</a>).</p>
@@ -493,18 +493,18 @@ public sealed class V1 : PluginBase
 dotnet build -c Release library/Plugins/Tooltip
 
 # Build everything in the library
-dotnet build -c Release library/MindAttic.Ideas.Library.slnx
+dotnet build -c Release library/IdeaCms.Library.slnx
 
 # Pack and verify (from the repo root)
-dotnet run --project src/MindAttic.Ideas.Sdk -- pack `
-  --assembly library/Plugins/Tooltip/bin/Release/net10.0/MindAttic.Ideas.Plugin.Tooltip.dll `
+dotnet run --project src/IdeaCms.Sdk -- pack `
+  --assembly library/Plugins/Tooltip/bin/Release/net10.0/IdeaCms.Plugin.Tooltip.dll `
   --out library/dist --wwwroot library/Plugins/Tooltip/assets `
-  --refs src/MindAttic.Ideas.Abstractions/bin/Debug/net10.0
+  --refs src/IdeaCms.Abstractions/bin/Debug/net10.0
 
-dotnet run --project src/MindAttic.Ideas.Sdk -- verify library/dist</code></pre>
+dotnet run --project src/IdeaCms.Sdk -- verify library/dist</code></pre>
 <p><code>library/tools/pack-all.ps1</code> packs the whole library (<code>-Sign</code> signs from the Vault PackageSigning bucket). The library has its own Codex canon under <code>library/docs/</code>, including <code>library/docs/data/components.json</code>, a machine-readable catalog of every shipped <code>.idea</code>; see <a href="library/README.md">library/README.md</a> and <a href="library/CLAUDE.md">library/CLAUDE.md</a>.</p>
 <h2 id="css-cascade">CSS cascade</h2>
-<p>The cascade order is fixed and enforced in exactly one place, <code>CmsHead</code> (<code>src/MindAttic.Ideas.Rendering/CmsHead.razor</code>):</p>
+<p>The cascade order is fixed and enforced in exactly one place, <code>CmsHead</code> (<code>src/IdeaCms.Rendering/CmsHead.razor</code>):</p>
 <pre><code class="language-text">GLOBAL (0)  -&gt;  THEME (100)  -&gt;  PAGE (150)  -&gt;  COMPONENT (200)  -&gt;  inline style="" (300+)
 host setting    e.g. Cyberspace   Page.PageCss    a citizen's own CSS   by DOM nature</code></pre>
 <ul>
@@ -514,7 +514,7 @@ host setting    e.g. Cyberspace   Page.PageCss    a citizen's own CSS   by DOM n
 </ul>
 <p>A per-page tweak is either inline CSS in the Page definition or an uploaded <code>.idea</code>.</p>
 <h2 id="trust-and-security">Trust and security</h2>
-<p>Sign-in is delegated to <a href="https://github.com/mindattic/MindAttic.Authentication">MindAttic.Authentication</a> (Argon2id with pepper, Vault-backed, hardened sessions). <code>src/MindAttic.Ideas.Blazor/Program.cs</code> wires it with <code>AddMindAtticAuthentication&lt;CmsDbContext&gt;(...)</code> and <code>AppName = "Ideas"</code>, a hard per-app trust boundary with no cross-app SSO. The package (6.0.0) sends auth email over SMTP once <code>MindAttic:Vault:Notifications:email</code> is complete (dev: the Vault <code>Notifications</code> bucket, already loaded; prod: <code>MindAttic__Vault__Notifications__email__*</code> app settings, which <code>infra/main.bicep</code> does not set); until then it logs a startup warning and sends nothing. That covers password-reset links and security alerts (password changed or reset, two-step verification turned on, recovery code used, repeated failed sign-ins, new-device sign-in, email changed, account deactivated). Self-service reset: <code>/login</code> links to <code>/forgot-password</code> (the library's <code>MaForgotPassword</code>), and the emailed link opens <code>/account/reset</code> (<code>MaResetPassword</code>). Links are built from <code>MindAttic:Auth:Reset:PublicBaseUrl</code>: <code>https://localhost:7207</code> in <code>appsettings.Development.json</code>; <code>infra/main.bicep</code> sets <code>https://mindattic.azurewebsites.net</code> for the company site and <code>https://mindattic-ideas-demo.azurewebsites.net</code> for the demo, applied on the next <code>infra/provision.ps1</code> run. What stays Ideas-owned is the raw-content trust gate:</p>
+<p>Sign-in is delegated to <a href="https://github.com/mindattic/MindAttic.Authentication">MindAttic.Authentication</a> (Argon2id with pepper, Vault-backed, hardened sessions). <code>src/IdeaCms.Blazor/Program.cs</code> wires it with <code>AddMindAtticAuthentication&lt;CmsDbContext&gt;(...)</code> and <code>AppName = "Ideas"</code>, a hard per-app trust boundary with no cross-app SSO. The package (6.0.0) sends auth email over SMTP once <code>MindAttic:Vault:Notifications:email</code> is complete (dev: the Vault <code>Notifications</code> bucket, already loaded; prod: <code>MindAttic__Vault__Notifications__email__*</code> app settings, which <code>infra/main.bicep</code> does not set); until then it logs a startup warning and sends nothing. That covers password-reset links and security alerts (password changed or reset, two-step verification turned on, recovery code used, repeated failed sign-ins, new-device sign-in, email changed, account deactivated). Self-service reset: <code>/login</code> links to <code>/forgot-password</code> (the library's <code>MaForgotPassword</code>), and the emailed link opens <code>/account/reset</code> (<code>MaResetPassword</code>). Links are built from <code>MindAttic:Auth:Reset:PublicBaseUrl</code>: <code>https://localhost:7207</code> in <code>appsettings.Development.json</code>; <code>infra/main.bicep</code> sets <code>https://mindattic.azurewebsites.net</code> for the company site and <code>https://mindattic-ideas-demo.azurewebsites.net</code> for the demo, applied on the next <code>infra/provision.ps1</code> run. What stays Ideas-owned is the raw-content trust gate:</p>
 <ul>
 <li>On save, a page body is stamped <code>ContentTrust.Author</code> only if the writer holds the <code>Cms.AuthorRawMarkup</code> claim (Admin role); otherwise <code>Untrusted</code>.</li>
 <li>Every page body, at every trust level, goes through HtmlSanitizer before rendering (<a href="docs/BIBLE.md#M.IDEA-§4.6">M.IDEA-§4.6</a>). No script, event handler, <code>javascript:</code> / <code>vbscript:</code> / <code>data:</code> URL, frame, form, embed or style element survives in page markup.</li>
@@ -578,14 +578,14 @@ host setting    e.g. Cyberspace   Page.PageCss    a citizen's own CSS   by DOM n
 </tr>
 </tbody></table>
 <h3 id="moving-content-between-environments">Moving content between environments</h3>
-<p>A <code>.idea</code> package moves a citizen; a <code>.idealist</code> moves what an author built with citizens, plus which citizens a deployment should have installed (<a href="docs/BIBLE.md#M.IDEA-§4.9">M.IDEA-§4.9</a>). <code>--seed</code> regenerates the shape of a site, never its curation, so promoting a hand-built site to production is an export and an import. A vanilla deployment has no idealist configured and installs everything in <code>library/</code>; a custom instance points <code>Ideas:Idealist</code> or <code>IDEAS_IDEALIST</code> at one.</p>
+<p>A <code>.idea</code> package moves a citizen; a <code>.idealist</code> moves what an author built with citizens, plus which citizens a deployment should have installed (<a href="docs/BIBLE.md#M.IDEA-§4.9">M.IDEA-§4.9</a>). <code>--seed</code> regenerates the shape of a site, never its curation, so promoting a hand-built site to production is an export and an import. A vanilla deployment has no idealist configured and installs everything in <code>library/</code>; a custom instance points <code>IdeaCms:Idealist</code> or <code>IDEACMS_IDEALIST</code> at one.</p>
 <pre><code class="language-powershell"># on the source environment
-dotnet run --project src/MindAttic.Ideas.Blazor -- --export-idealist D:\temp\site.idealist
+dotnet run --project src/IdeaCms.Blazor -- --export-idealist D:\temp\site.idealist
 
 # on the target: look first, then apply
-$env:ConnectionStrings__Ideas = '&lt;target connection string&gt;'
-dotnet run --project src/MindAttic.Ideas.Blazor -- --import-idealist D:\temp\site.idealist --dry-run
-dotnet run --project src/MindAttic.Ideas.Blazor -- --import-idealist D:\temp\site.idealist</code></pre>
+$env:ConnectionStrings__IdeaCms = '&lt;target connection string&gt;'
+dotnet run --project src/IdeaCms.Blazor -- --import-idealist D:\temp\site.idealist --dry-run
+dotnet run --project src/IdeaCms.Blazor -- --import-idealist D:\temp\site.idealist</code></pre>
 <ul>
 <li>Re-runnable by construction: pages reconcile on <code>Uid</code> first and <code>(SiteId, Slug)</code> second, so an idealist adopts a page an independently seeded database already has.</li>
 <li>Media is adopted by SHA-256, so a second import moves no bytes; every <code>/_media/{uid}</code> reference is rewritten through an old-to-new map.</li>
@@ -593,13 +593,13 @@ dotnet run --project src/MindAttic.Ideas.Blazor -- --import-idealist D:\temp\sit
 <li><code>--untrusted</code> downgrades Author-trust pages (the import always prints how many there are). <code>--prune</code> soft-deletes pages absent from the idealist and is opt-in.</li>
 </ul>
 <h3 id="nuget-distribution-and-content-signing">NuGet distribution and content signing</h3>
-<p>A <code>.idealist</code> never carries package bytes. Every <code>.idea</code> distributes as its own NuGet package (id <code>MindAttic.Ideas.{Category}.{Key}</code>, version <code>{n}.0.0</code>), and the resolver tries the local <code>library/</code> folder first, then a NuGet feed configured by <code>Ideas:NuGetFeedUrl</code> (<a href="docs/BIBLE.md#M.IDEA-§4.8">M.IDEA-§4.8</a>). Independently of NuGet's own signing, every <code>.idea</code> carries <code>idea.sig.json</code>, verified once at <code>PackageInstallService.InstallAsync</code>, so a tampered or unsigned package is rejected the same way whether it arrived from <code>library/</code>, <code>--install</code>, admin upload or NuGet. A same-version install with different content is a hard reject raised in the Admin Inbox.</p>
-<pre><code class="language-powershell">dotnet run --project src/MindAttic.Ideas.Sdk -- sign path\to\Foo.V1.idea --pfx signing.pfx --password &lt;password&gt;
-dotnet run --project src/MindAttic.Ideas.Sdk -- nupkg --idea path\to\Foo.V1.idea --out dist\nupkg
-dotnet nuget push dist\nupkg\MindAttic.Ideas.Plugin.foo.1.0.0.nupkg --source &lt;feed&gt; --api-key &lt;pat&gt; --skip-duplicate</code></pre>
+<p>A <code>.idealist</code> never carries package bytes. Every <code>.idea</code> distributes as its own NuGet package (id <code>IdeaCms.{Category}.{Key}</code>, version <code>{n}.0.0</code>), and the resolver tries the local <code>library/</code> folder first, then a NuGet feed configured by <code>IdeaCms:NuGetFeedUrl</code> (<a href="docs/BIBLE.md#M.IDEA-§4.8">M.IDEA-§4.8</a>). Independently of NuGet's own signing, every <code>.idea</code> carries <code>idea.sig.json</code>, verified once at <code>PackageInstallService.InstallAsync</code>, so a tampered or unsigned package is rejected the same way whether it arrived from <code>library/</code>, <code>--install</code>, admin upload or NuGet. A same-version install with different content is a hard reject raised in the Admin Inbox.</p>
+<pre><code class="language-powershell">dotnet run --project src/IdeaCms.Sdk -- sign path\to\Foo.V1.idea --pfx signing.pfx --password &lt;password&gt;
+dotnet run --project src/IdeaCms.Sdk -- nupkg --idea path\to\Foo.V1.idea --out dist\nupkg
+dotnet nuget push dist\nupkg\IdeaCms.Plugin.foo.1.0.0.nupkg --source &lt;feed&gt; --api-key &lt;pat&gt; --skip-duplicate</code></pre>
 <p><code>library/tools/publish-nuget.ps1</code> chains pack, sign, nupkg and push for the whole library in one pass, taking the signing certificate and feed token from MindAttic.Vault.</p>
 <h2 id="ma-idea-cli">ma-idea CLI</h2>
-<p><code>src/MindAttic.Ideas.Sdk</code> builds the <code>ma-idea</code> tool over the pure <code>MindAttic.Ideas.Packaging</code> library. Every verb is offline and never touches a database:</p>
+<p><code>src/IdeaCms.Sdk</code> builds the <code>ma-idea</code> tool over the pure <code>IdeaCms.Packaging</code> library. Every verb is offline and never touches a database:</p>
 <table><thead><tr>
 <th>Verb</th>
 <th>What it does</th>
@@ -641,12 +641,12 @@ dotnet nuget push dist\nupkg\MindAttic.Ideas.Plugin.foo.1.0.0.nupkg --source &lt
 <td>Wraps a <code>.idea</code> as a NuGet package (<code>--out</code>).</td>
 </tr>
 </tbody></table>
-<pre><code class="language-powershell">dotnet run --project src/MindAttic.Ideas.Sdk -- pack --assembly bin/Release/net10.0/MyPage.dll --out ./dist
-dotnet run --project src/MindAttic.Ideas.Sdk -- inspect ./dist/MindAttic.Ideas.Page.MyPage.V1.idea
-dotnet run --project src/MindAttic.Ideas.Sdk -- verify ./dist</code></pre>
+<pre><code class="language-powershell">dotnet run --project src/IdeaCms.Sdk -- pack --assembly bin/Release/net10.0/MyPage.dll --out ./dist
+dotnet run --project src/IdeaCms.Sdk -- inspect ./dist/IdeaCms.Page.MyPage.V1.idea
+dotnet run --project src/IdeaCms.Sdk -- verify ./dist</code></pre>
 <h2 id="building-and-testing">Building and testing</h2>
-<pre><code class="language-powershell">dotnet build MindAttic.Ideas.slnx -c Debug
-dotnet test src/MindAttic.Ideas.Tests/MindAttic.Ideas.Tests.csproj</code></pre>
+<pre><code class="language-powershell">dotnet build IdeaCms.slnx -c Debug
+dotnet test src/IdeaCms.Tests/IdeaCms.Tests.csproj</code></pre>
 <p>The NUnit suite gates every deployment. <code>PageHistorySqlServerTests</code> is <code>[Explicit]</code> and needs the dev LocalDB, so CI does not run it.</p>
 <p>Codex docs tooling:</p>
 <pre><code class="language-powershell">powershell -NoProfile -ExecutionPolicy Bypass -File tools\codex.ps1 digest
@@ -654,11 +654,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools\codex.ps1 doctor
 powershell -NoProfile -ExecutionPolicy Bypass -File tools\build-readme.ps1</code></pre>
 <p><code>digest</code> regenerates <code>docs/BIBLE.digest.md</code>, <code>doctor</code> validates the canon, and <code>build-readme</code> regenerates <code>README.htm</code> from this file.</p>
 <h2 id="end-to-end-tests">End-to-end tests</h2>
-<p><code>e2e/</code> is a Cypress suite covering the core admin flow: an admin signs in, uploads a compiled <code>.idea</code>, creates a page that references it, and the page renders with no missing-content placeholder (<code>e2e/cypress/e2e/admin-widget-flow.cy.js</code>, fixture <code>MindAttic.Ideas.Plugin.Tooltip.V1.idea</code>). It expects a running host and does not start one; see <a href="e2e/README.md">e2e/README.md</a> for the environment variables.</p>
+<p><code>e2e/</code> is a Cypress suite covering the core admin flow: an admin signs in, uploads a compiled <code>.idea</code>, creates a page that references it, and the page renders with no missing-content placeholder (<code>e2e/cypress/e2e/admin-widget-flow.cy.js</code>, fixture <code>IdeaCms.Plugin.Tooltip.V1.idea</code>). It expects a running host and does not start one; see <a href="e2e/README.md">e2e/README.md</a> for the environment variables.</p>
 <pre><code class="language-powershell"># 1) start the CMS from the repo root, against a separate dev database
 $env:ASPNETCORE_ENVIRONMENT = "Development"
 $env:ASPNETCORE_URLS        = "https://localhost:7207"
-dotnet run --project src/MindAttic.Ideas.Blazor
+dotnet run --project src/IdeaCms.Blazor
 
 # 2) in a second shell, from e2e/
 npm install
@@ -742,7 +742,7 @@ npm run cy:run</code></pre>
 <p>A note on vocabulary: the content kinds are Page, Plugin, Theme and Component. <code>Widget</code> and <code>Control</code> are not kinds (the manifest validator rejects them); the glossary in <code>docs/BIBLE.md</code> is authoritative.</p>
 <h2 id="license">License</h2>
 <p>This repository has no LICENSE file. All rights reserved.</p>
-<p>Part of <a href="https://mindattic.com">MindAttic</a> — see more projects at <a href="https://github.com/mindattic">github.com/mindattic</a>. Related: <a href="https://github.com/mindattic/MindAttic.Ideas.Library">MindAttic.Ideas.Library</a> (retired, merged into <code>library/</code>), <a href="https://github.com/mindattic/MindAttic.Web">MindAttic.Web</a> (shared assets), <a href="https://github.com/mindattic/MindAttic.Authentication">MindAttic.Authentication</a>, <a href="https://github.com/mindattic/MindAttic.Vault">MindAttic.Vault</a>, <a href="https://github.com/mindattic/MindAttic.Legion">MindAttic.Legion</a>.</p>
+<p>Part of <a href="https://mindattic.com">MindAttic</a> — see more projects at <a href="https://github.com/mindattic">github.com/mindattic</a>. Related: <a href="https://github.com/mindattic/IdeaCms.Library">IdeaCms.Library</a> (retired, merged into <code>library/</code>), <a href="https://github.com/mindattic/MindAttic.Web">MindAttic.Web</a> (shared assets), <a href="https://github.com/mindattic/MindAttic.Authentication">MindAttic.Authentication</a>, <a href="https://github.com/mindattic/MindAttic.Vault">MindAttic.Vault</a>, <a href="https://github.com/mindattic/MindAttic.Legion">MindAttic.Legion</a>.</p>
 
     <p class="codex-footer">Generated 2026-10-13 by the shared MindAttic Codex engine (<code>codex-standard/build-readme.ps1</code>) from <code>README.md</code>. Edit the Markdown source, not this file.</p>
   </main>

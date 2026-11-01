@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://mindattic.com/ideas-library/schema/component.schema.json",
-  "title": "MindAttic.Ideas.Library shipped component catalog",
+  "title": "IdeaCms.Library shipped component catalog",
   "description": "Canon-as-data (L5) for MAIL: one row per shipped .idea component. The catalog is derived from the component source (namespace tail => key, V{n} class => version) and the packed artifacts in dist/. Prose in docs/BIBLE.md cites entries by id and never restates these fields.",
   "type": "object",
   "additionalProperties": false,

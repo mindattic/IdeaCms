@@ -1,6 +1,6 @@
 ---
 codex: 1
-project: MindAttic.Ideas.Library
+project: IdeaCms.Library
 code: MAIL
 layer: rfc
 status: planned
@@ -19,10 +19,10 @@ second copy of what UiUx already holds — so the raw→`.idea` step is manual.
 Planned, not started: a generator that makes library projects from UiUx bundles.
 
 ## Sketch (not yet built)
-A small generator (its **own repo/tool**, e.g. `MindAttic.Ideas.Forge`) that:
+A small generator (its **own repo/tool**, e.g. `IdeaCms.Forge`) that:
 1. Reads a UiUx component bundle — its assets (`*.css`/`*.js`/`*.html`) + a `deps.json`/descriptor
    (kind = `Theme`|`Plugin`|`Component`, key, version, `uses[]`, asset list).
-2. Emits the corresponding `MindAttic.Ideas.<Kind>.<Key>` project (or packs the `.idea` directly)
+2. Emits the corresponding `IdeaCms.<Kind>.<Key>` project (or packs the `.idea` directly)
    into `library/` — namespace/`@inherits`/mount by convention, assets copied to
    `assets/`, so the output matches what's there now by hand.
 3. Re-runs `ma-idea pack` + `verify` so `dist/` stays the single source of installable packages.

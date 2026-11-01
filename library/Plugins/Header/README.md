@@ -15,9 +15,9 @@ A 3-column fixed header: logo link on the left, free-form center column, and an 
 **Blazor tag syntax**
 
 ```razor
-<MindAttic.Ideas.Plugin.Header.V1 Logo="Acme Corp">
+<IdeaCms.Plugin.Header.V1 Logo="Acme Corp">
     <nav>...</nav>
-</MindAttic.Ideas.Plugin.Header.V1>
+</IdeaCms.Plugin.Header.V1>
 ```
 
 ---
@@ -57,9 +57,9 @@ A 3-column fixed header: logo link on the left, free-form center column, and an 
 **Logo overriding a site-level default**
 
 ```razor
-<MindAttic.Ideas.Plugin.Header.V1 Logo="Dev Preview">
+<IdeaCms.Plugin.Header.V1 Logo="Dev Preview">
     <span style="font-size:.85rem;color:#f90;">staging environment</span>
-</MindAttic.Ideas.Plugin.Header.V1>
+</IdeaCms.Plugin.Header.V1>
 ```
 
 ---

@@ -1,8 +1,8 @@
-@namespace MindAttic.Ideas.Plugin.Header
+@namespace IdeaCms.Plugin.Header
 @inherits PluginBase
 @attribute [Idea(DisplayName = "Site Header")]
 
-@* MindAttic.Ideas.Plugin.Header.V1 — 3-column fixed header (logo | center | user dropdown).
+@* IdeaCms.Plugin.Header.V1 — 3-column fixed header (logo | center | user dropdown).
    Auth is handled entirely server-side: AuthorizeView gates the dropdown; the logout form uses
    POST + AntiforgeryToken (CSRF-safe). If auth state is unavailable the user column stays empty.
    Logo text comes from Logo parameter → "header.logo" site setting → site key → "MindAttic".

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace MindAttic.Ideas.Library.Shared;
+namespace IdeaCms.Library.Shared;
 
 /// <summary>
 /// Linked-source helper (NOT a project/package reference -- library/Directory.Build.props says the
