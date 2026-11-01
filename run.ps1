@@ -238,6 +238,14 @@ if (-not $Force -and -not (Test-NeedsPublish)) {
     Write-Host ''
 }
 
+# LAMP step 7 (M.IDEA-T33): import any first-run values into MindAttic Vault and write the settings manifest
+# Vault.Desktop reads, as the deployed copy runs it (serve.bat's Development environment), on every run.
+if (Test-Path $exe) {
+    $prevEnv = $env:ASPNETCORE_ENVIRONMENT
+    $env:ASPNETCORE_ENVIRONMENT = 'Development'
+    try { Push-Location $out; & $exe --write-settings-manifest | Out-Null } finally { Pop-Location; $env:ASPNETCORE_ENVIRONMENT = $prevEnv }
+}
+
 Write-Launchers
 
 if ($Launch) {

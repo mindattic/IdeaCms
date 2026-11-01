@@ -161,4 +161,22 @@ public class LampSettingsTests
         Assert.That(names, Does.Contain("MindAttic:Settings:Ideas:media:blobServiceUri").And.Not.Contain("MindAttic:Settings:Ideas:media:connectionString"));
         Assert.That(Leaves().Count(), Is.GreaterThan(35), "packages + media + every auth option");
     }
+
+    [Test]
+    public void RunScript_WritesTheSettingsManifestFromTheDeployedExe()
+    {
+        // LAMP step 7 (M.IDEA-T33): after publishing, run.ps1 runs the deployed exe once with --write-settings-manifest
+        // (Development, like serve.bat), so Vault.Desktop's Ideas tab matches the build just deployed.
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (dir != null && !File.Exists(Path.Combine(dir.FullName, "MindAttic.Ideas.slnx"))) dir = dir.Parent;
+        Assert.That(dir, Is.Not.Null, "repo root");
+        var script = File.ReadAllText(Path.Combine(dir!.FullName, "run.ps1"));
+
+        var manifest = script.IndexOf("& $exe " + SettingsManifestCommand.Switch, StringComparison.Ordinal);
+        Assert.That(manifest, Is.GreaterThan(0), "run.ps1 runs the deployed exe with " + SettingsManifestCommand.Switch);
+        Assert.That(manifest, Is.GreaterThan(script.IndexOf("dotnet publish", StringComparison.Ordinal)), "after publishing");
+        Assert.That(manifest, Is.LessThan(script.IndexOf("if ($Launch)", StringComparison.Ordinal)), "before launching");
+        var block = script[script.LastIndexOf("if (Test-Path $exe)", manifest, StringComparison.Ordinal)..manifest];
+        Assert.That(block, Does.Contain("ASPNETCORE_ENVIRONMENT = 'Development'"), "with the deployed copy's environment");
+    }
 }
