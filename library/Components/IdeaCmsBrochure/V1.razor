@@ -1,7 +1,7 @@
 @namespace IdeaCms.Component.IdeaCmsBrochure
 @inherits ComponentBase
 
-<link rel="stylesheet" href="/_ideas/Component/ideasbrochure/1/brochure.css" />
+<link rel="stylesheet" href="/_ideas/Component/ideacmsbrochure/1/brochure.css" />
 
 <div class="@_rootClass" style="@_rootStyle">
 
@@ -11,7 +11,7 @@
   <section class="ibr-hero">
     <p class="ibr-hero-eyebrow">@(Eyebrow ?? "A Content Management System for the post-framework era")</p>
     <h1 class="ibr-hero-title">
-      <span class="ibr-hero-wordmark">MindAttic</span><span class="ibr-hero-dot">.</span><span class="ibr-hero-ideas">Ideas</span>
+      <span class="ibr-hero-wordmark">Idea</span><span class="ibr-hero-cms">Cms</span>
     </h1>
     <p class="ibr-hero-tagline">
       Upload a <code class="ibr-code-inline">.idea</code> package. It goes live.
@@ -401,7 +401,7 @@
   <section class="ibr-section ibr-demo" data-ma-demo data-site-key="@_demo.TurnstileSiteKey" data-reveal-path="@_revealPath">
     <h2 class="ibr-section-title">Try the live demo</h2>
     <p class="ibr-demo-lede">
-      A real Ideas install, not a video. Sign in as the admin, upload an <code class="ibr-code-inline">.idea</code>,
+      A real IdeaCms install, not a video. Sign in as the admin, upload an <code class="ibr-code-inline">.idea</code>,
       build a page, switch themes. It wipes itself and gets a brand-new password every hour, so break anything you like.
     </p>
     <p><a class="ibr-demo-link" href="@_demo.Url" target="_blank" rel="noopener noreferrer">@_demo.Url</a></p>
@@ -424,7 +424,7 @@
         <dd><code data-ma-demo-pass></code> <button type="button" class="ibr-demo-copy" data-ma-demo-copy="pass">Copy</button></dd>
       </dl>
       <p class="ibr-demo-msg" data-ma-demo-msg aria-live="polite"></p>
-      <script src="/_ideas/Component/ideasbrochure/1/demo-access.js" defer></script>
+      <script src="/_ideas/Component/ideacmsbrochure/1/demo-access.js" defer></script>
     }
   </section>
   }

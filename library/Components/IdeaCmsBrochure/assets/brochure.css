@@ -41,8 +41,7 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-.ibr-hero-dot { color: var(--ibr-accent, #5aa0ff); }
-.ibr-hero-ideas {
+.ibr-hero-cms {
     background: linear-gradient(135deg, var(--ibr-accent, #5aa0ff) 0%, var(--ibr-accent-2, #a78bfa) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
