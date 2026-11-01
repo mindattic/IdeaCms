@@ -460,3 +460,4 @@ updated: 2026-10-03
 | M.IDEA-T37 | 2026-10-31 | chore | closed | Commit the component .idea packages run.ps1's local deploy re-signed again while redeploying for M.IDEA-T36 (library/dist and Blazor library copies), so the checkout matches what's deployed | 1ebed0b |
 | M.IDEA-T38 | 2026-10-31 | fix | open | /login looks half-styled: its heading renders in Times New Roman and only the card is styled, with or without the auth CSP (seen during M.IDEA-T36); the auth page doesn't pick up the site's fonts/styles | M.IDEA-T36 |
 | M.IDEA-T39 | 2026-10-31 | chore | open | Vault tab named after the repo: 'MindAttic Ideas' -> 'MindAttic.Ideas' | M.VALT-T78 |
+| M.IDEA-T40 | 2026-10-31 | chore | open | Commit the .idea packages run.ps1's local deploy re-signed for M.IDEA-T39 (library/dist and the Blazor library copies) | M.VALT-T78 |
