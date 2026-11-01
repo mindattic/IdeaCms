@@ -9,24 +9,21 @@
 <html lang="en" data-theme-mode="@_themeMode">
 
 <head>
-    @* Must stay the first thing in <head>, ahead of every stylesheet: sets data-theme-mode from the
-       visitor's own saved choice (if any) before the theme CSS below ever paints, so there's no flash
-       of the wrong mode. The server-rendered attribute above is only the first-visit default. *@
-    <script>
-    (function () {
-      try {
-        var m = localStorage.getItem('mindattic.theme-mode');
-        if (m === 'light' || m === 'dark') document.documentElement.setAttribute('data-theme-mode', m);
-      } catch (e) { }
-    })();
-    </script>
+    @* Must stay the first thing in <head>, ahead of every stylesheet: theme-init.js sets
+       data-theme-mode from the visitor's own saved choice (if any) before the theme CSS below ever
+       paints, so there's no flash of the wrong mode. The server-rendered attribute above is only the
+       first-visit default.
+       No inline <script> anywhere in this shell: /login, /mfa and /account render through it with
+       MindAttic.Authentication's strict CSP (script/style 'self' + a per-request nonce), which blocks
+       inline scripts. The one generated inline script, the import map, carries that nonce (M.IDEA-T36). *@
+    <script src="js/theme-init.js"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["MindAttic.Ideas.Blazor.styles.css"]" />
-    <ImportMap />
+    <ImportMap nonce="@_cspNonce" />
     <HeadOutlet />
 </head>
 
@@ -47,9 +44,14 @@
 @code {
     private string _themeMode = "light";
 
+    // The auth surface's per-request CSP nonce (null elsewhere, so the attribute is omitted there).
+    private string? _cspNonce;
+
     protected override async Task OnInitializedAsync()
     {
-        // Best-effort: this is only the pre-localStorage first-visit default (see the inline script
+        _cspNonce = Http.HttpContext?.Items[MindAttic.Authentication.Web.MindAtticAuthAppExtensions.CspNonceItem] as string;
+
+        // Best-effort: this is only the pre-localStorage first-visit default (see js/theme-init.js
         // above), so any failure here just falls back to "light" rather than breaking the page.
         try
         {
