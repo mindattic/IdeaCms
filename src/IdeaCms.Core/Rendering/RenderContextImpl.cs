@@ -1,5 +1,5 @@
 using System.Text.Json;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Core.Rendering;
 

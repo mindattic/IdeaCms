@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Blazor;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Discovery;

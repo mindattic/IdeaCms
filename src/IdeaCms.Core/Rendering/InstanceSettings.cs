@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Components;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Core.Rendering;
 

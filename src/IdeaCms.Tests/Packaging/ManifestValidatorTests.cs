@@ -109,7 +109,7 @@ public class ManifestValidatorTests
         Assert.That(ManifestValidator.Validate(Data(), []).IsValid, Is.True, "a clean data package is valid");
     }
 
-    [TestCase("IdeaCms.Abstractions.dll")]
+    [TestCase("MindAttic.Ideas.Abstractions.dll")]
     [TestCase("IdeaCms.Core.dll")]
     [TestCase("Microsoft.AspNetCore.Components.dll")]
     [TestCase("Microsoft.Extensions.DependencyInjection.dll")]

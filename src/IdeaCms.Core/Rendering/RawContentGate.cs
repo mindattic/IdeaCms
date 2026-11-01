@@ -1,6 +1,6 @@
 using Ganss.Xss;
 using Microsoft.AspNetCore.Components;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Core.Rendering;
 

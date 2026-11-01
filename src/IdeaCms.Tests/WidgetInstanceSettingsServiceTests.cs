@@ -26,8 +26,8 @@ public class WidgetInstanceSettingsServiceTests
         var page = new CmsPage
         {
             Slug = "hero-page", Title = "Hero",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             Enabled = true, CreatedUtc = DateTime.UtcNow,
         };
         db.Pages.Add(page);

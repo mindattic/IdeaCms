@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Rendering;
 
 namespace IdeaCms.Tests;

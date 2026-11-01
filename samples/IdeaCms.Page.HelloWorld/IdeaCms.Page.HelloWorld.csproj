@@ -29,7 +29,7 @@
     <!-- The ONLY reference: the frozen SDK. Private=false + ExcludeAssets=runtime keep Abstractions (and
          the framework Components it carries) OUT of bin/ — the package validator FORBIDS host assemblies
          in bin/, and the packer filters them anyway, so the packed bin/ holds exactly one DLL: this one. -->
-    <ProjectReference Include="..\..\src\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj"
+    <ProjectReference Include="..\..\src\MindAttic.Ideas.Abstractions\MindAttic.Ideas.Abstractions.csproj"
                       Private="false" ExcludeAssets="runtime" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 using System.Reflection;
 using System.Runtime.Loader;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Discovery;
 
 namespace IdeaCms.Tests.Packaging;
@@ -20,7 +20,7 @@ public class CmsPackageLoadContextTests
     {
         Assert.Multiple(() =>
         {
-            Assert.That(AlcDeferralPolicy.ShouldDefer("IdeaCms.Abstractions", _ => false), Is.True);
+            Assert.That(AlcDeferralPolicy.ShouldDefer("MindAttic.Ideas.Abstractions", _ => false), Is.True);
             Assert.That(AlcDeferralPolicy.ShouldDefer("IdeaCms.Core", _ => false), Is.True);
             Assert.That(AlcDeferralPolicy.ShouldDefer("System.Text.Json", _ => false), Is.True);
             Assert.That(AlcDeferralPolicy.ShouldDefer("Microsoft.EntityFrameworkCore", _ => false), Is.True);  // bare name

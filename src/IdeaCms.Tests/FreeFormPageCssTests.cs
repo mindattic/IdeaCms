@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Discovery;
 using IdeaCms.Core.Rendering;
 using IdeaCms.Core.Services;

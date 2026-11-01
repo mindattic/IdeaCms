@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.EntityFrameworkCore;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Discovery;
 using IdeaCms.Core.Entities;
@@ -207,7 +207,7 @@ public class SeededPageRenderTests
             {
                 ManifestVersion = 1, Category = "Component", Kind = "code",
                 Key = "tabs", Version = 1, DisplayName = "Tabs", Sdk = 1,
-                EntryType    = typeof(IdeaCms.Abstractions.ComponentBase).FullName!,
+                EntryType    = typeof(MindAttic.Ideas.Abstractions.ComponentBase).FullName!,
                 AssemblyName = "Demo",    // non-host fake; DefaultTypeResolver finds ComponentBase via scan
             }),
             ["bin/Demo.dll"] = "MZ-fake",

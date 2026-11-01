@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using IdeaCms.Abstractions;
-using ComponentBase = IdeaCms.Abstractions.ComponentBase;
+using MindAttic.Ideas.Abstractions;
+using ComponentBase = MindAttic.Ideas.Abstractions.ComponentBase;
 
 namespace IdeaCms.Component.Tabs;
 

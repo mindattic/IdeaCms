@@ -1,5 +1,5 @@
 using System.IO.Compression;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Portability;
 using IdeaCms.Packaging;
 using IdeaCms.Tests.Packaging;

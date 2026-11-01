@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Entities;
 using IdeaCms.Core.Services;

@@ -1,5 +1,5 @@
 using System.Globalization;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Rendering;
 
 namespace IdeaCms.Core.Services;

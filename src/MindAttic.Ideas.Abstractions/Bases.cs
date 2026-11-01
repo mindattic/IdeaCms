@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using BlazorComponentBase = Microsoft.AspNetCore.Components.ComponentBase;  // alias: MindAttic's ComponentBase wins the bare name (M.IDEA-LAW-1)
 
-namespace IdeaCms.Abstractions;
+namespace MindAttic.Ideas.Abstractions;
 
 // ============================================================================================
 //  THE INHERITANCE ROOTS — IdeaBase is the shared root every content type derives from; the four
@@ -191,7 +191,7 @@ public abstract class PluginBase : IdeaBase
 /// contain <c>Component.Textbox</c> or other children). Declare sub-component dependencies with
 /// <c>[Uses]</c>/<c>uses[]</c>.
 ///
-/// NOTE: <c>ComponentBase</c> here is <c>IdeaCms.Abstractions.ComponentBase</c>, NOT Blazor's
+/// NOTE: <c>ComponentBase</c> here is <c>MindAttic.Ideas.Abstractions.ComponentBase</c>, NOT Blazor's
 /// <c>Microsoft.AspNetCore.Components.ComponentBase</c> — the MindAttic kind wins the bare name.
 /// Blazor's base is aliased as <c>BlazorComponentBase</c> in this file (see M.IDEA-LAW-1).
 /// </summary>

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace IdeaCms.Abstractions;
+namespace MindAttic.Ideas.Abstractions;
 
 // ============================================================================================
 //  RENDER CONTEXT — the single object handed to every citizen at render time.

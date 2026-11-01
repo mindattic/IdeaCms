@@ -1,7 +1,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Plugin.Tooltip;
 

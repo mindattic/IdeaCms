@@ -1,6 +1,6 @@
 using System.IO.Compression;
 using System.Text.Json;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Portability;
 using IdeaCms.Core.Rendering;
 using IdeaCms.Core.Services;

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Entities;
 

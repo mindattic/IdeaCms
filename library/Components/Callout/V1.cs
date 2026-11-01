@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Components.Rendering;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using ParameterAttribute = Microsoft.AspNetCore.Components.ParameterAttribute;  // not the namespace: its ComponentBase would clash (M.IDEA-LAW-1)
 
 namespace IdeaCms.Component.Callout;

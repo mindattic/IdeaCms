@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/IdeaCms.Abstractions/IdeaCms.Abstractions.csproj" />
+    <Project Path="src/MindAttic.Ideas.Abstractions/MindAttic.Ideas.Abstractions.csproj" />
     <Project Path="src/IdeaCms.Core/IdeaCms.Core.csproj" />
     <Project Path="src/IdeaCms.Rendering/IdeaCms.Rendering.csproj" />
     <Project Path="src/IdeaCms.Blazor/IdeaCms.Blazor.csproj" />

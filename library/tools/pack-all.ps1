@@ -48,7 +48,7 @@ $libraryRoot = Split-Path -Parent $PSScriptRoot
 $repoRoot    = Split-Path -Parent $libraryRoot
 $distDir     = Join-Path $libraryRoot 'dist'
 $sdkProject  = Join-Path $repoRoot 'src\IdeaCms.Sdk'
-$refsDir     = Join-Path $repoRoot 'src\IdeaCms.Abstractions\bin\Debug\net10.0'
+$refsDir     = Join-Path $repoRoot 'src\MindAttic.Ideas.Abstractions\bin\Debug\net10.0'
 $hostLibrary = Join-Path $repoRoot 'src\IdeaCms.Blazor\library'
 
 if (-not (Test-Path $refsDir)) {

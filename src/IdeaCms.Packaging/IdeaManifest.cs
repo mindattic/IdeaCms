@@ -17,7 +17,7 @@ public sealed record IdeaManifest
     /// <summary>Schema version of <c>idea.json</c>. The host refuses a manifest newer than it understands.</summary>
     [JsonPropertyName("manifestVersion")] public int ManifestVersion { get; init; } = 1;
 
-    /// <summary>The <see cref="IdeaCms.Abstractions.ContentKind"/> name: Page | Plugin | Theme | Component.</summary>
+    /// <summary>The <see cref="MindAttic.Ideas.Abstractions.ContentKind"/> name: Page | Plugin | Theme | Component.</summary>
     [JsonPropertyName("category")] public string Category { get; init; } = "";
 
     /// <summary><c>data</c> (free-form author content, no assembly) or <c>code</c> (a compiled citizen in bin/).</summary>

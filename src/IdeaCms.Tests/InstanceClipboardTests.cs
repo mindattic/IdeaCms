@@ -1,4 +1,4 @@
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Blazor.Services;
 using IdeaCms.Core.Rendering;
 using IdeaCms.Core.Services;

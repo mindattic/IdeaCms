@@ -6,7 +6,7 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Core.Rendering;
 

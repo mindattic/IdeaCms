@@ -1,4 +1,4 @@
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Discovery;
 
 namespace IdeaCms.Tests.Rendering;

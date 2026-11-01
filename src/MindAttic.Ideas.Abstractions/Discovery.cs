@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace IdeaCms.Abstractions;
+namespace MindAttic.Ideas.Abstractions;
 
 // ============================================================================================
 //  THE DISCOVERY / CATALOG SEAMS — the ONE set of contracts Phase-1 compiled discovery and the
@@ -153,7 +153,7 @@ public static class SharedContracts
 {
     public static readonly IReadOnlyList<string> DeferToDefaultPrefixes = new[]
     {
-        "IdeaCms.Abstractions",
+        "MindAttic.Ideas.Abstractions",
         "IdeaCms.Core",
         "Microsoft.AspNetCore.",
         "Microsoft.Extensions.",

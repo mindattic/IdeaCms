@@ -10,7 +10,7 @@ namespace IdeaCms.Tests.Packaging;
 [TestFixture]
 public class PackerTests
 {
-    [TestCase("IdeaCms.Abstractions", true)]
+    [TestCase("MindAttic.Ideas.Abstractions", true)]
     [TestCase("IdeaCms.Core", true)]
     [TestCase("Microsoft.AspNetCore.Components", true)]
     [TestCase("Microsoft.Extensions.DependencyInjection", true)]

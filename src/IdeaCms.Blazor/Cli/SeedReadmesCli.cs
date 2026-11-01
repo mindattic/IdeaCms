@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Entities;
 using CmsPage = IdeaCms.Core.Entities.Page;

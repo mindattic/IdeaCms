@@ -1,4 +1,4 @@
-namespace IdeaCms.Abstractions;
+namespace MindAttic.Ideas.Abstractions;
 
 // ============================================================================================
 //  FROZEN ENUMS — explicit ascending integer values, APPEND-ONLY forever.

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
-namespace IdeaCms.Abstractions;
+namespace MindAttic.Ideas.Abstractions;
 
 // ============================================================================================
 //  CmsInclude — the SDK include primitive. The MindAttic analog of Orchard's @Display / <zone>:

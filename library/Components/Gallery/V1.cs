@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Component.Gallery;
 
@@ -22,7 +22,7 @@ namespace IdeaCms.Component.Gallery;
 /// are emitted as a small &lt;style&gt; overriding the gallery custom properties only for values that
 /// are set; behavior ones reach gallery.js through a <c>data-ma-settings="component.gallery"</c> element.
 /// </summary>
-public sealed class V1 : IdeaCms.Abstractions.ComponentBase
+public sealed class V1 : MindAttic.Ideas.Abstractions.ComponentBase
 {
     private const string Mount = "/_ideas/Component/gallery/1";
 

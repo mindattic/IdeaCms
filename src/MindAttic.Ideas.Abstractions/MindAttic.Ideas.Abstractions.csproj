@@ -5,8 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <!-- The frozen SDK every Page/Theme/Component compiles against. MAJOR pinned at 1 forever; additive-only. -->
-    <AssemblyName>IdeaCms.Abstractions</AssemblyName>
+    <!-- The frozen SDK every Page/Theme/Component compiles against. MAJOR pinned at 1 forever; additive-only.
+         AssemblyName stays MindAttic.Ideas.Abstractions even after the MindAttic.Ideas -> IdeaCms rename:
+         it is the binary identity every already-compiled .idea package (including vendored/external ones)
+         links against by exact assembly name, so changing it would break every one of them at load time. -->
+    <AssemblyName>MindAttic.Ideas.Abstractions</AssemblyName>
     <RootNamespace>IdeaCms.Abstractions</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- Doc file is generated for IntelliSense; we don't require a doc comment on every member. -->

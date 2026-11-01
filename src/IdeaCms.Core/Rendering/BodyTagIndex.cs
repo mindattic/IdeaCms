@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Core.Rendering;
 

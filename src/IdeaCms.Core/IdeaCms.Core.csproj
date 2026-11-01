@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj" />
+    <ProjectReference Include="..\MindAttic.Ideas.Abstractions\MindAttic.Ideas.Abstractions.csproj" />
     <!-- The .idea manifest contract + read-only install rules (PackageInstallService reuses them). -->
     <ProjectReference Include="..\IdeaCms.Packaging\IdeaCms.Packaging.csproj" />
   </ItemGroup>

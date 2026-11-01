@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Rendering;
 
 namespace IdeaCms.Tests;
@@ -10,7 +10,7 @@ public class InstanceSettingsTests
 {
     public enum Size { Small, Large }
 
-    private sealed class Sample : Abstractions.ComponentBase
+    private sealed class Sample : MindAttic.Ideas.Abstractions.ComponentBase
     {
         [Parameter, Setting("Glow effect", Group = "Effects")] public bool Glow { get; set; } = true;
         [Parameter] public int Count { get; set; } = 3;

@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IdeaCms.Abstractions\IdeaCms.Abstractions.csproj" />
+    <ProjectReference Include="..\MindAttic.Ideas.Abstractions\MindAttic.Ideas.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

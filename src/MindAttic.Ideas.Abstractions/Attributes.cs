@@ -1,4 +1,4 @@
-namespace IdeaCms.Abstractions;
+namespace MindAttic.Ideas.Abstractions;
 
 // ============================================================================================
 //  DISCOVERY — by CONVENTION, with an OPTIONAL override attribute.

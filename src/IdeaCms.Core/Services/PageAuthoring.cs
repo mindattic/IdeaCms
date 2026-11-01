@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Entities;
 
 namespace IdeaCms.Core.Services;

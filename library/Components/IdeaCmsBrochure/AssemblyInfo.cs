@@ -1,2 +1,2 @@
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 [assembly: IdeaSdkVersion(1)]

@@ -1,5 +1,5 @@
 using System.IO.Compression;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using NuGet.Versioning;
 
 namespace IdeaCms.Core.Portability;

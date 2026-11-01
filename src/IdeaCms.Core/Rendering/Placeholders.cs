@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 using BlazorComponentBase = Microsoft.AspNetCore.Components.ComponentBase;
 
 namespace IdeaCms.Core.Rendering;

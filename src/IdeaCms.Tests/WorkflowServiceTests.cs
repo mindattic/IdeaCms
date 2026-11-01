@@ -43,8 +43,8 @@ public class WorkflowServiceTests
         await using var db = factory.CreateDbContext();
         var page = new CmsPage
         {
-            Slug = "test-page", Title = "Test", Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Slug = "test-page", Title = "Test", Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             WorkflowDefinitionId = def.Id, WorkflowState = "Draft",
             IsPublished = false, Enabled = true, CreatedUtc = DateTime.UtcNow,
         };
@@ -204,8 +204,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "my-page", Title = "My Page",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             Enabled = true, CreatedUtc = DateTime.UtcNow,
         };
         setupDb.Pages.Add(page);
@@ -236,8 +236,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "live-page", Title = "Live",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             IsPublished = true, Enabled = true, CreatedUtc = DateTime.UtcNow,
         };
         setupDb.Pages.Add(page);
@@ -281,8 +281,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "draft-page", Title = "Draft",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             IsPublished = false, Enabled = true, CreatedUtc = DateTime.UtcNow,
         };
         setupDb.Pages.Add(page);
@@ -316,8 +316,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "null-state-page", Title = "Null State",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             WorkflowDefinitionId = def.Id,
             WorkflowState = null,   // null state but page is live — cleared by a direct SaveAsync
             IsPublished = true, Enabled = true, CreatedUtc = DateTime.UtcNow,
@@ -352,8 +352,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "reassign-page", Title = "Reassign Test",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             Enabled = true, CreatedUtc = DateTime.UtcNow,
             WorkflowDefinitionId = defA.Id, WorkflowState = "Published",
         };
@@ -382,8 +382,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "soft-deleted", Title = "Soft Deleted",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             WorkflowDefinitionId = defId, WorkflowState = "Draft",
             IsPublished = false, Enabled = true,
             IsDeleted = true, DeletedUtc = DateTime.UtcNow, CreatedUtc = DateTime.UtcNow,
@@ -434,8 +434,8 @@ public class WorkflowServiceTests
         var page = new CmsPage
         {
             Slug = "del-wf-page", Title = "Del WF",
-            Kind = IdeaCms.Abstractions.PageKind.Data,
-            BodyTrust = IdeaCms.Abstractions.ContentTrust.Untrusted,
+            Kind = MindAttic.Ideas.Abstractions.PageKind.Data,
+            BodyTrust = MindAttic.Ideas.Abstractions.ContentTrust.Untrusted,
             Enabled = true, IsDeleted = true, DeletedUtc = DateTime.UtcNow, CreatedUtc = DateTime.UtcNow,
         };
         setup.Pages.Add(page);

@@ -1,5 +1,5 @@
 using System.Reflection;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Core.Discovery;
 

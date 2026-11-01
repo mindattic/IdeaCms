@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.RateLimiting;
-using IdeaCms.Abstractions;
+using MindAttic.Ideas.Abstractions;
 
 namespace IdeaCms.Blazor.Demo;
 
