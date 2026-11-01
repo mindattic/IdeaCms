@@ -1,5 +1,6 @@
 @attribute [Authorize(Policy = MaPolicies.Admin)]
 @inject IContentLifecycleService Lifecycle
+@inject IJSRuntime JS
 
 @* Idea Library panel — installed Themes, Plugins &amp; Components. Hosted by AdminShell's
    "Idea Library" tab (no own route). *@
@@ -64,6 +65,8 @@ else
 
     private async Task Delete(CmsContentDefinition d)
     {
+        if (!await JS.InvokeAsync<bool>("confirm", $"Delete {d.Kind} '{d.Key}' V{d.Version}? This cannot be undone."))
+            return;
         var r = await Lifecycle.DeleteAsync(d.Kind, d.Key, d.Version);
         if (r.Blocked)
             Set($"Can't delete {d.Kind} '{d.Key}' V{d.Version} — still used by: {string.Join(", ", r.PinnedBy)}.", true);

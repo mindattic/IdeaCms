@@ -12,6 +12,7 @@ public interface ICmsRoleService
     Task<IReadOnlyList<CmsRoleSummary>> ListRolesAsync(CancellationToken ct = default);
     Task<IReadOnlyList<string>> GetAllRoleNamesAsync(CancellationToken ct = default);
     Task<(bool Ok, string? Error)> CreateRoleAsync(string name, string? description = null, CancellationToken ct = default);
+    Task<(bool Ok, string? Error)> UpdateRoleDescriptionAsync(int id, string? description, CancellationToken ct = default);
     Task<bool> DeleteRoleAsync(int id, CancellationToken ct = default);
     Task<IReadOnlyList<int>> GetUserCmsRoleIdsAsync(string userId, CancellationToken ct = default);
     Task SetUserCmsRolesAsync(string userId, IEnumerable<int> roleIds, CancellationToken ct = default);
@@ -34,14 +35,28 @@ public sealed class CmsRoleService(IDbContextFactory<CmsDbContext> dbFactory) : 
         return new[] { "User", MaRoles.Admin }.Concat(cmsNames).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
     }
 
+    private static readonly string[] BuiltInRoleNames = ["User", MaRoles.Admin];
+
     public async Task<(bool Ok, string? Error)> CreateRoleAsync(string name, string? description = null, CancellationToken ct = default)
     {
         name = name.Trim();
         if (string.IsNullOrEmpty(name)) return (false, "Name is required.");
+        if (BuiltInRoleNames.Contains(name, StringComparer.OrdinalIgnoreCase))
+            return (false, $"'{name}' is a built-in role name and can't be reused.");
         await using var db = await dbFactory.CreateDbContextAsync(ct);
         if (await db.CmsRoles.AnyAsync(r => r.Name.ToLowerInvariant() == name.ToLowerInvariant(), ct))
             return (false, $"Role '{name}' already exists.");
         db.CmsRoles.Add(new CmsRole { Name = name, Description = description?.Trim(), CreatedUtc = DateTime.UtcNow });
+        await db.SaveChangesAsync(ct);
+        return (true, null);
+    }
+
+    public async Task<(bool Ok, string? Error)> UpdateRoleDescriptionAsync(int id, string? description, CancellationToken ct = default)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync(ct);
+        var role = await db.CmsRoles.FirstOrDefaultAsync(r => r.Id == id, ct);
+        if (role is null) return (false, "Role not found.");
+        role.Description = description?.Trim();
         await db.SaveChangesAsync(ct);
         return (true, null);
     }

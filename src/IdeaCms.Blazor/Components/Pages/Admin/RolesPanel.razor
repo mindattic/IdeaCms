@@ -1,5 +1,6 @@
 @attribute [Authorize(Policy = MaPolicies.Admin)]
 @inject ICmsRoleService RolesSvc
+@inject IJSRuntime JS
 
 @* Roles management panel — hosted by AdminShell's "Roles" tab. *@
 
@@ -94,7 +95,9 @@
         }
         else
         {
-            status = "Role name cannot be changed after creation."; statusBad = false;
+            var (ok, error) = await RolesSvc.UpdateRoleDescriptionAsync(editing.Id, editing.Description);
+            if (!ok) { status = error ?? "Could not save the role."; statusBad = true; return; }
+            status = "Saved."; statusBad = false;
         }
         await Load();
     }
@@ -102,6 +105,8 @@
     private async Task Delete()
     {
         if (editing is null || isNew) return;
+        if (!await JS.InvokeAsync<bool>("confirm", $"Delete the role '{editing.Name}'? This removes it from every user and page it's assigned to."))
+            return;
         await RolesSvc.DeleteRoleAsync(editing.Id);
         editing = null; status = "";
         await Load();

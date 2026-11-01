@@ -40,8 +40,8 @@
         <input type="checkbox" @bind="allowOverride" /> Allow override (let a package shadow a compiled key)
     </label>
 
-    <label class="admin-dropzone">
-        <InputFile OnChange="OnFiles" multiple accept=".idea,.idealist" />
+    <label class="admin-dropzone @(busy ? "admin-dropzone-disabled" : "")">
+        <InputFile OnChange="OnFiles" multiple accept=".idea,.idealist" disabled="@busy" />
         <span class="admin-dropzone-label">Drop <code>.idea</code> or <code>.idealist</code> files here</span>
         <span class="admin-dropzone-hint">or <strong>click to browse</strong> · multiple files accepted</span>
     </label>
@@ -83,6 +83,9 @@
 
     private async Task OnFiles(InputFileChangeEventArgs e)
     {
+        // The dropzone is disabled while busy, but guard re-entrancy in code too: a second concurrent
+        // call used to Clear() the in-progress call's results out from under it (IDEA-T46).
+        if (busy) return;
         busy = true;
         results.Clear();
         try

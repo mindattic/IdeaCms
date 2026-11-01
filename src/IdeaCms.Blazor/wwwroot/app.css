@@ -333,6 +333,9 @@ h1:focus {
 .admin-dropzone-label code{color:#5aa0ff;background:none;padding:0;}
 .admin-dropzone-hint{font-size:.78rem;color:#a0aab8;}
 .admin-dropzone-hint strong{color:#5aa0ff;font-weight:600;}
+.admin-dropzone-disabled{cursor:default;opacity:.55;}
+.admin-dropzone-disabled:hover,.admin-dropzone-disabled:focus-within{border-color:rgba(90,160,255,.3);background:rgba(90,160,255,.025);box-shadow:none;}
+.admin-dropzone-disabled input[type="file"]{cursor:default;}
 .admin-results{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.3rem;}
 .admin-results li{padding:.4rem .6rem;border-radius:6px;font-size:.82rem;border:1px solid rgba(127,127,127,.3);}
 .admin-results li.ok{border-color:#2e7d32;background:rgba(46,125,50,.08);}

@@ -4,7 +4,13 @@
 @* Packages panel — browses every installed .idea blob (for download / SHA-256 verification / rollback).
    The download link hits the admin-protected /_ideas/packages/{category}/{key}/{version} endpoint. *@
 
-@if (packages is null)
+@if (error is { Length: > 0 })
+{
+    <div class="admin-status" style="border:1px dashed #c0392b;border-radius:6px;padding:.5rem .75rem;">
+        Could not load installed packages: @error
+    </div>
+}
+else if (packages is null)
 {
     <p>Loading…</p>
 }
@@ -52,7 +58,14 @@ else
 
 @code {
     private IReadOnlyList<PackageSummary>? packages;
+    private string? error;
 
-    protected override async Task OnInitializedAsync() =>
-        packages = await Registry.ListAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        // Unlike CatalogPanel/MediaPanel's _error-surfacing pattern, this had no try/catch: a
+        // transient DB error here threw into Blazor's default error UI instead of a recoverable
+        // in-panel message (IDEA-T46).
+        try { packages = await Registry.ListAsync(); }
+        catch (Exception ex) { error = ex.Message; }
+    }
 }

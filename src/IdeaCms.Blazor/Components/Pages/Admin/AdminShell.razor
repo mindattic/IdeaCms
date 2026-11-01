@@ -25,9 +25,10 @@
     <nav class="ma-admin-bar" role="tablist" aria-label="Admin sections">
         @foreach (var t in Tabs)
         {
-            <button type="button" role="tab"
+            <button type="button" role="tab" id="@TabButtonId(t.Slug)"
                     class="ma-admin-tab @(t.Slug == Active.Slug ? "on" : "")"
                     aria-selected="@(t.Slug == Active.Slug)"
+                    aria-controls="@TabPanelId(t.Slug)"
                     @onclick="() => Go(t.Slug)">
                 @t.Title
             </button>
@@ -36,6 +37,7 @@
 
     <h1 class="ma-admin-h">@Active.Title</h1>
 
+    <div role="tabpanel" id="@TabPanelId(Active.Slug)" aria-labelledby="@TabButtonId(Active.Slug)">
     @switch (Active.Slug)
     {
         case "content":
@@ -72,6 +74,7 @@
             <Pages />
             break;
     }
+    </div>
 </div>
 
 @code {
@@ -99,5 +102,17 @@
     private TabDef Active =>
         Tabs.FirstOrDefault(t => string.Equals(t.Slug, Tab, StringComparison.OrdinalIgnoreCase)) ?? Tabs[0];
 
+    private static string TabButtonId(string slug) => $"admin-tab-{slug}";
+    private static string TabPanelId(string slug) => $"admin-panel-{slug}";
+
     private void Go(string slug) => Nav.NavigateTo(slug == "pages" ? "/admin" : $"/admin/{slug}");
+
+    protected override void OnParametersSet()
+    {
+        // An unknown {Tab} segment used to fall back to "Page Management" silently, leaving the
+        // address bar showing the typo'd URL while the nav highlighted a different tab as active
+        // (IDEA-T46). Redirect to the real URL for whatever actually renders instead.
+        if (Tab is not null && !Tabs.Any(t => string.Equals(t.Slug, Tab, StringComparison.OrdinalIgnoreCase)))
+            Nav.NavigateTo("/admin", replace: true);
+    }
 }

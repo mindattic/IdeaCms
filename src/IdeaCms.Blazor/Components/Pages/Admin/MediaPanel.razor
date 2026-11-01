@@ -1,5 +1,6 @@
 @attribute [Authorize(Policy = MaPolicies.Admin)]
 @inject IMediaStore MediaStore
+@inject IJSRuntime JS
 
 @* Media Library — upload and manage images, PDFs, ZIPs and other files.
    Small files (≤ 2 MB) are stored inline in the Media table; larger files go to the media/ folder on disk.
@@ -14,8 +15,8 @@
         Reference assets in page HTML using the tokens shown below each file.
     </p>
 
-    <label class="admin-dropzone">
-        <InputFile OnChange="OnFilesAsync" multiple />
+    <label class="admin-dropzone @(_busy ? "admin-dropzone-disabled" : "")">
+        <InputFile OnChange="OnFilesAsync" multiple disabled="@_busy" />
         <span class="admin-dropzone-label">Drop files here</span>
         <span class="admin-dropzone-hint">or <strong>click to browse</strong> · any file type accepted</span>
     </label>
@@ -82,9 +83,9 @@
                         </div>
                     </td>
                     <td>
-                        <button class="admin-btn" type="button"
+                        <button class="admin-btn" type="button" disabled="@(_deleting.Contains(item.Uid))"
                                 style="color:#c0392b;border-color:#c0392b"
-                                @onclick="() => DeleteAsync(item.Uid)">Delete</button>
+                                @onclick="() => DeleteAsync(item.Uid, item.FileName)">Delete</button>
                     </td>
                 </tr>
             }
@@ -100,6 +101,7 @@ else if (!_busy)
     private bool _busy;
     private string? _error;
     private List<MediaItem> _items = new();
+    private readonly HashSet<Guid> _deleting = new();
 
     protected override async Task OnInitializedAsync() => await RefreshAsync();
 
@@ -141,10 +143,27 @@ else if (!_busy)
         }
     }
 
-    private async Task DeleteAsync(Guid uid)
+    private async Task DeleteAsync(Guid uid, string fileName)
     {
-        await MediaStore.DeleteAsync(uid);
-        await RefreshAsync();
+        if (_deleting.Contains(uid)) return;
+        if (!await JS.InvokeAsync<bool>("confirm", $"Delete '{fileName}'? This cannot be undone."))
+            return;
+        _deleting.Add(uid);
+        StateHasChanged();
+        try
+        {
+            await MediaStore.DeleteAsync(uid);
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = $"Failed deleting {fileName}: {ex.Message}";
+        }
+        finally
+        {
+            _deleting.Remove(uid);
+            StateHasChanged();
+        }
     }
 
     private static string FormatSize(long bytes) => bytes switch

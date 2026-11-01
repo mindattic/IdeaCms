@@ -50,7 +50,7 @@ else
                         {
                             <span class="admin-badge">installed</span>
                         }
-                        else if (busy == busyKey)
+                        else if (busy.Contains(busyKey))
                         {
                             <span class="admin-status">Installing…</span>
                         }
@@ -72,7 +72,10 @@ else
 
 @code {
     private CatalogListResult? result;
-    private string? busy;
+    // One row's install in flight must not hide every other row's busy state (IDEA-T46): this used to
+    // be a single string, so starting install B while A was still running overwrote A's busy key,
+    // making A's button reappear live and installable a second time while A was still in progress.
+    private readonly HashSet<string> busy = new();
     private string? message;
 
     protected override async Task OnInitializedAsync() => await RefreshAsync();
@@ -83,7 +86,8 @@ else
 
     private async Task InstallAsync(CatalogEntry e)
     {
-        busy = BusyKeyFor(e);
+        var busyKey = BusyKeyFor(e);
+        if (!busy.Add(busyKey)) return;
         message = null;
         StateHasChanged();
         try
@@ -111,7 +115,7 @@ else
         }
         finally
         {
-            busy = null;
+            busy.Remove(busyKey);
             StateHasChanged();
         }
     }

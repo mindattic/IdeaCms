@@ -57,4 +57,50 @@ public class CmsRoleServiceTests
             Assert.That(duplicate.Error, Does.Contain("already exists"), "friendly error message expected");
         });
     }
+
+    [TestCase("User")]
+    [TestCase("admin")]
+    public async Task CreateRole_BuiltInName_IsRejected(string name)
+    {
+        // Bug (IDEA-T46): a CMS role named "Admin"/"User" compiled fine against the uniqueness check
+        // (which only looked at the CmsRoles table) but was then silently swallowed by
+        // GetAllRoleNamesAsync's Distinct() against the built-ins -- the role existed, was deletable
+        // from RolesPanel, but could never be selected anywhere that lists role names.
+        var svc = NewService();
+        var result = await svc.CreateRoleAsync(name);
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Ok, Is.False, "a built-in role name must be rejected at creation");
+            Assert.That(result.Error, Does.Contain("built-in"));
+        });
+    }
+
+    [Test]
+    public async Task UpdateRoleDescriptionAsync_PersistsTheNewDescription()
+    {
+        // Bug (IDEA-T46): RolesPanel.Save() for an existing role only set a status message and never
+        // called any persistence method -- an admin editing a role's Description saw no error, but the
+        // edit was silently discarded on reload.
+        var svc = NewService();
+        await svc.CreateRoleAsync("Editor", "original");
+        var created = (await svc.ListRolesAsync()).Single(r => r.Name == "Editor");
+
+        var (ok, error) = await svc.UpdateRoleDescriptionAsync(created.Id, "updated description");
+
+        Assert.That(ok, Is.True, error);
+        var reloaded = (await svc.ListRolesAsync()).Single(r => r.Id == created.Id);
+        Assert.That(reloaded.Description, Is.EqualTo("updated description"));
+    }
+
+    [Test]
+    public async Task UpdateRoleDescriptionAsync_UnknownId_ReturnsFriendlyError()
+    {
+        var svc = NewService();
+        var (ok, error) = await svc.UpdateRoleDescriptionAsync(12345, "x");
+        Assert.Multiple(() =>
+        {
+            Assert.That(ok, Is.False);
+            Assert.That(error, Does.Contain("not found"));
+        });
+    }
 }

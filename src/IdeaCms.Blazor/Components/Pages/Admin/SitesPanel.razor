@@ -1,5 +1,6 @@
 @attribute [Authorize(Policy = MaPolicies.Admin)]
 @inject ISiteAdminService SitesSvc
+@inject IJSRuntime JS
 
 @* Sites panel — one deployment, many domains (M.IDEA-§4.10). A site's HostBindings decide which requests
    land on it; the default site answers everything unclaimed, which is why a single-site install needs
@@ -180,6 +181,8 @@
     private async Task Delete()
     {
         if (editing is null || isNew) return;
+        if (!await JS.InvokeAsync<bool>("confirm", $"Delete the site '{editing.Name}'? This cannot be undone."))
+            return;
         var (ok, error) = await SitesSvc.DeleteAsync(editing.Id);
         if (!ok) { status = error ?? "Could not delete."; statusBad = true; return; }
         editing = null; status = ""; statusBad = false;

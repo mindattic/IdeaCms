@@ -6,6 +6,7 @@
 @inject IInstanceConfigService Instances
 @inject IPageValidator Validator
 @inject IdeaCms.Blazor.Services.InstanceClipboard Clipboard
+@inject IJSRuntime JS
 @implements IDisposable
 
 @* Page Management panel — hosted by AdminShell's "Page Management" tab (no own route). *@
@@ -161,7 +162,7 @@
                                 var shown = editing.InheritPlugins ? editing.SiteDefaultPlugins : editing.ActivePlugins;
                                 <label class="admin-access-check">
                                     <input type="checkbox" disabled="@editing.InheritPlugins"
-                                           checked="@shown.Any(r => r.StartsWith("Plugin." + pKey, StringComparison.OrdinalIgnoreCase))"
+                                           checked="@shown.Any(r => PluginRefMatchesKey(r, pKey))"
                                            @onchange="e => TogglePlugin(latestRef, (bool)(e.Value ?? false))" />
                                     @pKey
                                 </label>
@@ -494,6 +495,9 @@
 
     private async Task SoftDelete(int id)
     {
+        var slug = editing?.Slug;
+        if (!await JS.InvokeAsync<bool>("confirm", $"Delete the page '/{slug}'? This cannot be undone."))
+            return;
         await PagesSvc.SoftDeleteAsync(id);
         editing = null; status = "";
         await Load();
@@ -532,7 +536,23 @@
     {
         if (editing is null) return;
         if (add) { if (!editing.ActivePlugins.Any(r => string.Equals(r, pluginRef, StringComparison.OrdinalIgnoreCase))) editing.ActivePlugins.Add(pluginRef); }
-        else editing.ActivePlugins.RemoveAll(r => r.StartsWith(pluginRef.Split('@')[0], StringComparison.OrdinalIgnoreCase));
+        else
+        {
+            var key = pluginRef.Split('@')[0];
+            editing.ActivePlugins.RemoveAll(r => PluginRefMatchesKey(r, key.StartsWith("Plugin.", StringComparison.OrdinalIgnoreCase) ? key["Plugin.".Length..] : key));
+        }
+    }
+
+    // A ref is this key's own entry only when it's exactly "Plugin.{key}" or that followed by an
+    // "@version" suffix -- a plain StartsWith let one plugin key that's a textual prefix of another
+    // (e.g. a future "Header" vs "HeaderV2") match and toggle both (IDEA-T46).
+    private static bool PluginRefMatchesKey(string pluginRef, string key)
+    {
+        const string prefix = "Plugin.";
+        if (!pluginRef.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return false;
+        var rest = pluginRef[prefix.Length..];
+        return rest.Equals(key, StringComparison.OrdinalIgnoreCase)
+            || rest.StartsWith(key + "@", StringComparison.OrdinalIgnoreCase);
     }
 
     private void AppendToken(string token)
