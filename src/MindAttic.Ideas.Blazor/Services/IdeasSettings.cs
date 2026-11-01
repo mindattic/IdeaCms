@@ -12,7 +12,7 @@ namespace MindAttic.Ideas.Blazor.Services;
 /// in the admin. The values are projected onto the configuration keys the app has always read (<see cref="ToConfigurationKeys"/>),
 /// below environment variables, so an App Service setting still wins exactly as before.
 /// </summary>
-[SettingsApp(AppId, "MindAttic Ideas", Icon = "lightbulb", Description = "The CMS behind mindattic.com and its sites.")]
+[SettingsApp(AppId, "MindAttic.Ideas", Icon = "lightbulb", Description = "The CMS behind mindattic.com and its sites.")]
 public sealed class IdeasSettings
 {
     public const string AppId = "Ideas";
