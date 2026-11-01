@@ -468,3 +468,4 @@ updated: 2026-10-03
 | IDEA-T45 | 2026-11-01 | fix | closed | Fails on main: IdeaCms.Tests.DeploymentPackagingTests.VendoredPackagesMatchTheLocalFeedsSameVersion — Vendored packages differ from C:\LocalNuGet; copy the current .nupkg into lib/local-packages/: MindAttic.Vault.7.0.0.nupkg Assert.That(stale, Is.Empty) Expected: <empty> But was: < "MindAttic.Vault.7.0.0.nupkg" > (landed on main since the last green run: tickets IDEA-T44 in da53904 Rename MindAttic.Ideas to IdeaCms: repo, folder, namespaces, projects, docs and GitHub, decoupled from the MindAttic ecosystem branding (IDEA-T44)) | main@da53904 |
 | IDEA-T46 | 2026-11-01 | chore | closed | Admin section bug hunt and cleanup pass | — |
 | IDEA-T47 | 2026-11-01 | feature | open | Add first-visit onboarding tour popups across the admin section using a JS tour library | — |
+| IDEA-T48 | 2026-11-01 | fix | open | Monaco editor: Insert from component palette can race a just-typed keystroke and clobber it | — |

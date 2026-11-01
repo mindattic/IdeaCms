@@ -194,7 +194,7 @@
 
             @if (editing.Kind == PageKind.Data)
             {
-                <label class="admin-area">Body HTML<MonacoEditor @bind-Value="editing.BodyHtml" /></label>
+                <label class="admin-area">Body HTML<MonacoEditor @ref="_bodyEditor" @bind-Value="editing.BodyHtml" /></label>
                 <label class="admin-area">Page CSS<textarea rows="5" @bind="editing.PageCss"></textarea></label>
                 @if (cssLintWarnings.Count > 0)
                 {
@@ -222,7 +222,7 @@
                                 <div class="admin-palette-item">
                                     <code>@token</code>
                                     <span class="admin-sub">@w.DisplayName</span>
-                                    <button class="admin-mini" @onclick="() => AppendToken(token)">Insert</button>
+                                    <button class="admin-mini" @onclick="() => InsertToken(token)">Insert</button>
                                 </div>
                             }
                         </div>
@@ -290,6 +290,7 @@
 
     private IReadOnlyList<PageSummary>? pages;
     private PageEditModel? editing;
+    private MonacoEditor? _bodyEditor;
     private bool isNew;
     private string status = "";
     private bool statusBad;
@@ -555,10 +556,22 @@
             || rest.StartsWith(key + "@", StringComparison.OrdinalIgnoreCase);
     }
 
-    private void AppendToken(string token)
+    private async Task InsertToken(string token)
     {
         if (editing is null) return;
-        editing.BodyHtml = (editing.BodyHtml ?? "") + token;
+        if (_bodyEditor is not null)
+        {
+            // Insert at the live cursor instead of reading/rewriting editing.BodyHtml directly: that
+            // round trip could race a just-typed keystroke whose change hadn't synced back from the
+            // editor yet and silently drop it (IDEA-T48).
+            await _bodyEditor.InsertAtCursorAsync(token);
+        }
+        else
+        {
+            // Editor not yet rendered (e.g. this page was just switched to Data) -- append is safe
+            // since there's no live editor state to race.
+            editing.BodyHtml = (editing.BodyHtml ?? "") + token;
+        }
     }
 
     private Task OnRestrictedChanged()

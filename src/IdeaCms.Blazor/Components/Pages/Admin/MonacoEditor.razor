@@ -52,6 +52,18 @@
         await ValueChanged.InvokeAsync(value);
     }
 
+    /// <summary>
+    /// Inserts <paramref name="text"/> at the live cursor/selection inside the editor itself, rather
+    /// than the caller reading and rewriting <see cref="Value"/> (which can race a just-typed
+    /// keystroke whose change hasn't synced back to .NET yet and silently drop it — IDEA-T48).
+    /// The resulting edit flows back through the normal <see cref="OnValueChanged"/> channel.
+    /// </summary>
+    public async Task InsertAtCursorAsync(string text)
+    {
+        if (_self is null) return; // not yet rendered
+        await JS.InvokeVoidAsync("MaMonaco.insertText", _host, text);
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_self is not null)

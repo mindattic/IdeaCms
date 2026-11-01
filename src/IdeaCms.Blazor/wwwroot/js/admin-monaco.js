@@ -128,6 +128,20 @@
             }
         },
 
+        // Inserts at the live cursor/selection instead of round-tripping through the bound .NET
+        // Value: appending via "Value += token" in C# could race a just-typed keystroke whose
+        // onDidChangeModelContent sync hadn't reached .NET yet, silently dropping it (IDEA-T48). The
+        // editor is the single source of truth for an insert; onDidChangeModelContent below carries
+        // the result back to .NET the same way every other edit does.
+        insertText: function (el, text) {
+            var id = el && el.dataset && el.dataset.mceId;
+            var ed = id && _editors.get(id);
+            if (!ed) return;
+            var sel = ed.getSelection();
+            ed.executeEdits('insert-token', [{ range: sel, text: text, forceMoveMarkers: true }]);
+            ed.focus();
+        },
+
         dispose: function (el) {
             var id = el && el.dataset && el.dataset.mceId;
             var ed = id && _editors.get(id);
