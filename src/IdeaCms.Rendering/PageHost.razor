@@ -391,7 +391,9 @@ else if (_context is not null)
         _themeScripts = Array.Empty<string>();
 
         var themeKey = page.ThemeKey ?? site?.DefaultThemeKey;
-        var themeVersion = page.ThemeVersion ?? site?.DefaultThemeVersion;
+        // The site's default VERSION belongs to the site's default KEY only: a page that names its own
+        // theme without a version floats to that theme's latest, never to the site default's version.
+        var themeVersion = page.ThemeKey is not null ? page.ThemeVersion : site?.DefaultThemeVersion;
         if (!string.IsNullOrWhiteSpace(themeKey))
         {
             var themeRes = Catalog.ResolveTag(ContentKind.Theme, themeKey!, themeVersion);

@@ -137,7 +137,9 @@ public sealed class InstanceConfigService(
 
         // Theme (page override → site default), then the plugins it composes by [Uses].
         var themeKey = page.ThemeKey ?? site?.DefaultThemeKey;
-        var themeVersion = page.ThemeVersion ?? site?.DefaultThemeVersion;
+        // The site's default VERSION belongs to the site's default KEY only: a page that names its own
+        // theme without a version floats to that theme's latest, never to the site default's version.
+        var themeVersion = page.ThemeKey is not null ? page.ThemeVersion : site?.DefaultThemeVersion;
         var seenPlugins = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         if (!string.IsNullOrWhiteSpace(themeKey))
         {

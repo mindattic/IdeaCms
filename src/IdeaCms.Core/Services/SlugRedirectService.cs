@@ -51,6 +51,9 @@ public sealed class SlugRedirectService(IDbContextFactory<CmsDbContext> dbFactor
                      && x.p.IsPublished
                      && x.p.Enabled
                      && !x.p.IsDeleted)
+            // The same old slug can sit in more than one page's history (page A renamed away from "x",
+            // page B later created as "x" and renamed too): the most recent claim is the live one.
+            .OrderByDescending(x => x.h.CreatedUtc)
             .Select(x => new { x.p.Slug })
             .FirstOrDefaultAsync(ct);
 

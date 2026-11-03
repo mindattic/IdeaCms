@@ -81,8 +81,9 @@ public sealed class ContentLifecycleService(IDbContextFactory<CmsDbContext> dbFa
         // (soft-deleted pages are not live references even if their flags were not cleared on delete).
         var pageRows = await db.Pages.IgnoreQueryFilters()
             .Where(p => !p.IsDeleted && p.Enabled && p.IsPublished)
-            .Select(p => new { p.Slug, p.BodyHtml, p.ThemeKey, p.ThemeVersion, p.Enabled, p.IsPublished, p.Kind, p.ComponentTypeName, p.ActivePluginsJson, p.IsDeleted })
+            .Select(p => new { p.Slug, p.SiteId, p.BodyHtml, p.ThemeKey, p.ThemeVersion, p.Enabled, p.IsPublished, p.Kind, p.ComponentTypeName, p.ActivePluginsJson, p.IsDeleted })
             .ToListAsync(ct);
+        var siteDefaults = await LoadSiteDefaultsAsync(db, ct);
 
         // A COMPILED (Code) page references Components/Controls through its package manifest uses[], NOT its
         // BodyHtml — so the guard must see those too, or a referenced citizen could be deleted out from under
@@ -98,11 +99,23 @@ public sealed class ContentLifecycleService(IDbContextFactory<CmsDbContext> dbFa
             catch (JsonException) { /* one corrupt manifest only drops that page's uses[] from the guard */ }
         }
 
-        var pages = pageRows.Select(p => new PageRef(
-            p.Slug, p.BodyHtml, p.ThemeKey, p.ThemeVersion, p.Enabled, p.IsPublished,
-            p.Kind == PageKind.Code && p.ComponentTypeName is not null
-                && usesByType.TryGetValue(p.ComponentTypeName, out var u) ? u : null,
-            p.ActivePluginsJson, p.IsDeleted)).ToList();
+        // A page with no theme / plugin selection of its own renders its SITE's defaults (PageHost), so the
+        // guard must see those inherited references too — otherwise the last enabled version of a site's
+        // default theme or chrome plugin could be deleted out from under every page that inherits it.
+        var pages = pageRows.Select(p =>
+        {
+            var sd = p.SiteId is int sid ? siteDefaults.GetValueOrDefault(sid) : default;
+            var inheritsTheme = p.ThemeKey is null && !string.IsNullOrWhiteSpace(sd.ThemeKey);
+            return new PageRef(
+                p.Slug, p.BodyHtml,
+                inheritsTheme ? sd.ThemeKey : p.ThemeKey,
+                inheritsTheme ? sd.ThemeVersion : p.ThemeVersion,
+                p.Enabled, p.IsPublished,
+                p.Kind == PageKind.Code && p.ComponentTypeName is not null
+                    && usesByType.TryGetValue(p.ComponentTypeName, out var u) ? u : null,
+                string.IsNullOrWhiteSpace(p.ActivePluginsJson) ? sd.PluginsJson : p.ActivePluginsJson,
+                p.IsDeleted);
+        }).ToList();
 
         // Versions of this key that would REMAIN enabled+live after deleting `version`.
         var otherEnabled = await db.ContentDefinitions
@@ -128,8 +141,9 @@ public sealed class ContentLifecycleService(IDbContextFactory<CmsDbContext> dbFa
 
         var pageRows = await db.Pages.IgnoreQueryFilters()
             .Where(p => !p.IsDeleted && p.Enabled && p.IsPublished)
-            .Select(p => new { p.Slug, p.BodyHtml, p.ThemeKey, p.ThemeVersion, p.Enabled, p.IsPublished, p.Kind, p.ComponentTypeName, p.ActivePluginsJson, p.IsDeleted })
+            .Select(p => new { p.Slug, p.SiteId, p.BodyHtml, p.ThemeKey, p.ThemeVersion, p.Enabled, p.IsPublished, p.Kind, p.ComponentTypeName, p.ActivePluginsJson, p.IsDeleted })
             .ToListAsync(ct);
+        var siteDefaults = await LoadSiteDefaultsAsync(db, ct);
 
         var usesByType = new Dictionary<string, IReadOnlyList<string>>(StringComparer.Ordinal);
         foreach (var pkg in await db.InstalledPackages.Where(p => p.Enabled && p.Category == "Page").ToListAsync(ct))
@@ -142,11 +156,23 @@ public sealed class ContentLifecycleService(IDbContextFactory<CmsDbContext> dbFa
             catch (JsonException) { }
         }
 
-        var pages = pageRows.Select(p => new PageRef(
-            p.Slug, p.BodyHtml, p.ThemeKey, p.ThemeVersion, p.Enabled, p.IsPublished,
-            p.Kind == PageKind.Code && p.ComponentTypeName is not null
-                && usesByType.TryGetValue(p.ComponentTypeName, out var u) ? u : null,
-            p.ActivePluginsJson, p.IsDeleted)).ToList();
+        // A page with no theme / plugin selection of its own renders its SITE's defaults (PageHost), so the
+        // guard must see those inherited references too — otherwise the last enabled version of a site's
+        // default theme or chrome plugin could be deleted out from under every page that inherits it.
+        var pages = pageRows.Select(p =>
+        {
+            var sd = p.SiteId is int sid ? siteDefaults.GetValueOrDefault(sid) : default;
+            var inheritsTheme = p.ThemeKey is null && !string.IsNullOrWhiteSpace(sd.ThemeKey);
+            return new PageRef(
+                p.Slug, p.BodyHtml,
+                inheritsTheme ? sd.ThemeKey : p.ThemeKey,
+                inheritsTheme ? sd.ThemeVersion : p.ThemeVersion,
+                p.Enabled, p.IsPublished,
+                p.Kind == PageKind.Code && p.ComponentTypeName is not null
+                    && usesByType.TryGetValue(p.ComponentTypeName, out var u) ? u : null,
+                string.IsNullOrWhiteSpace(p.ActivePluginsJson) ? sd.PluginsJson : p.ActivePluginsJson,
+                p.IsDeleted);
+        }).ToList();
 
         var otherEnabled = await db.ContentDefinitions
             .Where(d => d.Kind == kind && d.Key == key && d.Version != version && d.Enabled && d.IsActive && !d.IsShadowed)
@@ -172,6 +198,22 @@ public sealed class ContentLifecycleService(IDbContextFactory<CmsDbContext> dbFa
         await db.SaveChangesAsync(ct);
         await discovery.ReloadCatalogAsync(ct);
         return new DeleteGuardResult(true, false, false, Array.Empty<string>(), null);
+    }
+
+    /// <summary>Each site's default theme (key + version) and default plugin selection JSON, by site id.</summary>
+    private static async Task<Dictionary<int, (string? ThemeKey, int? ThemeVersion, string? PluginsJson)>> LoadSiteDefaultsAsync(
+        CmsDbContext db, CancellationToken ct)
+    {
+        var sites = await db.Sites.AsNoTracking()
+            .Select(s => new { s.Id, s.DefaultThemeKey, s.DefaultThemeVersion }).ToListAsync(ct);
+        var plugins = await db.Settings.AsNoTracking()
+            .Where(s => s.Scope == "Site" && s.Key == "plugins.default" && s.ScopeId != null)
+            .Select(s => new { s.ScopeId, s.Value }).ToListAsync(ct);
+        var map = new Dictionary<int, (string?, int?, string?)>();
+        foreach (var s in sites)
+            map[s.Id] = (s.DefaultThemeKey, s.DefaultThemeVersion,
+                plugins.FirstOrDefault(p => p.ScopeId == s.Id)?.Value);
+        return map;
     }
 
     /// <summary>

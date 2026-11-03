@@ -84,7 +84,10 @@ public sealed class PageTreeFeature(IDbContextFactory<CmsDbContext> factory) : I
                 .Select(p => new { p.Id, p.ParentId, p.Slug, p.Title, p.OpenInNewWindow })
                 .ToListAsync(ct);
 
-            var byParent = all.GroupBy(p => p.ParentId).ToDictionary(g => g.Key, g => g.ToList());
+            // Top-level pages (ParentId null) are excluded: ToDictionary throws on a null key, and the
+            // catch below then turned EVERY tree into an empty one (every site has top-level pages).
+            var byParent = all.Where(p => p.ParentId != null).GroupBy(p => p.ParentId!.Value)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
             // visited guards against parent cycles written outside the app; without it a cycle causes StackOverflow.
             var visited = new HashSet<int> { root.Id };

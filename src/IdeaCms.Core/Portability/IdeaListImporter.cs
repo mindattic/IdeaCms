@@ -488,6 +488,10 @@ public sealed class IdeaListImporter(
             throw new IdeaListImportException($"{reasons.Count} page Uses[] entrie(s) unmet — nothing was written.", reasons);
     }
 
+    private static readonly System.Text.RegularExpressions.Regex UidPattern = new(
+        @"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+        System.Text.RegularExpressions.RegexOptions.Compiled);
+
     /// <summary>
     /// Rewrites every media uid the import remapped. Uids are hyphenated GUIDs, so a plain substring
     /// swap is unambiguous and catches all three shapes at once: <c>/_media/{uid}</c>,
@@ -496,9 +500,12 @@ public sealed class IdeaListImporter(
     internal static string? Remap(string? text, IReadOnlyDictionary<string, string> uidMap)
     {
         if (string.IsNullOrEmpty(text) || uidMap.Count == 0) return text;
-        foreach (var (oldUid, newUid) in uidMap)
-            text = text.Replace(oldUid, newUid, StringComparison.OrdinalIgnoreCase);
-        return text;
+        // ONE pass over every uid in the text: replacing map entries one after another chained them, so
+        // when one item's NEW uid was another item's OLD uid (an adopted-by-hash local item whose uid is
+        // also a source uid in this idealist) its references were rewritten twice, onto the wrong media.
+        return UidPattern.Replace(text, m =>
+            uidMap.TryGetValue(m.Value, out var mapped) || uidMap.TryGetValue(m.Value.ToLowerInvariant(), out mapped)
+                ? mapped : m.Value);
     }
 
     internal static string Describe(long bytes) => bytes switch
