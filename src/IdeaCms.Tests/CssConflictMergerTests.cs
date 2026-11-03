@@ -182,6 +182,31 @@ public class CssConflictMergerTests
     }
 
     [Test]
+    public void DuplicateSelector_InterveningRuleSetsTheSameProperty_IsNotMovedAcrossIt()
+    {
+        // Regression: merging moved the later ".a { color: green }" up in front of ".b { color: blue }",
+        // so an element with both classes flipped from green to blue. Cascade order must be preserved.
+        const string css = ".a { color: red; } .b { color: blue; } .a { color: green; }";
+
+        Assert.That(CssConflictMerger.Normalize(css), Is.EqualTo(css));
+    }
+
+    [Test]
+    public void DuplicateSelector_InterveningRuleTouchesOtherProperties_StillMerges()
+    {
+        const string css = ".a { color: red; } .b { margin: 0; } .a { color: green; }";
+
+        var result = CssConflictMerger.Normalize(css);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(CountOccurrences(result, ".a {"), Is.EqualTo(1));
+            Assert.That(result, Does.Contain("0, 128, 0"));
+            Assert.That(result, Does.Contain(".b { margin: 0; }"));
+        });
+    }
+
+    [Test]
     public void MalformedCss_ReturnsInputUnchanged_NeverThrows()
     {
         const string malformed = ".a { margin: ; ";

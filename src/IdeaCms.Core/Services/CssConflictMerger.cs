@@ -45,11 +45,12 @@ public static class CssConflictMerger
     private static readonly Regex PropertyNamePattern = new(@"([a-zA-Z-]+)\s*:", RegexOptions.Compiled);
 
     /// <summary>
-    /// Collapses every group of rules sharing an EXACT (trimmed, byte-identical) selector string into
-    /// one rule at the position of its FIRST occurrence, applying real CSS "last non-losing declaration
+    /// Collapses each run of rules sharing an EXACT (trimmed, byte-identical) selector string into
+    /// one rule at the position of the run's FIRST occurrence -- a run only spans rules that nothing in
+    /// between could compete with (see <see cref="CanJoinRun"/>), so cascade order is preserved -- applying real CSS "last non-losing declaration
     /// wins" semantics per longhand property (a later non-important declaration never overrides an
     /// earlier !important one; a later !important always wins over an earlier !important). Every later
-    /// occurrence's rule text is dropped. Everything else -- comments, at-rules, single-occurrence
+    /// occurrence in a run has its rule text dropped. Everything else -- comments, at-rules, single-occurrence
     /// rules, whitespace -- is returned exactly as written. On any failure this returns the original
     /// text unchanged rather than throwing (a page must never be invalid -- M.IDEA-LAW-7) or producing a
     /// half-merged, worse-than-the-input result.
@@ -63,43 +64,66 @@ public static class CssConflictMerger
         {
             var segments = Tokenize(css);
 
-            var candidates = segments
-                .Where(s => s.SelectorText is not null)
-                .GroupBy(s => s.SelectorText!, StringComparer.Ordinal)
+            // Lazily computed property-name footprint of each plain rule (null = can't be fully
+            // resolved, so it must be treated as touching everything).
+            var footprints = new Dictionary<int, HashSet<string>?>();
+            HashSet<string>? Footprint(int index)
+            {
+                if (!footprints.TryGetValue(index, out var fp))
+                    footprints[index] = fp = TryGetFootprint(segments[index].RawText);
+                return fp;
+            }
+
+            // Cascade-order safety: merging moves a later occurrence's declarations UP to the run's
+            // first occurrence, in front of every rule in between. That is only safe when no rule in
+            // between declares any of the same (longhand) properties -- otherwise an intervening rule
+            // that used to lose to the later occurrence would start winning (and vice versa through
+            // specificity ties). @-rule blocks in between (@media, @supports, ...) can hold anything,
+            // so they always end a run. Runs are built greedily per selector from the original
+            // positions, which also keeps cross-group moves safe: content only ever moves earlier, and
+            // every rule it jumps over has been checked.
+            var replacement = new Dictionary<int, string>();   // first index of a merged run -> merged text
+            var dropped = new HashSet<int>();                  // later occurrences folded into a run
+
+            var groups = segments
+                .Select((s, i) => (s, i))
+                .Where(x => x.s.SelectorText is not null)
+                .GroupBy(x => x.s.SelectorText!, StringComparer.Ordinal)
                 .Where(g => g.Count() > 1);
 
-            var groups = new Dictionary<string, List<Segment>>(StringComparer.Ordinal);
-            var mergedTextBySelector = new Dictionary<string, string>(StringComparer.Ordinal);
-            foreach (var candidate in candidates)
+            foreach (var group in groups)
             {
-                // TryBuildMergedRuleText refuses to merge a group containing an unresolvable value (a
-                // custom-property reference inside a shorthand -- see its doc comment); such groups are
-                // simply left out of `groups` entirely, so every occurrence passes through untouched
-                // below, exactly like any other non-duplicated selector.
-                if (TryBuildMergedRuleText(candidate.Key, candidate.ToList(), out var mergedText))
+                var indices = group.Select(x => x.i).ToList();
+                var run = new List<int> { indices[0] };
+                for (var k = 1; k <= indices.Count; k++)
                 {
-                    groups[candidate.Key] = candidate.ToList();
-                    mergedTextBySelector[candidate.Key] = mergedText;
+                    var next = k < indices.Count ? indices[k] : -1;
+                    if (next >= 0 && CanJoinRun(run, next, segments, Footprint))
+                    {
+                        run.Add(next);
+                        continue;
+                    }
+
+                    // TryBuildMergedRuleText refuses a run containing an unresolvable value (see its
+                    // doc comment); such a run passes through untouched, like any non-duplicated rule.
+                    if (run.Count > 1 &&
+                        TryBuildMergedRuleText(group.Key, run.Select(i => segments[i]).ToList(), out var mergedText))
+                    {
+                        replacement[run[0]] = mergedText;
+                        foreach (var i in run.Skip(1)) dropped.Add(i);
+                    }
+                    if (next >= 0) run = [next];
                 }
             }
 
-            if (groups.Count == 0)
+            if (replacement.Count == 0)
                 return css; // nothing safely mergeable -- the file is already exactly what it should be.
 
-            var emitted = new HashSet<string>(StringComparer.Ordinal);
-
             var sb = new System.Text.StringBuilder(css.Length);
-            foreach (var seg in segments)
+            for (var i = 0; i < segments.Count; i++)
             {
-                if (seg.SelectorText is null || !groups.ContainsKey(seg.SelectorText))
-                {
-                    sb.Append(seg.RawText);
-                    continue;
-                }
-
-                if (emitted.Add(seg.SelectorText))
-                    sb.Append(mergedTextBySelector[seg.SelectorText]);
-                // later occurrences of an already-emitted duplicate selector are dropped entirely.
+                if (dropped.Contains(i)) continue;
+                sb.Append(replacement.TryGetValue(i, out var merged) ? merged : segments[i].RawText);
             }
 
             return sb.ToString();
@@ -108,6 +132,56 @@ public static class CssConflictMerger
         {
             return css;
         }
+    }
+
+    /// <summary>
+    /// True when the occurrence at <paramref name="candidate"/> can be folded into <paramref name="run"/>
+    /// (whose first element is where the merged rule is emitted) without changing which declaration wins:
+    /// every segment between the run's start and the candidate, other than the run's own occurrences,
+    /// is either inert (whitespace/comment) or a plain rule whose property footprint is disjoint from
+    /// the candidate's. Anything unresolvable on either side counts as a conflict.
+    /// </summary>
+    private static bool CanJoinRun(List<int> run, int candidate, List<Segment> segments, Func<int, HashSet<string>?> footprint)
+    {
+        var members = run.ToHashSet();
+        HashSet<string>? candidateProps = null;
+        for (var i = run[0] + 1; i < candidate; i++)
+        {
+            if (members.Contains(i)) continue;
+            var seg = segments[i];
+            if (!seg.IsBlock) continue;                    // whitespace / comment / stray text
+            if (seg.SelectorText is null) return false;    // @-rule block: could contain anything
+
+            candidateProps ??= footprint(candidate);
+            var between = footprint(i);
+            if (candidateProps is null || between is null) return false;
+            if (between.Overlaps(candidateProps)) return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Every property name a single rule touches: what it literally declares plus every longhand
+    /// AngleSharp resolved it to. Null when some declared name isn't fully resolvable (so the caller
+    /// can't prove the rule is disjoint from another and must assume a conflict).
+    /// </summary>
+    private static HashSet<string>? TryGetFootprint(string ruleRawText)
+    {
+        var rule = Parser.ParseStyleSheet(ruleRawText).Rules.OfType<ICssStyleRule>().FirstOrDefault();
+        if (rule is null) return null;
+
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (ICssProperty property in rule.Style)
+            if (!string.IsNullOrEmpty(property.Value))
+                names.Add(property.Name);
+
+        var resolved = new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
+        foreach (var declared in ExtractDeclaredPropertyNames(ruleRawText))
+        {
+            if (!IsCovered(declared, resolved)) return null;
+            names.Add(declared);
+        }
+        return names;
     }
 
     /// <summary>
@@ -197,7 +271,7 @@ public static class CssConflictMerger
 
     /// <summary>One top-level construct in the raw CSS text: a plain style rule (SelectorText set), or
     /// an opaque span (a comment, whitespace, an @-rule block, or anything else) carried through as-is.</summary>
-    private readonly record struct Segment(string? SelectorText, string RawText);
+    private readonly record struct Segment(string? SelectorText, string RawText, bool IsBlock = false);
 
     private static List<Segment> Tokenize(string css)
     {
@@ -236,7 +310,7 @@ public static class CssConflictMerger
                 var fullRaw = css[lastEnd..(blockEnd + 1)];
 
                 var isPlainRule = trimmedPrelude.Length > 0 && trimmedPrelude[0] != '@';
-                segments.Add(new Segment(isPlainRule ? trimmedPrelude : null, fullRaw));
+                segments.Add(new Segment(isPlainRule ? trimmedPrelude : null, fullRaw, IsBlock: true));
 
                 i = blockEnd + 1;
                 lastEnd = i;

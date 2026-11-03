@@ -42,7 +42,9 @@ public sealed class SiteAdminService(CmsDbContext db) : ISiteAdminService
     {
         key = (key ?? "").Trim().ToLowerInvariant();
         if (key.Length == 0) return (false, "A site key is required.", 0);
-        if (await db.Sites.AnyAsync(s => s.Key == key, ct)) return (false, $"A site with key \"{key}\" already exists.", 0);
+        // IgnoreQueryFilters: the unique index spans soft-deleted rows too (their keys are renamed
+        // on delete, but a hand-typed "~deleted-N" key must still get a clean error, not a DB throw).
+        if (await db.Sites.IgnoreQueryFilters().AnyAsync(s => s.Key == key, ct)) return (false, $"A site with key \"{key}\" already exists.", 0);
 
         var conflict = await FindBindingConflictAsync(hostBindings, excludeSiteId: null, ct);
         if (conflict is not null) return (false, conflict, 0);
@@ -106,12 +108,35 @@ public sealed class SiteAdminService(CmsDbContext db) : ISiteAdminService
 
         // Reference-guarded, per HOUSE-LAW-2: deleting a site out from under its pages would orphan
         // them onto whatever site resolves next, silently republishing them under another domain.
+        // Every live page of the site counts (published or not, enabled or not); already
+        // soft-deleted pages don't block, they stay in the trash with the site.
         var pages = await db.Pages.CountAsync(p => p.SiteId == id, ct);
         if (pages > 0) return (false, $"This site still has {pages} page(s). Move or delete them first.");
 
-        db.Sites.Remove(site);
+        // Soft delete (HOUSE-LAW-2): rows are never hard-deleted by the app. The unique Key is
+        // renamed out of the way so the same key can be created again later.
+        var now = DateTime.UtcNow;
+        site.IsDeleted = true;
+        site.DeletedUtc = now;
+        site.ModifiedUtc = now;
+        site.Key = DeletedKey(site.Key, site.Id);
+
+        // Pages already in the trash stay soft-deleted alongside their site (belt and braces:
+        // any page that slipped past the filter is soft-deleted too).
+        var sitePages = await db.Pages.IgnoreQueryFilters().Where(p => p.SiteId == id && !p.IsDeleted).ToListAsync(ct);
+        foreach (var p in sitePages) { p.IsDeleted = true; p.DeletedUtc = now; }
+
         await db.SaveChangesAsync(ct);
         return (true, null);
+    }
+
+    /// <summary>"&lt;key&gt;~deleted-&lt;id&gt;", trimmed so it fits the 100-char Key column.</summary>
+    internal static string DeletedKey(string key, int id)
+    {
+        var suffix = $"~deleted-{id}";
+        const int max = 100;
+        var head = key.Length + suffix.Length > max ? key[..(max - suffix.Length)] : key;
+        return head + suffix;
     }
 
 

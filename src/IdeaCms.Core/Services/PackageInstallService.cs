@@ -137,12 +137,54 @@ public sealed class PackageInstallService(
                     $"is not installed or not enabled. Install it first before installing '{manifest.Key}'.");
         }
 
-        // Persist the verbatim bytes (content-addressed path, safe to save before the DB row).
-        var blobPath = await blobStore.SaveAsync(manifest.Category, manifest.Key, manifest.Version, bytes, ct);
+        var isCode = string.Equals(manifest.Kind, "code", StringComparison.Ordinal);
+        var sameVersionRow = installedRows.FirstOrDefault(p => p.Version == manifest.Version);
+
+        // Order matters for a same-version overwrite (the live row already points at these files):
+        // extract into a staging folder, swap the files in, save the blob, and only THEN commit the DB
+        // row. Any failure before the commit -- a bad archive, a locked extracted DLL, a blob write
+        // error -- leaves the DB unchanged, and disposing `staged` puts the previous files back.
+        using var staged = isCode ? extractor.Stage(archive, manifest.Category, manifest.Key, manifest.Version) : null;
+        try { staged?.Swap(); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            throw new InstallException(
+                $"{manifest.Category}/{manifest.Key} v{manifest.Version}: the extracted package files are in use " +
+                $"and could not be replaced ({ex.Message}). Nothing was changed; restart the host and retry.");
+        }
+
+        // The blob path is per version, so an overwrite replaces the previous bytes: keep them in memory
+        // so a failed commit can put them back (the old row's Sha256 still describes them).
+        byte[]? priorBlob = null;
+        if (sameVersionRow?.BlobPath is { Length: > 0 } priorPath)
+        {
+            await using var prior = await blobStore.OpenAsync(priorPath, ct);
+            if (prior is not null)
+            {
+                using var ms = new MemoryStream();
+                await prior.CopyToAsync(ms, ct);
+                priorBlob = ms.ToArray();
+            }
+        }
+
+        // Persist the verbatim bytes.
+        string blobPath;
+        try { blobPath = await blobStore.SaveAsync(manifest.Category, manifest.Key, manifest.Version, bytes, ct); }
+        catch
+        {
+            await RestorePriorBlobAsync();
+            throw;
+        }
+
+        async Task RestorePriorBlobAsync()
+        {
+            if (priorBlob is null) return;
+            try { await blobStore.SaveAsync(manifest.Category, manifest.Key, manifest.Version, priorBlob, CancellationToken.None); }
+            catch { /* best effort -- surface the original failure */ }
+        }
 
         // ---- Registry row (idempotent upsert by the unique (Category,Key,Version)). ----
-        var pkg = installedRows.FirstOrDefault(p => p.Version == manifest.Version)
-                  ?? AddNew(db, new InstalledPackage());
+        var pkg = sameVersionRow ?? AddNew(db, new InstalledPackage());
         pkg.Category = manifest.Category;
         pkg.Kind = manifest.Kind;
         pkg.Key = manifest.Key;
@@ -189,15 +231,20 @@ public sealed class PackageInstallService(
         catch (DbUpdateException)
         {
             // Concurrent install of the same (Category,Key,Version) raced past the NoOp check above.
+            // The winner owns the blob now, so it is not restored; disposing `staged` undoes our swap.
             return new InstallPlan(InstallAction.NoOpAlreadyInstalled,
                 $"{manifest.Category}/{manifest.Key} v{manifest.Version} was installed by a concurrent request.",
                 MakeActiveVersion: false, []);
         }
+        catch
+        {
+            // Commit failed: the DB still holds the old row, so put its blob bytes back.
+            await RestorePriorBlobAsync();
+            throw;
+        }
 
-        // Extract bin/ only after the DB row is committed so a concurrent-install race that returns
-        // NoOpAlreadyInstalled above never leaves orphaned bin/ directories on disk.
-        if (string.Equals(manifest.Kind, "code", StringComparison.Ordinal))
-            extractor.Extract(archive, manifest.Category, manifest.Key, manifest.Version);
+        // Committed: keep the swapped-in files and drop the moved-aside previous extraction.
+        staged?.Complete();
 
         // ---- Seed-on-install: a Page (code) package may carry data/page.json to make itself routable on
         // upload (idempotent by (SiteId, Slug); never clobbers a row another package or an admin owns). ----
