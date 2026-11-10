@@ -470,3 +470,8 @@ updated: 2026-10-03
 | IDEA-T47 | 2026-11-01 | feature | closed | Add first-visit onboarding tour popups across the admin section using a JS tour library | — |
 | IDEA-T48 | 2026-11-01 | fix | closed | Monaco editor: Insert from component palette can race a just-typed keystroke and clobber it | — |
 | IDEA-T49 | 2026-11-01 | fix | open | Public /frontpage throws IntersectionObserver rootMargin error (invalid units) on load | — |
+| IDEA-T50 | 2026-11-02 | docs | open | Adopt MindAttic.Agency docs-site pipeline, publish README to GitHub Pages (HOUSE-LAW-14) | — |
+| IDEA-T51 | 2026-11-02 | fix | closed | Bughunt sweep, two passes: find and fix real bugs across tracked source (user request 2026-11-02) | — |
+| IDEA-T52 | 2026-11-02 | fix | closed | Command pointer in .agent/commands said a literal $source instead of its legacy path (install.ps1 escaping bug fixed in MAT-T84); point it at the real source, or the global command when the project copy is gone | — |
+| IDEA-T53 | 2026-11-02 | fix | closed | Fix the open items the 2026-11-02 bughunt left for decision (site soft delete, CSS merge cascade order, same-version package overwrite, others) | — |
+| IDEA-T54 | 2026-11-10 | chore | closed | Crash recovery: commit the command-catalog sync (.agent/commands/*.md) and regenerated docs/USER_STORIES.md left uncommitted by the session crash | — |
