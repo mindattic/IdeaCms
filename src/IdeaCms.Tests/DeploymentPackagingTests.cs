@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Text.RegularExpressions;
 
 namespace IdeaCms.Tests;
@@ -278,5 +279,30 @@ public class DeploymentPackagingTests
             Assert.That(workflow.Split("az webapp start").Length - 1, Is.EqualTo(1), "exactly one start, after the database swap");
             Assert.That(workflow.Split("bootstraptoken=").Length - 1, Is.EqualTo(1), "the token is pinned once, before the swap");
         });
+    }
+
+    /// <summary>
+    /// M.IDEA-§4.8 / §4.14. The host refuses an unsigned package on every install path, and the demo installs
+    /// every shipped package on its first boot against the fresh database: ONE unsigned <c>.idea</c> in the
+    /// host library and that boot exits 1 (<c>package signature check failed: NotSigned</c>), over and
+    /// over, with the demo down. Two packages repacked without <c>pack-all.ps1 -Sign</c> did exactly that.
+    /// This only proves a signature is present; the host proves it is valid and trusted.
+    /// </summary>
+    [Test]
+    public void EveryShippedLibraryPackageCarriesASignature()
+    {
+        var library = Path.Combine(RepoRoot().FullName, "src", "IdeaCms.Blazor", "library");
+        var packages = Directory.GetFiles(library, "*.idea");
+        Assert.That(packages, Is.Not.Empty, $"No .idea packages in {library}.");
+
+        var unsigned = new List<string>();
+        foreach (var package in packages)
+        {
+            using var zip = ZipFile.OpenRead(package);
+            if (zip.GetEntry("idea.sig.json") is null) unsigned.Add(Path.GetFileName(package));
+        }
+
+        Assert.That(unsigned, Is.Empty,
+            "Unsigned packages in src/IdeaCms.Blazor/library (run library/tools/pack-all.ps1 -Sign -Install): " + string.Join(", ", unsigned));
     }
 }
