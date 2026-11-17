@@ -43,9 +43,33 @@ storage and vaults are pennies).
 ### 0. The GitHub OIDC principal
 
 CI authenticates as the app registration **`gh-mindattic-ideas-deploy`** (Contributor on the resource
-group) with federated credentials `repo:mindattic/IdeaCms:ref:refs/heads/main` (the branch was `master` until 2026-10-16; its credential is kept) and
-`repo:mindattic/IdeaCms:environment:production`. Its ids are the repo secrets
-`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`. No other secret is needed.
+group). Its ids are the repo secrets `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`. No
+other secret is needed.
+
+Azure trusts exactly two token subjects, one federated credential each:
+
+| Credential | Subject | Used by |
+|---|---|---|
+| `github-ideacms-main` | `repo:mindattic@6359385/IdeaCms@1259764393:ref:refs/heads/main` | `migrate`, and every `demo-reset.yml` run |
+| `github-ideacms-env-production` | `repo:mindattic@6359385/IdeaCms@1259764393:environment:production` | `deploy-company`, `deploy-demo` (jobs with `environment: production`) |
+
+The subject is GitHub's **immutable** form, `repo:<owner>@<owner id>/<repo>@<repo id>:…`, which this repo
+issues (`gh api repos/mindattic/IdeaCms/actions/oidc/customization/sub` reports
+`use_immutable_subject: true`). The subject must match **character for character**, and the repo's *name*
+is still part of it: renaming the repo or its default branch changes the subject and every login then
+fails with `AADSTS700213` (see Troubleshooting). To add a credential:
+
+```pwsh
+$app = az ad app list --display-name gh-mindattic-ideas-deploy --query '[0].id' -o tsv
+az ad app federated-credential create --id $app --parameters '{
+  "name": "github-ideacms-main",
+  "issuer": "https://token.actions.githubusercontent.com",
+  "subject": "repo:mindattic@6359385/IdeaCms@1259764393:ref:refs/heads/main",
+  "audiences": ["api://AzureADTokenExchange"] }'
+```
+
+The three older credentials (`github-mindattic-ideas-main`, `-master`, `-env-production`) name the repo
+as `mindattic/MindAttic.Ideas`, which it was until 2026-11-01. Nothing presents those subjects any more.
 
 ### 1. Provision
 
@@ -85,7 +109,7 @@ sign in as `admin`, you are forced to change it, then **rotate the Key Vault sec
 
 ## Continuous deployment — `.github/workflows/azure-deploy.yml`
 
-On push to `master` and on dispatch:
+On push to `main` and on dispatch:
 
 1. **build** — restore, build, full NUnit suite (a red test stops everything), publish, generate
    `seed/demo.idealist` from the packages actually in the build, emit the idempotent migration script.
@@ -239,6 +263,14 @@ brand-new database until you install content.
 **Media 404s or 403s.** Confirm the app identity still holds Storage Blob Data Contributor. A SAS
 is user-delegation signed, which needs that role; without it the signer declines and the endpoint
 falls back to streaming, which then finds no bytes.
+
+**Every Azure login in CI fails with `AADSTS700213: No matching federated identity record found for
+presented assertion subject '…'`.** The app registration has no federated credential whose subject equals
+the one in the error. The subject carries the repo name, the branch and the environment name, so a rename
+of any of them breaks every job at its first step: the build still passes, `migrate` fails, nothing
+deploys, and the hourly demo reset fails within seconds (this is what stopped both workflows from
+2026-11-01, when the repo was renamed from `MindAttic.Ideas`, until 2026-11-17). Add a credential for the
+exact subject quoted in the error (step 0 above); nothing in the repo needs to change.
 
 **Migrate job cannot reach SQL.** The firewall rule is per-run and torn down in an `always()` step.
 If a run was killed mid-flight, delete the leftover `gh-<runid>` rule on the SQL server.
