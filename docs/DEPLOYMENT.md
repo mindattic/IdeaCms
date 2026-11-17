@@ -257,6 +257,16 @@ log stream: `az webapp log tail -g rg-mindattic-ideas -n mindattic` (or `-n mind
 and `DataProtection:KeyVaultKeyId` throw by name; a missing Security secret throws
 `Required auth secret '<name>' was not found`.
 
+**`/` is 200 with Azure's "Welcome" page and `/_health` is 404.** App Service is running its placeholder,
+not the app. With no startup command it finds the entry point by looking for the one
+`*.runtimeconfig.json` in `/home/site/wwwroot`, and a zip deploy never removes files a build no longer
+ships: after the entry assembly was renamed (`MindAttic.Ideas.Blazor` → `IdeaCms.Blazor`) there were two,
+and the first deploy afterwards (2026-11-17) took the company site down this way. The startup command is
+therefore pinned to `dotnet IdeaCms.Blazor.dll`, in `infra/webapp.bicep` and by the deploy's "Pin the
+startup command" step; check it with
+`az webapp config show -g rg-mindattic-ideas -n mindattic --query appCommandLine`. Rename the entry
+assembly again and both must change with it.
+
 **`/_health` is 200 but every page 404s.** The catalog seeded but no pages exist — expected on a
 brand-new database until you install content.
 

@@ -25,6 +25,10 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
     httpsOnly: true
     siteConfig: {
       linuxFxVersion: 'DOTNETCORE|10.0'
+      // Named, not guessed: with no command App Service looks for the one *.runtimeconfig.json in
+      // wwwroot, and a zip deploy leaves a renamed entry assembly's old one behind. Two of them and it
+      // serves its own placeholder page instead of the app. azure-deploy.yml sets the same value.
+      appCommandLine: 'dotnet IdeaCms.Blazor.dll'
       alwaysOn: alwaysOn
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'

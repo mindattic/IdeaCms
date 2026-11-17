@@ -36,6 +36,9 @@ env:
   TEST_PROJECT: src/IdeaCms.Tests/IdeaCms.Tests.csproj
   MIGRATIONS_PROJECT: src/IdeaCms.Core
   AZURE_RESOURCE_GROUP: rg-mindattic-ideas
+  # What the container runs. Pinned (here and in infra/webapp.bicep) rather than left to App Service,
+  # which picks the entry point by looking for the one *.runtimeconfig.json in wwwroot.
+  STARTUP_COMMAND: dotnet IdeaCms.Blazor.dll
   DOTNET_VERSION: '10.x'
 
 jobs:
@@ -183,6 +186,19 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      # A zip deploy does not remove files the new build no longer ships. After the entry assembly was
+      # renamed (MindAttic.Ideas.Blazor -> IdeaCms.Blazor) wwwroot held two *.runtimeconfig.json files;
+      # with no startup command App Service could not choose between them and served its own "Welcome"
+      # placeholder: / answered 200 and /_health 404. So the command is set explicitly, and checked.
+      - name: Pin the startup command
+        shell: pwsh
+        run: |
+          az webapp config set --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name $env:APP `
+            --startup-file "$env:STARTUP_COMMAND" --output none
+          if ($LASTEXITCODE) { throw 'Could not set the startup command.' }
+          $actual = az webapp config show --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name $env:APP --query appCommandLine -o tsv
+          if ($actual -ne $env:STARTUP_COMMAND) { throw "Startup command is '$actual', expected '$env:STARTUP_COMMAND'." }
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
@@ -251,6 +267,16 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # As above: the entry point is named, never guessed from what is lying in wwwroot.
+      - name: Pin the startup command
+        shell: pwsh
+        run: |
+          az webapp config set --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name $env:APP `
+            --startup-file "$env:STARTUP_COMMAND" --output none
+          if ($LASTEXITCODE) { throw 'Could not set the startup command.' }
+          $actual = az webapp config show --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name $env:APP --query appCommandLine -o tsv
+          if ($actual -ne $env:STARTUP_COMMAND) { throw "Startup command is '$actual', expected '$env:STARTUP_COMMAND'." }
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
