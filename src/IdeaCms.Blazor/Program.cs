@@ -45,11 +45,13 @@ builder.Configuration
     .AddEnvironmentVariables();
 builder.Services.AddMindAtticVault(builder.Configuration);
 
-// Connection string resolves through config/env (Vault-compatible); LocalDB fallback for dev.
+// Connection string resolves through config/env (Vault-compatible). With none configured (a developer
+// machine) it is the shared development database in Azure, opened with the developer's `az login`;
+// the deployed sites always set ConnectionStrings__IdeaCms (infra/main.bicep).
 var connectionString =
     builder.Configuration.GetConnectionString("IdeaCms")
     ?? Environment.GetEnvironmentVariable("ConnectionStrings__IdeaCms")
-    ?? "Server=(localdb)\\MSSQLLocalDB;Database=IdeaCms;Trusted_Connection=True;TrustServerCertificate=True";
+    ?? CmsDbContextFactory.DevelopmentConnectionString;
 
 // --- CMS Core: EF, discovery over this assembly's citizens + referenced Idea RCLs, catalog, gate,
 //     seed. The MindAttic front page ships as a compiled Page Idea (an RCL NuGet). ---

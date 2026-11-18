@@ -6,19 +6,19 @@ namespace IdeaCms.Tests;
 
 /// <summary>
 /// The LIVE temporal proof for M.IDEA-US-B5: <see cref="PageHistoryService.GetHistoryAsync"/> against a
-/// real SQL Server temporal table. [Explicit] because it needs the dev LocalDB with the
-/// IdeaCms database (run: dotnet test --filter FullyQualifiedName~PageHistorySqlServerTests).
+/// real SQL Server temporal table. [Explicit] because it needs the development database
+/// (IdeaCmsDev in Azure, opened with the developer's az login; run: dotnet test --filter
+/// FullyQualifiedName~PageHistorySqlServerTests). It only reads.
 /// The frontpage row has a rich edit history, so the assertion demands MULTIPLE temporal versions —
 /// the thing InMemory can never prove.
 /// </summary>
 [TestFixture]
 public class PageHistorySqlServerTests
 {
-    private const string Conn =
-        @"Server=(localdb)\MSSQLLocalDB;Database=IdeaCms;Trusted_Connection=True;TrustServerCertificate=True";
+    private const string Conn = CmsDbContextFactory.DevelopmentConnectionString;
 
     [Test]
-    [Explicit("Requires SQL Server LocalDB with the IdeaCms database (the dev DB).")]
+    [Explicit("Requires the development database (IdeaCmsDev in Azure) and an az login that can open it.")]
     public async Task GetHistoryAsync_OnSqlServer_ReturnsOrderedTemporalVersions()
     {
         var factory = new SqlFactory(Conn);

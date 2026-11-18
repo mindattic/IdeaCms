@@ -46,5 +46,5 @@ entirely. Neither is used.
 
 ## Reset for a clean first login
 
-Drop the dev database (`IdeaCms` on LocalDB) so the next boot re-runs migrate → seed. Optionally
+Empty the development database (`IdeaCmsDev` on `sql-mindattic-f65744.database.windows.net`: drop its tables, or delete and recreate the database) so the next boot re-runs migrate → seed. Optionally
 rotate the dev `bootstrap-token` in `providers.json` between runs.

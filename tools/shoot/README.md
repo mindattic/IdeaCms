@@ -68,21 +68,28 @@ an empty frame, so every page has the same shape and the gaps are visible instea
 It needs two inputs beside it:
 
 ```pwsh
+# 0. the development database (IdeaCmsDev in Azure), signed in with your `az login`.
+#    Invoke-Sqlcmd comes from the SqlServer module (Install-Module SqlServer).
+$sql = @{ ServerInstance = 'sql-mindattic-f65744.database.windows.net'; Database = 'IdeaCmsDev'
+          AccessToken = (az account get-access-token --resource https://database.windows.net/ --query accessToken -o tsv) }
+
 # 1. the pages + their seeded READMEs
-sqlcmd -S "(localdb)\MSSQLLocalDB" -d IdeaCms -y 0 -o pages.json -Q `
+(Invoke-Sqlcmd @sql -MaxCharLength 2147483647 -Query `
   "SET NOCOUNT ON; SELECT p.Slug, p.Title, ISNULL(m.MetadataJson,'') AS Meta FROM Pages p
    LEFT JOIN ComponentMetadata m ON m.PageUid = p.Uid AND m.ComponentKey = 'frommd'
-   WHERE p.Slug LIKE 'projects/%' AND p.IsDeleted = 0 ORDER BY p.Slug FOR JSON PATH;"
-# sqlcmd chunks FOR JSON at 2033 chars — strip the physical newlines to reassemble it.
+   WHERE p.Slug LIKE 'projects/%' AND p.IsDeleted = 0 ORDER BY p.Slug FOR JSON PATH;" |
+  ForEach-Object { $_[0] }) -join '' | Set-Content pages.json -Encoding utf8
+# FOR JSON comes back in chunks of about 2033 chars; the -join reassembles them into one line.
 
 # 2. the placeholder's media uid, one line
 dotnet run --project src/IdeaCms.Blazor -- --upload-media tools/shoot/assets/no-screenshot.svg --folder screenshots
 
 python brochures.py                      # -> brochures-all.sql
-sqlcmd -S "(localdb)\MSSQLLocalDB" -d IdeaCms -f 65001 -i brochures-all.sql
+Invoke-Sqlcmd @sql -InputFile brochures-all.sql
 ```
 
-**`-f 65001` is not optional.** sqlcmd reads a UTF-8 script as ANSI otherwise, and every em-dash in
-the page copy silently becomes mojibake.
+**The script must stay UTF-8 with a BOM** (which `brochures.py` writes): read as ANSI, every em-dash
+in the page copy silently becomes mojibake. With `sqlcmd` against another server, that means
+`-f 65001`, which is not optional.
 
 As screenshots land, add them to the `SHOTS` map and re-run — the pages regenerate in place.

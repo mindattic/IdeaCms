@@ -49,7 +49,7 @@ Try it: the public demo at [mindattic-ideas-demo.azurewebsites.net](https://mind
 
 ## Quick start
 
-Prerequisites: the .NET 10 SDK, SQL Server LocalDB (the host falls back to `(localdb)\MSSQLLocalDB` database `IdeaCms` when no `ConnectionStrings:IdeaCms` is configured), and the machine-local MindAttic.Vault files described in [`docs/DEV_LOGIN.md`](docs/DEV_LOGIN.md).
+Prerequisites: the .NET 10 SDK, the Azure CLI signed in (`az login`) with an account that can open the development database (with no `ConnectionStrings:IdeaCms` configured the host uses database `IdeaCmsDev` on `sql-mindattic-f65744.database.windows.net`, signed in as you; no local SQL Server is needed), and the machine-local MindAttic.Vault files described in [`docs/DEV_LOGIN.md`](docs/DEV_LOGIN.md).
 
 ```powershell
 git clone https://github.com/mindattic/IdeaCms.git
@@ -505,7 +505,7 @@ dotnet build IdeaCms.slnx -c Debug
 dotnet test src/IdeaCms.Tests/IdeaCms.Tests.csproj
 ```
 
-The NUnit suite gates every deployment. `PageHistorySqlServerTests` is `[Explicit]` and needs the dev LocalDB, so CI does not run it.
+The NUnit suite gates every deployment. `PageHistorySqlServerTests` is `[Explicit]` and needs the development database (`IdeaCmsDev` in Azure), so CI does not run it. `MindAtticLogSqlServerTests` is `[Explicit]` too: it creates and drops scratch databases, so it is the one thing here that still needs a local SQL Server (LocalDB).
 
 Codex docs tooling:
 
@@ -550,7 +550,7 @@ One build runs as two deployments on one App Service plan ([M.IDEA-§4.14](docs/
 
 ## Limitations
 
-- The Blazor host needs SQL Server (LocalDB locally) and MindAttic.Vault files to run; there is no in-memory mode.
+- The Blazor host needs SQL Server (the `IdeaCmsDev` Azure SQL database in development) and MindAttic.Vault files to run; there is no in-memory mode.
 - Uploaded packages render Static or InteractiveServer only; WebAssembly is excluded by design.
 - Expect a few minutes of demo downtime at the top of each hour while it resets.
 

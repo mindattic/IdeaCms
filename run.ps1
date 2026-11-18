@@ -12,7 +12,7 @@
     When it does publish:
     1. Stops any running IdeaCms.Blazor.exe.
     2. With -Force, removes bin/obj for the Blazor, Core and Rendering projects (a clean rebuild).
-       BUILD cache only: the LocalDB database (IdeaCms, shared with the dev server), the Data
+       BUILD cache only: the development database (IdeaCmsDev in Azure, shared with the dev server), the Data
        Protection key ring under %APPDATA%\MindAttic\DataProtection\Ideas\, and any media already
        uploaded under C:\Apps\Ideas\media\ are never touched, so content and logins survive a redeploy.
     3. Repacks the first-party library (library\tools\pack-all.ps1 -Install) into the host's library\
@@ -23,7 +23,7 @@
        the installed ones.
     4. Writes C:\Apps\Ideas\serve.bat, which pins ASPNETCORE_URLS to a port distinct from the dev
        server (5229/7207) and sets ASPNETCORE_ENVIRONMENT=Development - Program.cs only runs the
-       LocalDB migration and skips its production-only Azure Data Protection (Blob + Key Vault)
+       development-database migration and skips its production-only Azure Data Protection (Blob + Key Vault)
        requirement in Development, same convention IdiotProof.Blazor uses for its own deployed copy.
        The Release build itself is unaffected: the debug-only auth bypass is gated on build
        Configuration, not on ASPNETCORE_ENVIRONMENT, so it never ships here regardless.
@@ -182,7 +182,7 @@ if (-not $Force -and -not (Test-NeedsPublish)) {
     }
 
     # ── Clear build cache (-Force only) ────────────────────────────────────
-    # bin/obj only - never the LocalDB database, the Data Protection key ring under
+    # bin/obj only - never the development database, the Data Protection key ring under
     # %APPDATA%\MindAttic\DataProtection\Ideas\, or media already deployed under $out\media\.
     if ($Force) {
         Write-Host ''

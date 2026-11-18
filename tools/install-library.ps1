@@ -14,6 +14,8 @@
 #   powershell -File tools\install-library.ps1 -Rebuild         # pack first, then sync
 #   powershell -File tools\install-library.ps1 -Conn "..."      # override the connection string
 #
+# The default database is the development one, IdeaCmsDev in Azure, opened with your `az login`.
+#
 # After this script finishes, restart the web app.  The startup sequence installs every .idea in
 # library/ via PackageInstallService (allowOverride:false — idempotent; already-installed versions
 # are no-ops; NEW Plugin/Component packages install fresh).
@@ -21,7 +23,7 @@
 [CmdletBinding()]
 param(
     [switch]$Rebuild,
-    [string]$Conn = 'Server=(localdb)\MSSQLLocalDB;Database=IdeaCms;Trusted_Connection=True;TrustServerCertificate=True'
+    [string]$Conn = 'Server=tcp:sql-mindattic-f65744.database.windows.net,1433;Database=IdeaCmsDev;Authentication=Active Directory Default;Encrypt=True;Connect Timeout=60'
 )
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
@@ -29,6 +31,25 @@ $ErrorActionPreference = 'Stop'
 $root    = Split-Path $PSScriptRoot -Parent
 $distDir = Join-Path $root 'library\dist'
 $webLib  = Join-Path $root 'src\IdeaCms.Web\library'
+
+# Opens $ConnectionString. For Azure SQL without a password it signs in with the developer's own
+# `az login`: Windows PowerShell's System.Data.SqlClient cannot parse `Authentication=...`, so that
+# keyword is dropped and an access token from the Azure CLI is put on the connection instead.
+function Open-SqlConnection([string]$ConnectionString) {
+    Add-Type -AssemblyName 'System.Data'
+    $useToken = $ConnectionString -match 'database\.windows\.net' -and $ConnectionString -notmatch '(?i)(^|;)\s*(Password|Pwd)\s*='
+    if ($useToken) {
+        $ConnectionString = (($ConnectionString -split ';') | Where-Object { $_.Trim() -and $_ -notmatch '(?i)^\s*Authentication\s*=' }) -join ';'
+    }
+    $connection = New-Object System.Data.SqlClient.SqlConnection($ConnectionString)
+    if ($useToken) {
+        $token = az account get-access-token --resource https://database.windows.net/ --query accessToken -o tsv
+        if ($LASTEXITCODE -ne 0 -or -not $token) { throw 'No Azure SQL access token: run "az login" first.' }
+        $connection.AccessToken = $token
+    }
+    $connection.Open()
+    $connection
+}
 
 # ── 1. Optionally rebuild the dist/ packages ────────────────────────────────────────────────────
 if ($Rebuild) {
@@ -67,10 +88,9 @@ Write-Host "[install-library] $($ideas.Count) package(s) synced to $webLib" -For
 # ── 3. Clean up stale Widget rows from the database ─────────────────────────────────────────────
 Write-Host '[install-library] Cleaning up Widget DB rows...' -ForegroundColor Cyan
 
-Add-Type -AssemblyName 'System.Data'
-$sqlConn = New-Object System.Data.SqlClient.SqlConnection($Conn)
+$sqlConn = $null
 try {
-    $sqlConn.Open()
+    $sqlConn = Open-SqlConnection $Conn
 
     $delPkg = $sqlConn.CreateCommand()
     $delPkg.CommandText = "DELETE FROM InstalledPackages WHERE Category = 'Widget'"
@@ -87,7 +107,7 @@ catch {
     Write-Warning "This is harmless if the database has never been seeded; old Widget rows will simply fail to resolve at runtime."
 }
 finally {
-    $sqlConn.Dispose()
+    if ($sqlConn) { $sqlConn.Dispose() }
 }
 
 # ── 4. Done ─────────────────────────────────────────────────────────────────────────────────────

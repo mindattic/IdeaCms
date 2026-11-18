@@ -19,13 +19,33 @@
 #              DOM swap), and the S12 IIFEs (shine + a11y)           3341..3588
 #
 # Idempotent: re-running rewrites the same content. Run after a fresh seed for full fidelity.
+# The default database is the development one, IdeaCmsDev in Azure, opened with your `az login`.
 [CmdletBinding()]
 param(
   [string]$IndexHtm = 'D:\Projects\MindAttic\mindattic.com\index.htm',
-  [string]$Conn = 'Server=(localdb)\MSSQLLocalDB;Database=IdeaCms;Trusted_Connection=True'
+  [string]$Conn = 'Server=tcp:sql-mindattic-f65744.database.windows.net,1433;Database=IdeaCmsDev;Authentication=Active Directory Default;Encrypt=True;Connect Timeout=60'
 )
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
+
+# Opens $ConnectionString. For Azure SQL without a password it signs in with the developer's own
+# `az login`: Windows PowerShell's System.Data.SqlClient cannot parse `Authentication=...`, so that
+# keyword is dropped and an access token from the Azure CLI is put on the connection instead.
+function Open-SqlConnection([string]$ConnectionString) {
+  Add-Type -AssemblyName 'System.Data'
+  $useToken = $ConnectionString -match 'database\.windows\.net' -and $ConnectionString -notmatch '(?i)(^|;)\s*(Password|Pwd)\s*='
+  if ($useToken) {
+    $ConnectionString = (($ConnectionString -split ';') | Where-Object { $_.Trim() -and $_ -notmatch '(?i)^\s*Authentication\s*=' }) -join ';'
+  }
+  $connection = New-Object System.Data.SqlClient.SqlConnection($ConnectionString)
+  if ($useToken) {
+    $token = az account get-access-token --resource https://database.windows.net/ --query accessToken -o tsv
+    if ($LASTEXITCODE -ne 0 -or -not $token) { throw 'No Azure SQL access token: run "az login" first.' }
+    $connection.AccessToken = $token
+  }
+  $connection.Open()
+  $connection
+}
 
 $lines = [System.IO.File]::ReadAllLines($IndexHtm, [System.Text.Encoding]::UTF8)
 function Slice([int]$from, [int]$to) {   # 1-based inclusive, like the line numbers above
@@ -109,9 +129,7 @@ $js = @(
 
 Write-Host ("assembled: BodyHtml {0:N0} chars, PageCss {1:N0} chars, PageJs {2:N0} chars" -f $body.Length, $css.Length, $js.Length)
 
-Add-Type -AssemblyName System.Data
-$cn = New-Object System.Data.SqlClient.SqlConnection($Conn)
-$cn.Open()
+$cn = Open-SqlConnection $Conn
 try {
   $up = $cn.CreateCommand()
   $up.CommandText = "UPDATE Pages SET BodyHtml = @b, PageCss = @c, PageJs = @j, ModifiedUtc = SYSUTCDATETIME() WHERE Slug = 'frontpage'"

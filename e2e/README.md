@@ -16,10 +16,12 @@ Fixture: `cypress/fixtures/IdeaCms.Plugin.Tooltip.V1.idea` (packed from the firs
 ## Run
 
 ```pwsh
-# 1) Start the CMS on a dev port + separate DB (from the repo root)
+# 1) Start the CMS on a dev port (from the repo root). With no connection string set it uses the
+#    development database, IdeaCmsDev in Azure, signed in with your `az login`; the specs write their
+#    test content there. To keep it out of that database, point ConnectionStrings__IdeaCms at another
+#    SQL Server database of your own first (there is no shared e2e database).
 $env:ASPNETCORE_ENVIRONMENT = "Development"
 $env:ASPNETCORE_URLS        = "https://localhost:7207"
-$env:ConnectionStrings__IdeaCms = "Server=(localdb)\MSSQLLocalDB;Database=IdeaCms_E2E;Trusted_Connection=True;TrustServerCertificate=True"
 dotnet run --project src/IdeaCms.Web
 # On first run the bundled library/*.idea files seed into the catalog automatically.
 

@@ -493,7 +493,7 @@ These are the **project-specific** laws:
 
 **Build/test evidence (2026-10-03):** `dotnet test src/IdeaCms.Tests` → **Passed: 586, Failed: 0,
 Skipped: 0**. The SQL Server temporal proof (`PageHistorySqlServerTests`) is `[Explicit]` and runs
-against LocalDB on demand.
+against the development database (`IdeaCmsDev` in Azure SQL) on demand.
 
 **Live:** the company site and the demo run on Azure from the CI pipeline. The hourly `demo-reset.yml`
 workflow passes (run 37152987331, 2026-10-03: stop, pin, swap, start, real sign-in, publish). The
