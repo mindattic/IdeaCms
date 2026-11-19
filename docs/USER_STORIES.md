@@ -477,3 +477,7 @@ updated: 2026-10-03
 | IDEA-T54 | 2026-11-10 | chore | closed | Crash recovery: commit the command-catalog sync (.agent/commands/*.md) and regenerated docs/USER_STORIES.md left uncommitted by the session crash | — |
 | IDEA-T55 | 2026-11-10 | chore | closed | Adopt the shared docs-site pipeline: turn on GitHub Pages | — |
 | IDEA-T56 | 2026-11-17 | docs | closed | Update USER_STORIES.md | — |
+| IDEA-T57 | 2026-11-17 | chore | open | Azure deploy is failing: diagnose and fix the last 3 failed azure-deploy runs and the 40 failed hourly demo-reset runs | — |
+| IDEA-T58 | 2026-11-17 | fix | closed | Fails on main: the build — D:\Projects\MindAttic.worktrees\IdeaCms\main-tests\src\IdeaCms.Packaging\IdeaCms.Packaging.csproj : error NU1301: The local source 'D:\Projects\MindAttic.worktrees\IdeaCms\local-feed' doesn't exist. [D:\Projects\MindAttic.worktrees\IdeaCms\main-tests\IdeaCms.slnx]; D:\Projects\MindAttic.worktrees... (landed on main since the last green run: tickets IDEA-T57 in fdf5289 Deploy pins the startup command (dotnet IdeaCms.Blazor.dll): the renamed entry assembly left two runtimeconfig.json files in wwwroot and App Service served its placeholder page (IDEA-T57)) | passes on main@b5b7ff8 |
+| IDEA-T59 | 2026-11-18 | chore | open | Development defaults point at Azure SQL (sql-mindattic-f65744) instead of LocalDB, so no local SQL Server is needed to develop | — |
+| IDEA-T60 | 2026-11-18 | docs | closed | Update USER_STORIES.md | — |
