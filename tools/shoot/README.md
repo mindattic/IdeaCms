@@ -1,7 +1,7 @@
 # ma-shoot — photograph every MindAttic project
 
 Captures a screenshot of each project for its Ideas brochure page, then those images go into
-MindAttic.Media and are referenced from a page as `<Component.MediaImage uid="…" />`.
+MindAttic.Storage and are referenced from a page as `<Component.MediaImage uid="…" />`.
 
 ```pwsh
 cd tools/shoot

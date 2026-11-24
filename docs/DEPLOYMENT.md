@@ -184,7 +184,7 @@ the server verifies with Cloudflare (bound to the `demo-reveal` action), rate-li
 ## The NuGet problem, and why `lib/local-packages/` is in git
 
 Ideas references six private packages — `MindAttic.Vault` (V3+), `MindAttic.Legion`,
-`MindAttic.Authentication`, `MindAttic.Media`, `MindAttic.Media.Azure` and
+`MindAttic.Authentication`, `MindAttic.Storage`, `MindAttic.Storage.Azure` and
 `MindAttic.Ideas.Page.Frontpage`. On a dev box those come from `C:\LocalNuGet` and `..\local-feed`.
 **A GitHub runner has neither**, and NuGet tolerates a missing local source *silently* — so without
 vendored copies the restore fails with a confusing `NU1101` about a package that plainly exists.

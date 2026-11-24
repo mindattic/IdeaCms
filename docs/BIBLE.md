@@ -166,7 +166,7 @@ convention, and it is live. The four kinds derive from one shared root `IdeaBase
 - **`ComponentMetadata`** — per-page, per-component JSON slots (e.g. the `frommd` Markdown a project
   page renders).
 - **`AdminInboxMessage`** — dedup-by-`DedupKey`, severity/status, reopen-on-recurrence.
-- **Media items** — MindAttic.Media rows addressed by uid, served at `/_media/{uid}` ([§4.11](#M.IDEA-§4.11)).
+- **Media items** — MindAttic.Storage rows addressed by uid, served at `/_media/{uid}` ([§4.11](#M.IDEA-§4.11)).
 - Identity is the triple **`(ContentKind Kind, string Key, int Version)`** ([M.IDEA-LAW-1](#M.IDEA-LAW-1)).
 
 ### 4.3 Key services — the VERBS {#M.IDEA-§4.3}
@@ -480,7 +480,7 @@ These are the **project-specific** laws:
 - **{#M.IDEA-LAW-8} Two version axes, never conflated.** `manifestVersion` (file-format host gate) is
   distinct from `sdk` (runtime contract floor); both are integers.
 - **{#M.IDEA-LAW-9} Use the shared packages, don't reinvent.** Credentials come from MindAttic.Vault, sign-in
-  from MindAttic.Authentication, LLM access from MindAttic.Legion, media storage from MindAttic.Media.
+  from MindAttic.Authentication, LLM access from MindAttic.Legion, media storage from MindAttic.Storage.
   Ideas adds capability to those packages rather than growing its own copy.
 - **{#M.IDEA-LAW-10} Only signed packages install.** Every install path goes through
   `PackageInstallService.InstallAsync`, which verifies the content signature against host-configured

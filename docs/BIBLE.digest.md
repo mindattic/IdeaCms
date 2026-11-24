@@ -90,7 +90,7 @@ These are the **project-specific** laws:
 - **{#M.IDEA-LAW-8} Two version axes, never conflated.** `manifestVersion` (file-format host gate) is
   distinct from `sdk` (runtime contract floor); both are integers.
 - **{#M.IDEA-LAW-9} Use the shared packages, don't reinvent.** Credentials come from MindAttic.Vault, sign-in
-  from MindAttic.Authentication, LLM access from MindAttic.Legion, media storage from MindAttic.Media.
+  from MindAttic.Authentication, LLM access from MindAttic.Legion, media storage from MindAttic.Storage.
   Ideas adds capability to those packages rather than growing its own copy.
 - **{#M.IDEA-LAW-10} Only signed packages install.** Every install path goes through
   `PackageInstallService.InstallAsync`, which verifies the content signature against host-configured

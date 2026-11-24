@@ -236,7 +236,7 @@
       "assembly": "IdeaCms.Component.MediaImage",
       "artifact": "IdeaCms.Component.MediaImage.V1.idea",
       "mount": "/_ideas/Component/mediaimage/1",
-      "notes": "Renders a managed MindAttic.Media asset as an <img>, addressed by the stable Uid shown in Admin -> Media. The DB-backed alternative to base64-inlining an image into page markup."
+      "notes": "Renders a managed MindAttic.Storage asset as an <img>, addressed by the stable Uid shown in Admin -> Media. The DB-backed alternative to base64-inlining an image into page markup."
     },
     {
       "id": "component.medialink",
@@ -247,7 +247,7 @@
       "assembly": "IdeaCms.Component.MediaLink",
       "artifact": "IdeaCms.Component.MediaLink.V1.idea",
       "mount": "/_ideas/Component/medialink/1",
-      "notes": "Renders a managed MindAttic.Media asset as a hyperlink; images and PDFs open inline, everything else downloads."
+      "notes": "Renders a managed MindAttic.Storage asset as a hyperlink; images and PDFs open inline, everything else downloads."
     },
     {
       "id": "component.mindatticfrontpage",
