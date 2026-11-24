@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using MindAttic.Media;
-using MindAttic.Media.Azure;
+using MindAttic.Storage;
+using MindAttic.Storage.Azure;
 
 namespace IdeaCms.Blazor.Services;
 

@@ -5,7 +5,7 @@ using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Entities;
 using IdeaCms.Core.Rendering;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Core.Portability;
 

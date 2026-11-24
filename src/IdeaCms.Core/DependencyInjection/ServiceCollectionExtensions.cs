@@ -11,7 +11,7 @@ using IdeaCms.Core.Secrets;
 using IdeaCms.Core.Services;
 using IdeaCms.Core.Sites;
 using MindAttic.Log.Extensions;
-using MindAttic.Media;
+using MindAttic.Storage;
 using MindAttic.Vault.Paths;
 
 namespace IdeaCms.Core.DependencyInjection;

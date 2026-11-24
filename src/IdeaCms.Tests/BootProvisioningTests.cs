@@ -10,7 +10,7 @@ using IdeaCms.Core.Discovery;
 using IdeaCms.Core.Portability;
 using IdeaCms.Core.Services;
 using IdeaCms.Tests.Packaging;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Tests;
 

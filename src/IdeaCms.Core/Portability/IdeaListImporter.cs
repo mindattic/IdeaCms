@@ -6,7 +6,7 @@ using IdeaCms.Core.Data;
 using IdeaCms.Core.Entities;
 using IdeaCms.Core.Rendering;
 using IdeaCms.Core.Services;
-using MindAttic.Media;
+using MindAttic.Storage;
 using CmsPage = IdeaCms.Core.Entities.Page;
 
 namespace IdeaCms.Core.Portability;

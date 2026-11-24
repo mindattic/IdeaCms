@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -29,8 +29,8 @@
     <PackageReference Include="MindAttic.Log" Version="3.0.0" />
     <PackageReference Include="MindAttic.Vault" Version="7.0.0" />
     <ProjectReference Include="..\..\..\MindAttic.Authentication\src\MindAttic.Authentication\MindAttic.Authentication.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Authentication\src\MindAttic.Authentication\MindAttic.Authentication.csproj')" />
-    <PackageReference Include="MindAttic.Media" Version="2.0.0" />
-    <ProjectReference Include="..\..\..\MindAttic.Media\src\MindAttic.Media\MindAttic.Media.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Media\src\MindAttic.Media\MindAttic.Media.csproj')" />
+    <PackageReference Include="MindAttic.Storage" Version="1.0.0" />
+    <ProjectReference Include="..\..\..\MindAttic.Storage\src\MindAttic.Storage\MindAttic.Storage.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Storage\src\MindAttic.Storage\MindAttic.Storage.csproj')" />
     <!-- Rendering-time dependencies the ADR mandates: HTML sanitizer + HTML tokenizer.
          AngleSharp pinned to the exact version HtmlSanitizer requires (no version clash).
          Both moved off the 0.17.1 line, which carries GHSA-pgww-w46g-26qg. -->

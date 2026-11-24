@@ -2,7 +2,7 @@ using System.IO.Compression;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Portability;
 using IdeaCms.Core.Services;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Blazor.Cli;
 

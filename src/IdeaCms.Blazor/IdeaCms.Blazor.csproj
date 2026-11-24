@@ -22,7 +22,7 @@
     <!-- PROD Data Protection key-ring persistence + at-rest protection (DefaultAzureCredential ->
          Blob + Key Vault). Only the production code path uses these; dev persists to the file system. -->
     <!-- Design-time only: required by the dotnet-ef tools when this is the startup project. Never ships. -->
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -32,8 +32,8 @@
     <!-- Azure Blob backing for the media store, selected at runtime by Media:Provider=azure.
          Large assets (video above all) belong in blob storage, not a varbinary column: /_media/{uid}
          then 302s to a short-lived SAS URL and Azure serves the Range requests. -->
-    <PackageReference Include="MindAttic.Media.Azure" Version="2.0.0" />
-    <ProjectReference Include="..\..\..\MindAttic.Media\src\MindAttic.Media.Azure\MindAttic.Media.Azure.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Media\src\MindAttic.Media.Azure\MindAttic.Media.Azure.csproj')" />
+    <PackageReference Include="MindAttic.Storage.Azure" Version="1.0.0" />
+    <ProjectReference Include="..\..\..\MindAttic.Storage\src\MindAttic.Storage.Azure\MindAttic.Storage.Azure.csproj" Condition="'$(Configuration)' == 'Debug' AND Exists('..\..\..\MindAttic.Storage\src\MindAttic.Storage.Azure\MindAttic.Storage.Azure.csproj')" />
     <!-- A compiled Page Idea (the MindAttic front page), consumed as an RCL NuGet. Its static web
          assets serve at _content/MindAttic.Ideas.Page.Frontpage/; Abstractions is host-provided. -->
     <PackageReference Include="MindAttic.Ideas.Page.Frontpage" Version="1.0.0" />

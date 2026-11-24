@@ -12,7 +12,7 @@ using IdeaCms.Blazor.Cli;
 using IdeaCms.Blazor.Components;
 using IdeaCms.Blazor.Services;
 using MindAttic.Legion;
-using MindAttic.Media;
+using MindAttic.Storage;
 using MindAttic.Vault.Configuration;
 using MindAttic.Vault.DependencyInjection;
 

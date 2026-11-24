@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using MindAttic.Ideas.Abstractions;
 using IdeaCms.Core.Data;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Blazor.Cli;
 

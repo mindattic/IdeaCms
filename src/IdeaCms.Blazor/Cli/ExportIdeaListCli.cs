@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using IdeaCms.Core.Data;
 using MindAttic.Export.Artifacts;
 using IdeaCms.Core.Portability;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Blazor.Cli;
 

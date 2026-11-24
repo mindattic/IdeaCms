@@ -4,7 +4,7 @@ using MindAttic.Ideas.Abstractions;
 using IdeaCms.Blazor.Cli;
 using IdeaCms.Core.Data;
 using IdeaCms.Core.Entities;
-using MindAttic.Media;
+using MindAttic.Storage;
 using CmsPage = IdeaCms.Core.Entities.Page;
 
 namespace IdeaCms.Tests;

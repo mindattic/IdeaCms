@@ -14,7 +14,7 @@ using IdeaCms.Core.Services;
 using IdeaCms.Packaging;
 using IdeaCms.Tests.Packaging;
 using IdeaCms.Tests.Portability;
-using MindAttic.Media;
+using MindAttic.Storage;
 using CmsPage = IdeaCms.Core.Entities.Page;
 
 namespace IdeaCms.Tests;

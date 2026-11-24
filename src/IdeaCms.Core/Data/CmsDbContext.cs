@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MindAttic.Authentication.Data;
 using MindAttic.Authentication.Entities;
 using IdeaCms.Core.Entities;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Core.Data;
 

@@ -1245,7 +1245,7 @@ namespace IdeaCms.Core.Migrations
                     b.ToTable("WorkflowTransitionDefs");
                 });
 
-            modelBuilder.Entity("MindAttic.Media.MediaItem", b =>
+            modelBuilder.Entity("MindAttic.Storage.MediaItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

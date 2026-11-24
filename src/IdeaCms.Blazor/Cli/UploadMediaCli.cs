@@ -1,4 +1,4 @@
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Blazor.Cli;
 

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using IdeaCms.Blazor.Cli;
-using MindAttic.Media;
+using MindAttic.Storage;
 
 namespace IdeaCms.Tests;
 

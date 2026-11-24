@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using IdeaCms.Blazor.Services;
 using IdeaCms.Core.Data;
-using MindAttic.Media;
-using MindAttic.Media.Azure;
+using MindAttic.Storage;
+using MindAttic.Storage.Azure;
 
 namespace IdeaCms.Tests;
 
