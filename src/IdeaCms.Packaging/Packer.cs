@@ -272,10 +272,10 @@ public static partial class Packer
     }
 
     private static bool? NamedBool(CustomAttributeData a, string name) =>
-        a.NamedArguments.FirstOrDefault(n => n.MemberName == name) is { MemberName: not null } na && na.TypedValue.Value is bool b ? b : null;
+        NamedValue(a, name) is bool b ? b : null;
 
     private static string? NamedString(CustomAttributeData a, string name) =>
-        a.NamedArguments.FirstOrDefault(n => n.MemberName == name) is { MemberName: not null } na ? na.TypedValue.Value as string : null;
+        NamedValue(a, name) as string;
 
     private static string? SafeAttrName(CustomAttributeData a)
     {
