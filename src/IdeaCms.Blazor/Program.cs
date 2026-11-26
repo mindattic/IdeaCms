@@ -178,15 +178,9 @@ async Task InitializeAsync(CancellationToken ct)
 // First in the pipeline: nothing but /_health is served until initialisation has finished.
 app.Use(next => IdeaCms.Blazor.StartupGate.Gate(readiness, next));
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
-}
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
-
-// Honor the reverse proxy's forwarded scheme/IP (secure cookie + real client IP) before auth.
+// Honor the reverse proxy's forwarded scheme/IP (secure cookie + real client IP). This must run BEFORE
+// HTTPS redirection and HSTS: behind a TLS-terminating proxy the request is plain http until the
+// forwarded scheme is applied, so redirecting first would loop forever.
 var forwardedHeaders = new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
@@ -194,6 +188,14 @@ var forwardedHeaders = new ForwardedHeadersOptions
 forwardedHeaders.KnownIPNetworks.Clear();
 forwardedHeaders.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedHeaders);
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseHsts();
+}
+app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+app.UseHttpsRedirection();
 
 // authn + authz + forced-step (MustChangePassword → /account/change-password) + scoped CSP on the auth surface.
 app.UseMindAtticAuthentication();
