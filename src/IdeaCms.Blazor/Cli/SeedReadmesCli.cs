@@ -185,7 +185,9 @@ public static class SeedReadmesCli
             }
             else
             {
-                if (!dryRun)
+                if (!readmeExists)
+                    Console.WriteLine($"[seed-readmes]   = Kept stored ComponentMetadata (README missing): {proj.ReadmePath}");
+                else if (!dryRun)
                 {
                     meta.MetadataJson = metadataJson;
                     meta.ModifiedUtc = DateTime.UtcNow;
