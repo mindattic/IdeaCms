@@ -230,7 +230,22 @@ public sealed class PackageInstallService(
         try { await db.SaveChangesAsync(ct); }   // pkg.Id is now generated, so the seed can stamp SourcePackageId.
         catch (DbUpdateException)
         {
-            // Concurrent install of the same (Category,Key,Version) raced past the NoOp check above.
+            // Only a brand-new row can lose a race: a concurrent install of the same (Category,Key,Version)
+            // got in between the NoOp check above and this commit. Confirm that on a fresh context; any other
+            // DbUpdateException is a real failure and must surface (with the prior blob put back).
+            bool raced = false;
+            if (sameVersionRow is null)
+            {
+                await using var probe = await dbFactory.CreateDbContextAsync(CancellationToken.None);
+                raced = await probe.InstalledPackages.AnyAsync(
+                    p => p.Category == manifest.Category && p.Key == manifest.Key && p.Version == manifest.Version,
+                    CancellationToken.None);
+            }
+            if (!raced)
+            {
+                await RestorePriorBlobAsync();
+                throw;
+            }
             // The winner owns the blob now, so it is not restored; disposing `staged` undoes our swap.
             return new InstallPlan(InstallAction.NoOpAlreadyInstalled,
                 $"{manifest.Category}/{manifest.Key} v{manifest.Version} was installed by a concurrent request.",
