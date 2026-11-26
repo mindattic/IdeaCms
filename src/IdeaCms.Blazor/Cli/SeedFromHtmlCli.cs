@@ -101,7 +101,9 @@ public static class SeedFromHtmlCli
         }
         else
         {
-            if (!dryRun)
+            if (!htmlExists)
+                Console.WriteLine($"[seed from-html]   = Kept stored ComponentMetadata (source file missing): {HtmlPath}");
+            else if (!dryRun)
             {
                 meta.MetadataJson = metadataJson;
                 meta.ModifiedUtc = DateTime.UtcNow;
