@@ -62,7 +62,7 @@ dotnet run --project src/IdeaCms.Blazor
 
 The host listens on `https://localhost:7207` and `http://localhost:5229` (`Properties/launchSettings.json`). Sign in at `/login` as `admin` with the Vault bootstrap token; you are forced to change the password on first sign-in ([`docs/DEV_LOGIN.md`](docs/DEV_LOGIN.md)). Then open `/admin` to create pages and upload `.idea` files.
 
-`run.ps1` publishes a Release copy to `C:\Apps\Ideas\` (served on `http://localhost:5280`) when source has changed, and is a fast no-op otherwise; `run.ps1 -Force` does a clean rebuild, and `run.ps1 -Launch` also starts it and opens the browser. The desktop shortcut points at `C:\Apps\Ideas\run.bat`, which opens a menu: 1) Deploy & Run runs `run.ps1 -Force` then launches, 2) Run launches the deployed copy (`serve.bat`) without redeploying. `run.ps1 -LauncherOnly` only rewrites the launchers.
+`run.bat` (or `run.ps1`) opens the MindAttic run menu: 1) Redeploy packs the library and publishes Debug and Release to `R:\MindAttic\Apps\IdeaCms\Debug` and `\Release` (keeping each copy's uploaded `media\`), 2) Run Debug, 3) Run Release; `13` is Deploy & Run. Both runs are Development on the URLs above, against LocalDB. The Azure web-app deploy under `infra\` is retired (Azure was decommissioned) and is not part of the menu.
 
 ## How it works
 
