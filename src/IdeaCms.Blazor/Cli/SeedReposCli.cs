@@ -132,8 +132,15 @@ public static class SeedReposCli
             var slug = $"{ProjectsSlug}/{SlugFor(repo.Name)}";
 
             var page = FindExistingPage(existing, repoNameByPageUid, repo.Name, slug);
-            var markdown = await ResolveReadmeAsync(http, org, repo.Name, localRoot);
-            if (markdown is null)
+            var (markdown, fetchFailed) = await ResolveReadmeAsync(http, org, repo.Name, localRoot);
+            // A rate limit / 5xx is not "no README": keep the snapshot an existing page already has
+            // rather than overwriting good content with a description stub.
+            var keepReadme = markdown is null && fetchFailed && page is not null;
+            if (keepReadme)
+            {
+                Console.WriteLine($"[seed-repos]   ! {repo.Name}: README fetch failed — keeping the previous snapshot.");
+            }
+            else if (markdown is null)
             {
                 // Every repo gets a page — a missing README is a thin page, not an absent one. The stub is
                 // built from the GitHub description so the page still says what the project is.
@@ -200,12 +207,13 @@ public static class SeedReposCli
             }
 
             seen.Add(page.Id);
-            await UpsertMetadataAsync(db, page.Uid, MetaKeyReadme, JsonSerializer.Serialize(new
-            {
-                markdown,
-                source = $"https://github.com/{org}/{repo.Name}",
-                lastSynced = DateTime.UtcNow,
-            }, JsonOpts));
+            if (!keepReadme)
+                await UpsertMetadataAsync(db, page.Uid, MetaKeyReadme, JsonSerializer.Serialize(new
+                {
+                    markdown,
+                    source = $"https://github.com/{org}/{repo.Name}",
+                    lastSynced = DateTime.UtcNow,
+                }, JsonOpts));
             await UpsertMetadataAsync(db, page.Uid, MetaKeyRepo, JsonSerializer.Serialize(new
             {
                 name = repo.Name,
@@ -298,7 +306,7 @@ public static class SeedReposCli
     /// README text for a repo. A local clone wins when one is available — it is faster, works offline, and
     /// reflects uncommitted work in progress; otherwise the canonical copy comes from the GitHub API.
     /// </summary>
-    private static async Task<string?> ResolveReadmeAsync(HttpClient http, string org, string repo, string? localRoot)
+    private static async Task<(string? Text, bool FetchFailed)> ResolveReadmeAsync(HttpClient http, string org, string repo, string? localRoot)
     {
         if (!string.IsNullOrWhiteSpace(localRoot))
         {
@@ -308,15 +316,23 @@ public static class SeedReposCli
                 // Windows is case-insensitive, but this also has to hold on a Linux App Service.
                 var match = Directory.EnumerateFiles(dir, "*.md", SearchOption.TopDirectoryOnly)
                     .FirstOrDefault(f => string.Equals(Path.GetFileNameWithoutExtension(f), "README", StringComparison.OrdinalIgnoreCase));
-                if (match is not null) return await File.ReadAllTextAsync(match);
+                if (match is not null) return (await File.ReadAllTextAsync(match), false);
             }
         }
 
         using var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{org}/{repo}/readme");
         req.Headers.Accept.Clear();
         req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.raw"));
-        using var res = await http.SendAsync(req);
-        return res.IsSuccessStatusCode ? await res.Content.ReadAsStringAsync() : null;
+        try
+        {
+            using var res = await http.SendAsync(req);
+            if (res.IsSuccessStatusCode) return (await res.Content.ReadAsStringAsync(), false);
+            return (null, res.StatusCode != System.Net.HttpStatusCode.NotFound);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+            return (null, true);
+        }
     }
 
     // ---- CMS writes ----
