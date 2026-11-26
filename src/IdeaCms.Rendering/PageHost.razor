@@ -202,7 +202,8 @@ else if (_context is not null)
 
         // Reserved prefixes never resolve to a content page (defense in depth; /admin & /_* are also
         // handled by endpoint routing).
-        if (slug.StartsWith("admin", StringComparison.OrdinalIgnoreCase) || slug.StartsWith('_'))
+        // "admin" is reserved as a whole path segment only: a slug like "administration" is an ordinary page.
+        if (slug == "admin" || slug.StartsWith("admin/", StringComparison.Ordinal) || slug.StartsWith('_'))
         {
             ClearPageState();
             _status = Status.NotFound;
