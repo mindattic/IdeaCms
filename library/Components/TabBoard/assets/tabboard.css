@@ -48,7 +48,7 @@
     }
     .tabButton-tabpanels {
         position: relative;
-        z-index: 1100;
+        z-index: 1;
         margin-top: var(--ma-tb-gap, 12px);
     }
     .tabPage.is-open { width: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
